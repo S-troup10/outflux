@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cold Email Dashboard - Manage your email campaigns with ease." />
+  <title>Cold Email Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+   
+<!-- GrapesJS Core -->
+<link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<!-- Quill JS -->
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="/static/css/dashboard.css" />
+</head>
+
+<body class="text-white h-screen flex overflow-hidden bg-gray-900">
+
+
+  <div id="toast-container" class="fixed bottom-8 right-4 flex flex-col gap-2 z-[9999] pointer-events-none"></div>
+
+  <!-- Sidebar Navigation -->
+   <div id="loader" class="loading-overlay" style="display: none;">
+  <div class="spinner"></div>
+</div>
+
+  <nav class="sidebar bg-gray-800 text-white h-full flex flex-col p-2 shadow-lg">
+    <!-- Customer Section -->
+
+    <div class="customer-section">
+      <img src="/static/img/logo_b.png"
+        alt="User Avatar" class="bg-gray-800  w-10 h-10" />
+      <div class="customer-info">
+        <h2 id="nav-name" class="text-lg font-semibold">John Doe</h2>
+        <p id="nav-status" class="text-sm text-gray-400">Customer</p>
+      </div>
+    </div>
+    <!-- Navigation Menu Items -->
+    <ul class="flex-1 mt-4">
+      <li id="dashboard-button" class="menu-item" onclick="switchScreen('dashboard')">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-layer-group text-xl"></i>
+          <span>Dashboard</span>
+        </div>
+      </li>
+
+      <li  id="campaigns-button" class="menu-item" onclick="switchScreen('campaigns')">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-envelope text-xl"></i>
+          <span>Email Campaigns</span>
+        </div>
+      </li>
+      <li id="analytics-button" class=" menu-item" onclick="switchScreen('analytics')">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-chart-line text-xl"></i>
+          <span>Analytics</span>
+        </div>
+      </li>
+      <li id="lists-button" class="menu-item" onclick="switchScreen('lists')">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-scroll"></i>
+          <span>Lists</span>
+        </div>
+      </li>
+      <li  id="settings-button" class="menu-item" onclick="switchScreen('settings')">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-cog text-xl"></i>
+          <span>Settings</span>
+        </div>
+      </li>
+     
+      <li class="menu-item" onclick="openLogoutModal()">
+        <div  class="flex items-center">
+          <i class="fa-solid fa-right-from-bracket text-xl"></i>
+          <span>Log Out</span>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+
+
+
+
+
+
+
+  <div
+    class="dashboard absolute bottom-10 left-40 w-20 h-20 bg-blue-500 rounded-full opacity-30 blur-2xl animate-pulse">
+  </div>
+  <div class="absolute top-10 right-20 w-24 h-24 bg-purple-500 rounded-full opacity-30 blur-2xl animate-pulse"></div>
+
+
+
+
+
+<div id="dashboard" class="main-content flex flex-col min-h-screen text-white p-8 space-y-8 transition-all duration-500">
+  <!-- Welcome Header -->
+  <div class="relative w-full  rounded-2xl shadow-xl p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700">
+  <!-- Background Glow Accent -->
+  <div class="absolute -top-10 -left-10 w-80 h-80 bg-blue-500 opacity-20 blur-3xl rounded-full z-0"></div>
+  <div class="absolute bottom-0 right-0 w-72 h-72 bg-purple-500 opacity-10 blur-2xl rounded-full z-0"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 text-center space-y-2">
+    <h1 id='dash-name' class="text-5xl font-extrabold tracking-tight text-white animate-fade-in-slow">Welcome back</h1>
+    <p class="text-md text-gray-400 max-w-xl mx-auto">Your campaign control center is ready. Use the quick actions below to manage lists, send emails, and grow your audience.</p>
+  </div>
+</div>
+
+  <!-- Main Split Layout -->
+  <div class="flex flex-col lg:flex-row gap-6 flex-1">
+    
+    <!-- Left Panel (2/3) -->
+    <div class="w-full lg:w-2/3 space-y-6">
+      <!-- Quick Action Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- CARD TEMPLATE -->
+
+        <div onclick="update_settings('account')" class="bg-gray-800 rounded-2xl shadow-md p-8 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
+          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-user-cog"></i></div>
+          <div class="flex items-center justify-between mb-2 z-10 relative">
+            <h2 class="text-lg font-semibold">Update Account</h2>
+            <i class="fas fa-user-cog text-blue-400 text-xl"></i>
+          </div>
+          <p class="text-sm text-gray-400">Edit your profile and preferences.</p>
+        </div>
+
+
+
+        <div onclick="create_new_list()" class="bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
+          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-list-alt"></i></div>
+          <div class="flex items-center justify-between mb-2 z-10 relative">
+            <h2 class="text-lg font-semibold">Create List</h2>
+            <i class="fas fa-list-alt text-blue-400 text-xl"></i>
+          </div>
+          <p class="text-sm text-gray-400">Organize your subscribers.</p>
+        </div>
+
+        <div onclick="create_new_campagin()" class="bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-purple-500 transition cursor-pointer relative overflow-hidden">
+          <div class="absolute bottom-2 right-3 text-purple-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-bullhorn"></i></div>
+          <div class="flex items-center justify-between mb-2 z-10 relative">
+            <h2 class="text-lg font-semibold">Create Campaign</h2>
+            <i class="fas fa-bullhorn text-purple-400 text-xl"></i>
+          </div>
+          <p class="text-sm text-gray-400">Design and send a new campaign.</p>
+        </div>
+
+        <div onclick="switchScreen('campaigns')" class=" bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
+          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-eye"></i></div>
+          <div class="flex items-center justify-between mb-2 z-10 relative">
+            <h2 class="text-lg font-semibold">View Campaigns</h2>
+            <i class="fas fa-eye text-blue-400 text-xl"></i>
+          </div>
+          <p class="text-sm text-gray-400">Browse your active and past campaigns.</p>
+        </div>
+      </div>
+
+
+<div id="connect-google" class="bg-orange-100 border-l-4 border-orange-400 text-orange-800 p-6 rounded-2xl shadow-md relative">
+  <div class="absolute bottom-2 right-3 text-orange-300 opacity-20 text-6xl">
+    <i class="fas fa-link-slash"></i>
+  </div>
+  <div class="flex items-center justify-between mb-2 relative z-10">
+    <h2 class="text-lg font-semibold">Google Account Not Connected</h2>
+    <i class="fas fa-link-slash text-orange-500 text-xl"></i>
+  </div>
+  <p class="text-sm text-orange-800 mb-4">
+    You have scheduled emails, but your Google account is not connected. Connect now to ensure delivery.
+  </p>
+  <button onclick="update_settings('connect')" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition shadow">
+    Connect Google Account
+  </button>
+</div>
+
+    
+
+    </div>
+
+    
+
+    <!-- Right Panel (1/3) -->
+    <div class="w-full lg:w-1/3 space-y-6">
+      <!-- Next Send Card -->
+     <div class="bg-gray-800 rounded-2xl shadow-md p-6 relative overflow-hidden" id="next-send-card">
+  <div class="absolute top-3 right-4 text-yellow-400 opacity-10 text-5xl"><i class="fas fa-clock"></i></div>
+  <h2 class="text-xl font-semibold mb-4">Next Send</h2>
+  <div class="space-y-2 text-sm text-gray-300">
+    <div class="flex justify-between">
+      <span>Campaign</span>
+      <span class="text-white font-medium" id="ns-campaign">–</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Scheduled</span>
+      <span class="text-white" id="ns-scheduled">–</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Recipients</span>
+      <span id="ns-recipients">–</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Status</span>
+      <span class="text-yellow-400 font-medium" id="ns-status">–</span>
+    </div>
+  </div>
+  <button class="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg transition" id="ns-button">
+    View Campaign
+  </button>
+</div>
+
+
+      <!-- Quick Tip -->
+      <div class="bg-gray-800 rounded-2xl shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-3">Quick Tip</h2>
+        <p class="text-sm text-gray-400 leading-relaxed">
+          💡 Avoid words like <b>“FREE!!!”</b> or <b>“LIMITED TIME”</b> in subject lines — they increase spam flagging and lower delivery rates.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center text-sm text-gray-600 mt-12">
+    &copy; 2025 Neura • All rights reserved.
+  </div>
+</div>
+
+
+
+
+
+
+  <div id="campaigns" class="main-content flex-1 p-8 main-content transition-all duration-500 opacity-0 transform translate-x-0 hidden">
+    <!-- 🔥 CAMPAIGN HEADER (REWORKED) -->
+<div class="w-full relative bg-gray-800/80 border border-purple-700 rounded-2xl shadow-lg p-6 mb-6">
+
+  <!-- Header Top: Main Title + Actions -->
+  <div class="flex items-center justify-between gap-4 flex-wrap">
+    <!-- Title & Subtitle -->
+    <div>
+      <h1 class="text-3xl sm:text-4xl py-1 font-extrabold tracking-wide bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent flex items-center gap-2">
+        <i class="fas fa-envelope-open-text text-purple-400 text-2xl "></i>
+        Email Campaigns
+      </h1>
+      <p class="text-sm text-gray-400 mt-1 ml-1">Manage, filter, and track your active & upcoming email campaigns.</p>
+    </div>
+
+    <!-- New Campaign Button -->
+    <button
+      onclick="openCampaignModal()"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 hover:to-blue-700 text-white text-sm font-semibold shadow-lg transition hover:scale-105"
+      title="Create a new campaign"
+    >
+      <i class="fas fa-plus"></i> New Campaign
+    </button>
+  </div>
+
+  <!-- Header Bottom: Contextual Back Button & Section Title -->
+  <div id="back-title-section"
+       class="anim-out flex items-center gap-3 mt-6 hidden"
+  >
+
+
+<button
+  id="backb"
+  onclick="saveEditedCampaign()"
+  class="group relative px-4 px-1 rounded-full bg-gray-800 border border-purple-600/40 text-purple-300 hover:bg-purple-700/80 hover:text-white transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none"
+  title="Back to Campaigns"
+>
+  <i class="fas fa-arrow-left text-lg"></i>
+
+  <!-- Optional: Tooltip -->
+  <span class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 text-xs rounded bg-purple-700 text-white opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap shadow">
+    Back to Campaigns
+  </span>
+</button>
+
+
+    <h2
+      id="detailTitle"
+      class="hidden text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent"
+    >
+      Edit Campaign
+    </h2>
+  </div>
+
+
+
+  <div id="filter" class="anim-out mt-6 flex flex-wrap sm:flex-nowrap gap-2 sm:gap-4 items-end w-full border-t pt-4 mb-4 transition-all duration-100 transform opacity-100 scale-100 pointer-events-auto">
+  <!-- Status Dropdown -->
+  <div class="flex flex-col flex-shrink-0 w-1/2 sm:w-40">
+    <label for="filterStatus" class="text-[0.65rem] sm:text-sm mb-2 xs:inline-flex items-center gap-1 text-gray-400">
+      <i class="fas fa-toggle-on text-green-300"></i> <span class=" xs:inline">Status</span>
+    </label>
+    <select id="filterStatus" class="custom-select w-full text-xs sm:text-sm">
+      <option value="all">All</option>
+      <option value="running">Completed</option>
+      <option value="paused">Incomplete</option>
+    </select>
+  </div>
+
+  <!-- Campaign Name Input -->
+  <div class="flex flex-col flex-grow">
+    <label for="filterName" class="text-[0.65rem] sm:text-sm mb-2 xs:inline-flex items-center gap-1 text-gray-400">
+      <i class="fas fa-search text-purple-400"></i> <span class=" xs:inline">Campaign Name</span>
+    </label>
+    <input type="text" id="filterName"  style="padding: 0.5rem 0.75rem;" placeholder="Search..." class="w-full text-xs sm:text-sm" />
+  </div>
+
+  <!-- Min Recipients -->
+  <div class="flex flex-col flex-shrink-0 w-1/3 sm:w-36">
+    <label for="filterMinRecipients" class="text-[0.65rem] sm:text-sm mb-2 xs:inline-flex items-center gap-1 text-gray-400">
+      <i class="fas fa-users text-blue-400"></i> <span class=" xs:inline">Min Recipients</span>
+    </label>
+    <input type="number" id="filterMinRecipients"  style="padding: 0.5rem 0.75rem;" min="0" value="0" class="w-full text-xs sm:text-sm appearance-none" />
+  </div>
+</div>
+
+</div>
+
+    
+
+
+     
+
+
+
+
+
+      
+    
+
+      <!-- Campaigns List -->
+<div id="campaignList"
+     class="anim-out relative flex flex-wrap justify-start gap-x-6 gap-y-8 transition-all duration-500 transform opacity-100 translate-x-0 scale-100">
+</div>
+
+    
+      <!-- Campaign Details / Edit View -->
+      <div id="campaignDetails"
+     class="anim-in transition-all duration-500 transform opacity-0 translate-x-10 scale-95 pointer-events-none z-52">
+<!--  tabs serction-->
+
+
+
+
+
+<div class="flex justify-between items-center mb-6 border-b border-gray-700" id="campaignTabs">
+
+  <!-- Tabs -->
+  <div class="flex space-x-6">
+    <button
+      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-300 hover:text-white focus:outline-none"
+      onclick="showTab('emailTab')"
+      id="tab-email"
+      aria-selected="true"
+      role="tab"
+      tabindex="0"
+      style="border-bottom: 4px solid transparent;"
+      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
+      onmouseout="this.style.borderBottom=''">
+      Create Email
+      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
+    </button>
+
+    <button
+      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white focus:outline-none"
+      onclick="showTab('listTab')"
+      id="tab-list"
+      aria-selected="false"
+      role="tab"
+      tabindex="-1"
+      style="border-bottom: 4px solid transparent;"
+      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
+      onmouseout="this.style.borderBottom=''">
+      List
+      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
+    </button>
+
+    <button
+      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white focus:outline-none"
+      onclick="showTab('settingsTab')"
+      id="tab-settings"
+      aria-selected="false"
+      role="tab"
+      tabindex="-1"
+      style="border-bottom: 4px solid transparent;"
+      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
+      onmouseout="this.style.borderBottom=''">
+      Settings
+      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
+    </button>
+  </div>
+
+  <!-- Pause Toggle + Save Button -->
+  <div class="flex items-center gap-6">
+
+    <!-- Pause Toggle -->
+    <div class="flex items-center gap-3 select-none hidden">
+      <label for="check-paused" class="text-sm font-semibold text-gray-300 flex items-center gap-2 cursor-pointer">
+        <i class="fas fa-pause-circle text-orange-500"></i> Paused:
+      </label>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="check-paused" class="sr-only peer" />
+        <div
+          class="w-14 h-8 bg-gray-700 rounded-full peer-focus:ring-2 peer-focus:ring-purple-500
+                 peer-checked:bg-purple-600 transition-colors duration-300"
+        ></div>
+        <div
+          class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full border border-gray-400
+                 peer-checked:left-7 peer-checked:border-white transition-all duration-300 shadow"
+        ></div>
+      </label>
+    </div>
+
+    <!-- Save Button -->
+    <button
+      id="update-campaign"
+      onclick="saveEditedCampaign()"
+      class="inline-flex items-center gap-2 px-5 py-1 rounded-lg text-sm font-semibold
+               bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg
+               hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 hover:shadow-purple-700/50
+               transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500"
+      type="button"
+      title="Save Changes"
+    >
+
+
+      <i class="fas fa-cloud-upload-alt text-lg"></i>
+      Save Changes
+  
+    </button>
+
+
+  </div>
+
+</div>
+
+
+
+<input type="hidden" id="campaignId" value="">
+
+
+
+<div id="emailTab" class="tab-content transition-opacity duration-300 opacity-0 hidden">
+
+
+<div class="flex items-center justify-between mb-8">
+  <h2 class="text-2xl font-extrabold text-gray-100 tracking-wide select-none">
+    Email Editor
+    <span id="pro" class="ml-3 hidden inline-block bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 text-transparent bg-clip-text font-black text-xl uppercase tracking-wider">
+      PRO
+    </span>
+  </h2>
+
+  <!-- Pro feature toggle button -->
+   <div id="toggleEditorBtn">
+  <button 
+     
+    class="hidden relative inline-flex items-center px-6 py-2 rounded-lg bg-gradient-to-r from-purple-700 via-pink-600 to-red-500
+           text-white font-semibold tracking-wide shadow-lg hover:brightness-110 
+           transition-transform active:scale-95 select-none"
+    aria-pressed="false"
+    title="Switch to GrapesJS editor (Pro feature)">
+
+  
+
+    Use PRO Editor
+    <span class="ml-3 inline-block bg-white bg-opacity-20 rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-widest select-none">
+      PRO
+    </span>
+  </button>
+  </div>
+</div>
+
+  <!-- Email subject input -->
+  <div class="mb-6">
+    <label for="email-subject" class="block text-sm font-medium text-gray-300 mb-2">Subject</label>
+    <input 
+      type="text" 
+      id="email-subject" 
+      placeholder="Enter email subject" 
+      class="w-full rounded-lg bg-gray-800 border border-gray-600 p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+    >
+  </div>
+
+  <div id="quill-wrapper">
+  <!-- Quill editor container (your original) -->
+  <div id="email-content-editor" class="mb-6 rounded-lg overflow-hidden border border-gray-600" style="min-height: 300px;">
+    <!-- Quill editor will be initialized here -->
+  </div>
+  </div>
+
+  <!-- GrapesJS editor container, hidden by default -->
+  <div id="grapesjsEditor" class="mb-6 rounded-lg overflow-hidden border border-gray-600 hidden flex" style="height: 550px;">
+    <!-- GrapesJS will initialize here -->
+ <div id="editor-wrapper">
+    <div id="blocks"></div>
+    <div id="gjs"></div>
+  </div>
+
+  </div>
+  
+
+
+<!-- ░░ EMAIL TEMPLATES ░░ -->
+<section id="template_section" class="relative rounded-2xl bg-gray-900/90 border border-purple-700 shadow-xl p-8 space-y-10">
+
+  <!-- Header Row -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+    <!-- Title + Subtitle -->
+    <div>
+      <h3 class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 text-transparent bg-clip-text">
+        Email Templates
+      </h3>
+      <p class="text-gray-400 mt-2 max-w-md">
+        Browse, preview, and reuse your pre‑designed email templates for quick campaign creation.
+      </p>
+    </div>
+
+    <!-- Quick Stats + New Template -->
+    <div class="flex items-center gap-6 flex-wrap">
+
+      <!-- Count badge -->
+      <div class="text-center">
+        <p class="uppercase text-xs tracking-widest text-gray-400">Total Templates</p>
+        <p id="template-count" class="text-2xl font-bold text-white mt-0.5">0</p>
+      </div>
+
+      <!-- Create Template button -->
+      <button
+        onclick="openSaveTemplateModal()"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold
+               bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg
+               hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 hover:shadow-purple-700/50
+               transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500"
+        title="Create New Template"
+      >
+        <i class="fas fa-plus"></i> Save to Template
+      </button>
+    </div>
+  </div>
+
+
+
+
+<!-- Custom Templates Section -->
+<div class="mb-8">
+  <div class="flex border-b mb-4 border-purple-700 items-center justify-between cursor-pointer"
+       onclick="toggleSection('custom_template_section')">
+    <h4 class="text-xl font-bold text-white mb-2 pb-2 tracking-wide">Custom Templates</h4>
+    <i id="toggle-icon-custom_template_section" class="fas fa-chevron-down text-purple-400 transition-transform duration-300 rotate-0"></i>
+  </div>
+
+  <div id="custom_template_section" class="overflow-hidden transition-all duration-[10000ms] ease-in-out max-h-[9999px]">
+
+    <!-- Search input -->
+    <div class="flex-1 relative mb-10">
+      <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-purple-400"></i>
+      <input id="custom_template-search" type="text" placeholder="Search templates…"
+        class="w-full pl-10 pr-3 py-2 rounded-lg bg-gray-800 border border-purple-700 text-sm text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        oninput="filterCustomTemplates(this.value)" />
+    </div>
+
+    <!-- Grid -->
+    <div class="nice-scrollbar rounded-lg">
+      <div id="custom_email_template_list" class="space-y-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-1">
+        <!-- Templates inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Premade Templates Section -->
+<div class="mb-8">
+  <div class="flex border-b mb-4 border-purple-700 items-center justify-between cursor-pointer"
+       onclick="toggleSection('premade_template_section')">
+    <h4 class="text-xl font-bold text-white mb-2 pb-2 tracking-wide">Premade Templates</h4>
+    <i id="toggle-icon-premade_template_section" class="fas fa-chevron-down text-purple-400 transition-transform duration-300 rotate-0"></i>
+  </div>
+
+  <div id="premade_template_section" class="overflow-hidden transition-all duration-[10000ms] ease-in-out max-h-[9999px]">
+
+    <!-- Search input -->
+    <div class="flex-1 relative mb-10">
+      <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-purple-400"></i>
+      <input id="template-search" type="text" placeholder="Search templates…"
+        class="w-full pl-10 pr-3 py-2 rounded-lg bg-gray-800 border border-purple-700 text-sm text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        oninput="filterTemplates(this.value)" />
+    </div>
+
+    <!-- Grid -->
+    <div id="email_template_list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-1">
+      <!-- Templates inserted here -->
+    </div>
+  </div>
+</div>
+
+
+</section>
+
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+<div id="listTab" class="tab-content transition-all duration-300 opacity-0 hidden space-y-10">
+
+  <!-- 🔹 Manual Email Entry -->
+<div class="bg-gray-900 border-2 border-blue-800 rounded-2xl shadow-xl p-6 space-y-6 relative">
+  <!-- Header -->
+  <div class="flex justify-between items-center">
+    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+      <i class="fas fa-user-plus text-blue-400"></i> Manually Add Emails
+    </h3>
+    <button onclick="clearManualEmails()" class="text-sm text-red-400 hover:underline transition duration-200">
+      Clear All
+    </button>
+  </div>
+
+  <p class="text-gray-400 text-sm">
+    Type emails and press <kbd>Enter</kbd>, <kbd>Comma</kbd>, or <kbd>Space</kbd>. Suggestions appear after <code>@</code>.
+  </p>
+
+  <!-- Chip Container -->
+  <div id="email-chip-container" class="p-3 min-h-[150px] relative bg-gray-800 border border-gray-700 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+    <div class="flex flex-wrap gap-2 mb-2" id="email-chip-list"></div>
+    <textarea id="email-chip-input" rows="3" class="w-full bg-transparent text-white text-sm outline-none resize-none placeholder-gray-500" placeholder="Enter email addresses..."></textarea>
+  </div>
+
+  <!-- Suggestion Box -->
+  <div id="email-suggestions" class="hidden absolute bg-gray-900 border border-gray-700 rounded-md shadow-xl text-sm text-white overflow-hidden z-50"></div>
+</div>
+
+<!-- Hidden mirror for caret tracking -->
+<div id="mirror-div" style="position: absolute; visibility: hidden; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; z-index: -1; pointer-events: none;"></div>
+
+
+
+<!-- 🔹 List Selection -->
+<div class="bg-gray-900 border-2 border-purple-600 rounded-2xl shadow-2xl p-8 space-y-8">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+    <div class="flex items-center gap-3">
+      <h3 class="text-xl font-bold text-white flex items-center gap-3">
+        <i class="fas fa-address-book text-purple-400 text-2xl"></i> Select from Saved Lists
+      </h3>
+    </div>
+
+    <div class="flex gap-4 items-center flex-wrap sm:flex-nowrap">
+      <input id="search-lists" type="text" placeholder="Search Lists..."
+        class="bg-gray-800 text-gray-100 px-4 py-2.5 rounded-lg border border-gray-700 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-inner" />
+
+      <!-- Keep this exactly as you had -->
+      <button onclick="add_list_button()"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold
+               bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg
+               hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 hover:shadow-purple-700/50
+               transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500">
+        <i class="fas fa-plus"></i> New List
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-hidden rounded-xl border border-gray-700 shadow-lg">
+    <table class="w-full text-left text-sm text-gray-300 divide-y divide-gray-800">
+      <thead class="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-200 uppercase text-xs tracking-wider">
+        <tr>
+          <th class="py-4 px-6"><i class="fas fa-list-ul mr-2 text-purple-400"></i>List Name</th>
+          <th class="py-4 px-6"><i class="fas fa-envelope mr-2 text-indigo-400"></i>Email Count</th>
+        </tr>
+      </thead>
+      <tbody id="lists-table-body" class="divide-y divide-gray-800">
+        <!-- Example filler rows -->
+
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+
+
+
+<!-- Settings Section -->
+<div id="settingsTab" class="tab-content transition-all duration-300 opacity-0 hidden z-50">
+  <div class="max-w-4xl mx-auto bg-gray-800 p-6 rounded-2xl shadow-xl text-white space-y-6">
+
+    <!-- Header -->
+    <h2 class="text-3xl font-bold text-center text-white">Select Send Dates</h2>
+
+    <!-- Month Navigation -->
+    <div class="flex items-center justify-between">
+      <button onclick="changeMonth(-1)"
+              class="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none">
+        Prev
+      </button>
+      <h3 id="calendar-title" class="text-xl font-semibold text-white"></h3>
+      <button onclick="changeMonth(1)"
+              class="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none">
+        Next
+      </button>
+    </div>
+
+    <!-- Calendar -->
+    <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-white">
+      <!-- Days injected by JS -->
+    </div>
+
+    <!-- Selected Dates Display -->
+    <div id="selectedDates" class="mt-4 text-sm text-gray-300 text-center">
+      No dates selected
+    </div>
+  </div>
+
+  <!-- Delete Button -->
+  <div class="flex justify-end max-w-4xl mx-auto mt-4">
+    <button onclick="deleteCampaign()"
+            id="delete-campaign"
+            class="text-sm text-pink-400 hover:bg-pink-600/10 px-4 py-2 rounded-md focus:outline-none">
+      Delete
+    </button>
+  </div>
+</div>
+
+<style>
+  .active-tab {
+ 
+  border-bottom-width: 4px;
+  border-color: #9f7aea; /* Tailwind's purple-500 */
+  color: white;
+}
+
+  
+</style>
+</div>
+</div>
+</div>
+  
+  
+
+
+
+
+
+<div id="analytics" class="flex-1 p-6 text-white main-content hidden transition-all duration-500">
+
+  <!-- Hero Header -->
+<div class="mb-10 p-6 rounded-xl bg-gradient-to-r from-purple-800 via-blue-800 to-indigo-900 shadow-2xl border border-blue-700 relative">
+
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+    <!-- Title + Sub Info -->
+    <div>
+      <h2 class="text-4xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 p-1">
+        Campaign Analytics
+      </h2>
+      <p class="text-sm text-gray-300 mt-2 flex items-center gap-2">
+        <span class="text-indigo-300">Last synced:</span>
+        <span id="an-lastSync" class="font-mono text-blue-200">2025-07-03 15:42 UTC</span>
+        <span class="px-2 py-0.5 rounded-full bg-blue-700/40 text-xs text-blue-300 border border-blue-500">LIVE</span>
+      </p>
+    </div>
+
+
+    <!-- CTA Button + Icons -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 mt-6 sm:mt-0">
+      <!-- Action Button -->
+
+
+
+
+    </div>
+  </div>
+
+</div>
+
+<!-- KPI STATS – CYBERPUNK DENSE VERSION -->
+<div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+
+  <!-- SENT (blue) -->
+  <div class="rounded-xl bg-gray-900 border border-blue-700 p-6 shadow-lg hover:shadow-blue-600/40 transition">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-paper-plane text-blue-500 text-xl"></i>
+        <span class="uppercase text-xs font-semibold text-blue-400 tracking-widest">Sent</span>
+      </div>
+      <span id="an-sent_percent" class="px-2 py-0.5 rounded bg-blue-800/40 text-blue-300 text-xs font-mono">
+        +4.8%
+      </span>
+    </div>
+    <p id="an_sent" class="text-4xl font-extrabold text-white mt-2">132</p>
+    <p class="text-xs text-gray-500">emails sent this week</p>
+    <div class="mt-4 h-2 bg-blue-900 rounded">
+      <div class="h-2 bg-blue-600 rounded" style="width: 66%;"></div>
+    </div>
+  </div>
+
+  <!-- DELIVERED (purple) -->
+  <div class="rounded-xl bg-gray-900 border border-purple-600 p-6 shadow-lg hover:shadow-purple-500/40 transition">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-envelope-open-text text-purple-400 text-xl"></i>
+        <span class="uppercase text-xs font-semibold text-purple-300 tracking-widest">Delivered</span>
+      </div>
+      <span id="an-delivered_percent" class="px-2 py-0.5 rounded bg-purple-700/40 text-purple-200 text-xs font-mono">
+        +3.1%
+      </span>
+    </div>
+    <p id="an-delivered" class="text-4xl font-extrabold text-white mt-2">126</p>
+    <p class="text-xs text-gray-400">successful deliveries</p>
+    <div class="mt-4 h-2 bg-purple-800 rounded">
+      <div class="h-2 bg-purple-500 rounded" style="width: 82%;"></div>
+    </div>
+  </div>
+
+  <!-- FAILED (red) -->
+  <div class="rounded-xl bg-gray-900 border border-rose-600 p-6 shadow-lg hover:shadow-rose-500/40 transition">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-times-circle text-rose-400 text-xl"></i>
+        <span class="uppercase text-xs font-semibold text-rose-300 tracking-widest">Failed</span>
+      </div>
+      <span id="an-failed-percent" class="px-2 py-0.5 rounded bg-rose-700/40 text-rose-200 text-xs font-mono">
+        ‑1.2%
+      </span>
+    </div>
+    <p id="an-failed" class="text-4xl font-extrabold text-white mt-2">6</p>
+    <p class="text-xs text-gray-400">bounced or blocked</p>
+    <div class="mt-4 h-2 bg-rose-800 rounded">
+      <div class="h-2 bg-rose-500 rounded" style="width: 12%;"></div>
+    </div>
+  </div>
+
+  <!-- RECIPIENTS (lighter blue) -->
+  <div class="rounded-xl bg-gray-900 border border-indigo-500 p-6 shadow-lg hover:shadow-indigo-400/40 transition">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-users text-indigo-300 text-xl"></i>
+        <span class="uppercase text-xs font-semibold text-indigo-200 tracking-widest">Recipients</span>
+      </div>
+      <span id="an-recipients_percent" class="px-2 py-0.5 rounded bg-indigo-600/40 text-indigo-200 text-xs font-mono">
+        +0.0%
+      </span>
+    </div>
+    <p id="an-recipients" class="text-4xl font-extrabold text-white mt-2">0</p>
+    <p class="text-xs text-gray-400">addresses targeted</p>
+    <div class="mt-4 h-2 bg-indigo-700 rounded">
+      <div class="h-2 bg-indigo-400 rounded" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- BOUNCES (pink) -->
+  <div class="rounded-xl bg-gray-900 border border-pink-600 p-6 shadow-lg hover:shadow-pink-500/40 transition">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-ban text-pink-400 text-xl"></i>
+        <span class="uppercase text-xs font-semibold text-pink-300 tracking-widest">Bounces</span>
+      </div>
+      <span id="an-bounces_percent" class="px-2 py-0.5 rounded bg-pink-700/40 text-pink-200 text-xs font-mono">
+        +0.0%
+      </span>
+    </div>
+    <p id="an-bounces" class="text-4xl font-extrabold text-white mt-2">0</p>
+    <p class="text-xs text-gray-400">individual failures</p>
+    <div class="mt-4 h-2 bg-pink-800 rounded">
+      <div class="h-2 bg-pink-500 rounded" style="width:0%"></div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+  <!-- Chart Placeholder -->
+<!-- ENGAGEMENT TRENDS -->
+<div class="mb-10 bg-gray-900 border border-indigo-700 rounded-2xl p-6 shadow-xl">
+
+  <!-- Header Row -->
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold text-indigo-300 flex items-center gap-2">
+      <i class="fas fa-chart-area text-indigo-400"></i>
+      Engagement Trends
+    </h3>
+
+    <!-- Time‑range switcher -->
+    <div class="flex gap-2 text-xs font-semibold">
+      <div class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white transition">14d</div>
+    </div>
+  </div>
+
+  <!-- Chart Canvas -->
+<!-- Chart Container -->
+<div class="grid gap-6 mt-10 lg:grid-cols-2">
+
+  <!-- KPI Bar Chart -->
+<!-- Sent‑over‑time (last 2 weeks) -->
+<div class="relative h-64 bg-gray-900 rounded-lg p-2">
+  <canvas id="sentTimeChart" class="absolute inset-0 w-full h-full"></canvas>
+</div>
+
+
+  <!-- Deliverability Chart -->
+<div class="relative h-64 bg-gray-900 rounded-lg p-2">
+  <canvas id="deliverPieChart" class="absolute inset-0 w-full h-full"></canvas>
+</div>
+
+</div>
+</div>
+
+<section class="w-full py-8 px-4">
+  <div class="mb-6">
+    <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+      <i class="fas fa-chart-line text-blue-500 text-2xl"></i>
+      Campaign Performance
+    </h2>
+    <p class="text-sm text-blue-300 mt-1">
+      Overview of email delivery, recipients, and activity trends across campaigns.
+    </p>
+  </div>
+
+  <div id="campaignStatsContainer" class="space-y-6">
+    <!-- Cards will be injected here -->
+  </div>
+</section>
+
+
+
+
+  <!-- Previous Sends (unchanged) -->
+  <!-- PREVIOUS SENDS PANEL -->
+<!-- Scheduled Sends Panel -->
+<div id="schedule-panel"
+     class="rounded-2xl border border-purple-600 bg-gray-900 shadow-xl overflow-hidden">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-purple-800 to-purple-700">
+    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+      <i class="fas fa-calendar-check text-purple-200"></i>
+      Scheduled Sends
+    </h3>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-col sm:flex-row gap-4 px-4 py-3 bg-gray-800/70 border-b border-gray-700">
+    <input id="search-schedule" type="text"
+           placeholder="Search campaign name…"
+           class="flex-1 px-3 py-2 rounded-md bg-gray-800 text-sm
+                  placeholder-gray-400 focus:outline-none focus:ring focus:ring-purple-600/30" />
+    <select id="status-filter"
+            class="px-3 py-2 rounded-md bg-gray-800 text-sm text-white focus:outline-none">
+      <option value="">All Status</option>
+      <option value="true">Sent</option>
+      <option value="false">Upcoming</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="max-h-80 overflow-y-auto nice-scrollbar">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-800/80 backdrop-blur sticky top-0 z-10 text-gray-300 uppercase tracking-wider">
+        <tr>
+          <th class="px-6 py-3 text-left">Campaign</th>
+          <th class="px-6 py-3 text-left">Scheduled</th>
+          <th class="px-6 py-3 text-left">Status</th>
+        </tr>
+      </thead>
+      <tbody id="schedule-body" class="divide-y divide-gray-700"></tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div id="schedule-empty"
+         class="hidden py-10 text-center text-gray-400 text-sm">
+      <i class="fas fa-inbox text-2xl mb-2"></i><br>
+      No scheduled sends match your filter.
+    </div>
+  </div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <!--SETTINGS-->
+<div id="settings" class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden text-white min-h-screen p-6">
+
+  <div class="flex flex-col md:flex-row gap-6">
+    
+    <!-- Sidebar Tabs -->
+<aside class="md:w-1/4">
+  <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-4 rounded-2xl shadow-xl space-y-2 border border-purple-700/30">
+    
+    <button onclick="switchSettingsTab('account')" 
+      class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
+             transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-purple-500/30">
+      <i class="fas fa-user mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
+      Account
+    </button>
+<!-- subscription
+    <button onclick="switchSettingsTab('subscription')" 
+      class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
+             transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30">
+      <i class="fas fa-credit-card mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
+      Subscription
+    </button>
+-->
+    <button onclick="switchSettingsTab('connect')" 
+      class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
+             transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30">
+      <i class="fas fa-link mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
+      Connect
+    </button>
+
+    <button onclick="switchSettingsTab('about')" 
+      class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
+             transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-purple-500/30">
+      <i class="fas fa-circle-info mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
+      About
+    </button>
+
+    <!-- subscription
+    <button onclick="switchSettingsTab('danger')" 
+      class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-red-400 bg-gray-800
+             transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-red-700 hover:to-red-600 hover:text-white hover:shadow-lg hover:shadow-red-500/40">
+      <i class="fas fa-exclamation-triangle mr-2 text-red-500 transition duration-500 group-hover:text-white"></i>
+      Danger Zone
+    </button>
+  -->
+  </div>
+</aside>
+
+
+
+
+
+    <!-- Tab Content -->
+    <main class="flex-1 space-y-6 relative">
+      <!-- Account Settings -->
+<section id="tab-account" class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden">
+  <h2 class="text-3xl font-semibold mb-6 text-white">Account Settings</h2>
+
+  <div class="flex flex-col justify-between flex-grow bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-2xl shadow-xl border border-purple-700/20 min-h-[400px]">
+
+    
+    <div id="settings-account-loader" class="absolute inset-0 mt-30 flex justify-center items-center z-50 hidden ">
+  <div class="flex flex-col items-center space-y-2 text-gray-500">
+    <div class="w-6 h-6 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+    <span class="text-sm">Loading...</span>
+  </div>
+</div>
+
+
+    <div id="settings-all-fields">
+
+
+    
+    <!-- Top: Name Fields -->
+    
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-300 mb-1">First Name</label>
+        <input type="text" value="Your" id="settings-account-first" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-300 mb-1">Last Name</label>
+        <input type="text" value="Name" id="settings-account-second" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300">
+      </div>
+    
+
+    <!-- Middle: Email -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-purple-300 mb-1">Email</label>
+      <input type="email" value="you@example.com" id="settings-account-email" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-300">
+    </div>
+<!-- Password Fields Side by Side -->
+ 
+<div class="mb-4">
+  <button id="togglePasswordBtn" type="button"
+    class="text-sm font-semibold text-purple-400 hover:underline focus:outline-none">
+    Change Password
+  </button>
+</div>
+
+<div id="settings-password-fields" class="flex gap-6 hidden">
+  <!-- Password Input -->
+  <div class="flex-1">
+    <label class="block text-sm font-medium text-purple-300 mb-1">New Password</label>
+    <div class="relative w-full">
+      <input
+        id="settings-account-pw"
+        type="password"
+        placeholder="Password"
+        class="w-full px-4 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 hover:border-purple-500 transition duration-300"
+      />
+      <!-- Eye icon -->
+      <span
+        id="passwordEye"
+        class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-400"
+        style="display:none;"
+      >
+        <i id="eyeIcon" class="fa-solid fa-eye"></i>
+      </span>
+      <!-- Valid check -->
+      <span
+        id="passwordTick"
+        class="absolute inset-y-0 right-10 flex items-center text-green-400 hidden"
+      >
+        <i class="fa-solid fa-circle-check"></i>
+      </span>
+      <!-- Invalid cross -->
+      <span
+        id="passwordX"
+        class="absolute inset-y-0 right-10 flex items-center text-red-600 hidden"
+      >
+        <i class="fa-solid fa-circle-xmark"></i>
+      </span>
+    </div>
+  </div>
+
+  <!-- Confirm Password Input -->
+  <div class="flex-1">
+    <label class="block text-sm font-medium text-purple-300 mb-1">Confirm Password</label>
+    <div class="relative w-full">
+      <input
+        id="settings-account-cpw"
+        type="password"
+        placeholder="Confirm Password"
+        class="w-full px-4 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 hover:border-purple-500 transition duration-300"
+      />
+      <!-- Valid check -->
+      <span
+        id="confirmTick"
+        class="absolute inset-y-0 right-4 flex items-center text-green-400 hidden"
+      >
+        <i class="fa-solid fa-circle-check"></i>
+      </span>
+      <!-- Invalid cross -->
+      <span
+        id="confirmX"
+        class="absolute inset-y-0 right-4 flex items-center text-red-600 hidden"
+      >
+        <i class="fa-solid fa-circle-xmark"></i>
+      </span>
+    </div>
+  </div>
+</div>
+<p id="settings-relay" class="mt-2 text-xs " style="display: none;"></p>
+
+    <!-- Bottom: Save Button -->
+    <div class="text-right  pt-6">
+      <button onclick="save_account(this)" class="relative group inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold shadow-md hover:from-blue-600 hover:to-purple-500 transition-all duration-300 transform hover:scale-105 active:scale-95">
+        <i class="fas fa-save group-hover:animate-pulse"></i>
+        Save Changes
+      </button>
+    </div>
+</div>
+  </div>
+</section>
+
+      <!-- Account Settings -->
+
+<section id="tab-subscription" class="settings-tab absolute inset-0 w-full min-h-[675px] overflow-y-auto transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden p-6">
+
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-8 text-white text-center tracking-wide">Choose Your Plan</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+
+    <!-- Free Plan -->
+    <div class="flex flex-col justify-between bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl p-5 shadow-md hover:shadow-blue-300/20 transition">
+      <div>
+        <h3 class="text-xl font-semibold mb-1">Free</h3>
+        <p class="text-slate-300 mb-3 text-sm">Perfect for starting out.</p>
+        <ul class="text-slate-200 text-sm list-disc list-inside space-y-1 mb-5">
+          <li>50 emails/month</li>
+          <li>Basic scheduling tools</li>
+          <li>Email support</li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-2xl font-bold mb-3">$0<span class="text-base text-slate-400">/mo</span></div>
+        <button class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg font-medium">Select Free</button>
+      </div>
+    </div>
+
+    <!-- Pro Plan -->
+    <div class="flex flex-col justify-between bg-gradient-to-br from-indigo-700 to-purple-800 text-white rounded-2xl p-5 shadow-md hover:shadow-purple-400/20 transition transform hover:scale-[1.14] scale-[1.1]">
+      <div>
+        <h3 class="text-xl font-semibold mb-1">Pro</h3>
+        <p class="text-indigo-100 mb-3 text-sm">Ideal for consistent campaigns and insights.</p>
+        <ul class="text-indigo-100 text-sm list-disc list-inside space-y-1 mb-5">
+          <li>1,000 emails/month</li>
+          <li>Campaign controls</li>
+          <li>Analytics dashboard</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-2xl font-bold mb-3">$19<span class="text-base text-indigo-200">/mo</span></div>
+        <button class="w-full bg-white text-purple-800 hover:bg-gray-200 py-2 rounded-lg font-medium">Manage Subscription</button>
+      </div>
+    </div>
+
+    <!-- Premium Plan -->
+    <div class="flex flex-col justify-between bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] text-gray-800 rounded-2xl p-5 shadow-md hover:shadow-gray-400/30 transition transform hover:scale-[1.02]">
+      <div>
+        <h3 class="text-xl font-semibold mb-1 text-gray-900">Premium</h3>
+        <p class="text-gray-600 mb-3 text-sm">Full power for teams and high-volume users.</p>
+        <ul class="text-gray-700 text-sm list-disc list-inside space-y-1 mb-5">
+          <li>Unlimited emails</li>
+          <li>All Pro features</li>
+          <li>24/7 support</li>
+          <li>Integrations</li>
+          <li>Early feature access</li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-gray-900 mb-3">$49<span class="text-base text-gray-500">/mo</span></div>
+        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg font-medium">Select Premium</button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+
+
+
+
+      
+      <!-- connect -->
+<section id="tab-connect" class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden">
+  <h2 class="text-3xl font-semibold mb-6 text-white">Connect Your Account</h2>
+
+  <div id="connection-space" >
+
+
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+      <!-- Campaign Defaults -->
+<section id="tab-about" class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden">
+  <div class="p-6 text-white">
+    <h2 class="text-2xl font-semibold mb-6">About This App</h2>
+
+    <!-- Tab Navigation -->
+    <div class="flex space-x-4 mb-6">
+      <button id="aboutTabBtn" onclick="showAboutContent('about')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-sm font-medium shadow-inner border border-gray-700 border-purple-500 text-purple-400">About</button>
+      <button id="termsTabBtn" onclick="showAboutContent('terms')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-sm font-medium shadow-inner border border-gray-700">Terms & Conditions</button>
+    </div>
+
+   <div class="bg-gray-800 rounded-2xl p-6 border border-purple-600 shadow-[0_0_20px_rgba(128,90,213,0.3)] transition-all duration-300">
+
+    <!-- Tab Content -->
+<div id="aboutContent" class="space-y-6 text-gray-300 max-w-3xl mx-auto">
+
+  <p>
+    Welcome to Outflux
+    Heres a quick instruction on how to use the tool
+  </p>
+
+  <!-- Step 1 -->
+  <section class="space-y-2">
+    <h3 class="text-xl font-semibold text-white">1. Add a Campaign and Set It Up</h3>
+    <p>
+      Begin by creating a new campaign. Give it a meaningful name and configure its status — you can pause or activate the campaign at any time. This forms the foundation of your email outreach.
+    </p>
+    <!-- Image placeholder -->
+    <img src="/static/img/how_to_use/campaign.png" alt="Add Campaign Screenshot" class="w-full rounded-lg shadow-lg border border-gray-700">
+  </section>
+
+  <!-- Step 2 -->
+  <section class="space-y-2">
+    <h3 class="text-xl font-semibold text-white">2. Add a New List and Add Recipients</h3>
+    <p>
+      Next, create a recipient list for your campaign. You can manually add contacts or import them via CSV. Organizing your audience into lists helps you target your emails effectively.
+    </p>
+    <img src="/static/img/how_to_use/list.png" alt="Add List Screenshot" class="w-full rounded-lg shadow-lg border border-gray-700">
+  </section>
+
+  <!-- Step 3 -->
+  <section class="space-y-2">
+    <h3 class="text-xl font-semibold text-white">3. Create the Email Content</h3>
+    <p>
+      Compose the email message for your campaign. Drag and drop the blocks from the left and style them using the tab on the right to create the perfect email
+    </p>
+    <img src="/static/img/how_to_use/email.png" alt="Create Email Screenshot" class="w-full rounded-lg shadow-lg border border-gray-700">
+  </section>
+
+  <!-- Step 4 -->
+  <section class="space-y-2">
+    <h3 class="text-xl font-semibold text-white">4. Select the List and Pick the Date</h3>
+    <p>
+      Assign your email to the appropriate recipient list and schedule the sending date and time. You can also choose to send immediately if desired. The scheduling system allows precise control over your campaign timeline.
+    </p>
+    <img src="/static/img/how_to_use/date.png" alt="Schedule Email Screenshot" class="w-full rounded-lg shadow-lg border border-gray-700">
+  </section>
+<!-- Step 5 -->
+  <section class="space-y-2">
+    <h3 class="text-xl font-semibold text-white">5. Connect your Google account</h3>
+    <p>
+      this will be the email your emails will be sent from , navigate to settings > connect then select google. This will take you to google where you will sign in and allow permissions for outflux to send emails from your behalf. 
+    </p>
+    <img src="/static/img/how_to_use/google.png" alt="Schedule Email Screenshot" class="w-full rounded-lg shadow-lg border border-gray-700">
+  </section>
+  <h4>Congraulations you have now know how to use Outflux and its features</h4>
+
+  
+
+
+</div>
+
+
+   <div id="termsContent" class="space-y-4 hidden">
+  <h3 class="text-xl font-semibold text-white">Terms & Conditions</h3>
+
+  <p class="text-gray-300">
+    By using this software application, you agree to abide by the following terms and conditions. These terms are designed to ensure responsible usage, protect user rights, and clarify the boundaries of service. If you do not agree with any part of these terms, you must discontinue use of the App.
+  </p>
+
+  <h4 class="text-white font-medium">1. Acceptable Use</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>The App must not be used to send unsolicited emails (spam), phishing messages, or content that is harmful, abusive, or misleading.</li>
+    <li>Users must comply with all applicable local, national, and international laws, including but not limited to data protection regulations and anti-spam laws.</li>
+    <li>Usage of the App must not interfere with or negatively impact the experience of other users, systems, or networks.</li>
+  </ul>
+
+  <h4 class="text-white font-medium">2. Data & Privacy</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>User data is stored locally and/or transmitted securely and is handled in accordance with GDPR principles, including data minimization and transparency.</li>
+    <li>As a solo-developed application, no third-party entities have access to your campaign data unless explicitly stated or required by law.</li>
+    <li>You are solely responsible for the integrity, security, and legality of the email content and recipient lists you manage through the App.</li>
+  </ul>
+
+  <h4 class="text-white font-medium">3. Intellectual Property</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>All intellectual property rights related to the App, including its codebase, interface, and design elements, are owned by the developer unless otherwise stated.</li>
+    <li>Redistribution, duplication, or resale of the App without written consent from the developer is strictly prohibited.</li>
+    <li>Feedback or suggestions you provide may be used to improve the App without obligation to compensate you.</li>
+  </ul>
+
+  <h4 class="text-white font-medium">4. Service Limitations</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>The App is provided "as is" without any express or implied warranty of any kind.</li>
+    <li>Although every effort is made to maintain availability and accuracy, the developer is not liable for any loss of data, downtime, or unintended behavior.</li>
+    <li>Use of the App is at your own risk. The developer shall not be held responsible for any indirect, incidental, or consequential damages.</li>
+  </ul>
+
+  <h4 class="text-white font-medium">5. Termination</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>Violation of these terms may result in suspension or permanent termination of your access to the App.</li>
+    <li>You may discontinue use of the App at any time, and all stored data will remain your responsibility.</li>
+  </ul>
+
+  <h4 class="text-white font-medium">6. Updates & Changes</h4>
+  <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+    <li>These Terms & Conditions may be updated periodically. Continued use of the App after such updates constitutes your agreement to the revised terms.</li>
+    <li>It is your responsibility to review the Terms regularly to stay informed of any changes.</li>
+  </ul>
+
+  <p class="text-gray-300">
+    If you have any questions or concerns regarding these Terms & Conditions, you are encouraged to contact the developer directly through the official support channel provided within the App.
+  </p>
+</div>
+
+  </div>
+  </div>
+</section>
+
+
+
+
+
+
+      <!-- Danger Zone -->
+      <section id="tab-danger" class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden">
+        <h2 class="text-2xl font-semibold text-red-400 mb-4">Danger Zone</h2>
+        <div class="bg-gray-700 rounded-xl p-4">
+          <p class="text-sm text-gray-300 mb-3">Permanently delete your account and all associated data.</p>
+          <button class="bg-red-600 hover:bg-red-500 px-5 py-2 rounded-lg text-sm font-medium">Delete Account</button>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MAIN LISTS VIEW -->
+<div id="list"
+     class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden p-6 text-white space-y-8">
+
+  <!-- ✨ Header Banner -->
+  <section class="relative overflow-hidden rounded-2xl shadow-lg">
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 opacity-90"></div>
+    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-8 py-6">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-wide">Your Email Lists</h1>
+        <p class="text-indigo-200 mt-1 max-w-xl">
+          Manage all mailing lists, search, add new lists, and review recent email failures in one place.
+        </p>
+      </div>
+      <button id="list-add"
+              onclick="openAddListModal()"
+              class="bg-gradient-to-r from-blue-500 to-purple-600 flex items-center gap-2 py-3 px-6 rounded-full
+                     font-semibold hover:scale-105 transition-transform shadow-lg">
+        <i class="fas fa-plus"></i>
+        Create New List
+      </button>
+    </div>
+  </section>
+
+  <!-- 🔍 Search bar -->
+<!-- Filter Bar -->
+<!-- ░░ LIST FILTERS ░░ -->
+<div
+  class="flex flex-col md:flex-row md:items-end gap-4 bg-gray-800/60 backdrop-blur
+         rounded-2xl border border-blue-600/40 shadow-lg p-6">
+
+  <!-- 🔍 Search -->
+  <div class="relative flex-1">
+    <input id="list-search"
+           type="text"
+           placeholder="Search lists…"
+           class="w-full pl-11 pr-3 py-3 rounded-lg bg-gray-900/60 text-gray-100
+                  border border-gray-700/60 focus:outline-none focus:ring-2
+                  focus:ring-blue-500 placeholder-gray-500 transition" />
+    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-blue-400/80"></i>
+  </div>
+
+  <!-- ↕️ Sort Field -->
+  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
+    Sort&nbsp;By
+    <div class="relative">
+      <select id="sort-field"
+              class="appearance-none w-36 bg-gray-900/60 border border-gray-700/60
+                     rounded-lg pl-3 pr-8 py-2 text-sm text-gray-200 hover:border-blue-400
+                     focus:ring-2 focus:ring-blue-500 transition">
+        <option value="name">Name</option>
+        <option value="count">Count</option>
+      </select>
+      <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+    </div>
+  </label>
+
+  <!-- ⬆/⬇ Direction -->
+  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
+    Direction
+    <div class="relative">
+      <select id="sort-dir"
+              class="appearance-none w-36 bg-gray-900/60 border border-gray-700/60
+                     rounded-lg pl-3 pr-8 py-2 text-sm text-gray-200 hover:border-blue-400
+                     focus:ring-2 focus:ring-blue-500 transition">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <i class="fas fa-sort-amount-down-alt absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+    </div>
+  </label>
+
+  <!-- #️⃣ Min Count -->
+  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
+    Min&nbsp;Emails
+    <input id="min-count"
+           type="number"
+           min="0"
+           placeholder="0"
+           class="w-24 bg-gray-900/60 border border-gray-700/60 rounded-lg px-3 py-2 text-sm
+                  text-gray-200 placeholder-gray-500 hover:border-blue-400
+                  focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
+  </label>
+
+  <!-- 🔄 Reset -->
+  <button id="reset-filters"
+          class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-600
+                 text-white text-sm font-semibold px-5 py-2 rounded-lg shadow
+                 hover:-translate-y-0.5 hover:shadow-blue-600/50 active:scale-95 transition">
+    <i class="fas fa-sync-alt text-xs"></i>
+    Reset
+  </button>
+</div>
+
+
+<div class="flex flex-col lg:flex-row gap-8">
+
+  <!-- 📋 Lists Table (65% width) -->
+  <div class="lg:basis-[65%] bg-gray-900/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-purple-600/40 overflow-hidden ring-1 ring-purple-700/30 flex flex-col">
+
+    <div class="max-h-96 overflow-y-auto nice-scrollbar flex-1">
+      <table class="w-full text-sm text-gray-200 font-medium tracking-wide">
+
+        <thead class="sticky top-0 z-10 text-xs uppercase font-bold tracking-widest">
+          <tr class="bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 text-white shadow-sm shadow-purple-900/40">
+            <th class="py-5 px-6 text-left">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-list text-sm text-white/90"></i>
+                List&nbsp;Name
+              </div>
+            </th>
+            <th class="py-5 px-6 text-left">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-envelope text-sm text-white/90"></i>
+                Emails&nbsp;Count
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody id="list-table" class="divide-y divide-gray-700/30">
+          <!-- JS inject rows -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🚨 Recent Failures Panel (35% width) -->
+  <div class="lg:basis-[35%] bg-gray-900 rounded-2xl shadow-xl border border-red-600/40 flex flex-col">
+
+    <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-700 to-red-600 rounded-t-2xl">
+      <h3 class="text-lg font-bold flex items-center gap-2">
+        <i class="fas fa-times-circle text-red-200"></i>
+        Recent&nbsp;Failures
+      </h3>
+      <!-- optional refresh button -->
+    </div>
+
+    <div class="max-h-80 overflow-y-auto nice-scrollbar flex-1">
+      <table class="w-full text-xs">
+        <thead class="sticky top-0 bg-gray-800/90 backdrop-blur text-gray-300 uppercase tracking-wider">
+          <tr>
+            <th class="px-4 py-2 text-left">Email</th>
+            <th class="px-4 py-2 text-left">Reason</th>
+          </tr>
+        </thead>
+        <tbody id="fail-table" class="divide-y divide-gray-700/50 text-gray-200 text-[0.75rem]">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+
+      <div id="fail-empty" class="hidden py-8 text-center text-gray-400 text-sm">
+        <i class="fas fa-inbox text-xl mb-1"></i><br>No failures yet.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+  
+
+<!-- Overlay -->
+<div id="edit-list-overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40" onclick="closeEditPanel()"></div>
+
+<div id="edit-list-panel" 
+     class="fixed top-0 right-0 h-full w-full max-w-[60rem] bg-gray-900 text-white shadow-2xl transform translate-x-full transition-transform z-50 overflow-y-auto
+            ring-2 ring-purple-600/40">
+
+  <div class="p-8 space-y-8">
+
+    <!-- Header -->
+    <div class="relative border-b border-purple-700 pb-4">
+  <!-- Back (X) button -->
+  <button 
+    onclick="closeEditPanel()" 
+    class="absolute left-0 top-0 mt-1 ml-1 mr-2 text-gray-400 hover:text-gray-200 transition"
+    title="Close"
+  >
+    <i class="fas fa-times text-lg"></i>
+  </button>
+
+  <!-- Header title & Delete button -->
+  <div class="flex justify-between items-center pl-8 pr-2">
+    <h2 class="text-3xl font-extrabold tracking-wide text-purple-400" id="edit-list-title">Edit List</h2>
+    
+    <button 
+      onclick="confirmDeleteList()" 
+      class="text-red-500 hover:text-red-300 transition-colors duration-200 font-semibold px-4 py-2 rounded-lg border border-red-600 hover:bg-red-700/20 focus:outline-none focus:ring-2 focus:ring-red-500"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+
+
+    <!-- Description + Count -->
+    <div>
+      <p class="text-sm text-gray-400 mb-2" id="edit-list-description">
+        Manage your mailing list entries below.
+      </p>
+      <div class="flex justify-between items-center text-gray-300 font-mono text-sm">
+        <span>Total Entries: <span id="edit-list-count" class="text-purple-400 font-semibold">0</span></span>
+        
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex border-b border-purple-700 mb-6 select-none">
+      <button id="tab-button-manual" 
+              class="list-tab-button px-6 py-3 text-sm font-semibold text-purple-300 hover:text-purple-100 hover:bg-purple-800 rounded-t-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onclick="showListTab('manual')">
+        Manual
+      </button>
+      <button id="tab-button-csv" 
+              class="list-tab-button px-6 py-3 text-sm font-semibold text-purple-300 hover:text-purple-100 hover:bg-purple-800 rounded-t-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onclick="showListTab('csv')">
+        CSV Upload
+      </button>
+    </div>
+
+    <!-- Manual Tab -->
+    <div id="tab-manual" class="list-tab-content space-y-6">
+      <div class="space-y-4">
+        <div class="flex gap-4">
+          <input type="email" id="new-email" placeholder="Email" 
+                 class="flex-1 bg-gray-800 border border-purple-700 rounded-lg px-4 py-3 text-white placeholder-purple-400
+                        focus:outline-none focus:ring-2 focus:ring-purple-500 transition" />
+        </div>
+        <div class="flex gap-4">
+          <input type="text" id="new-name" placeholder="Name" 
+                 class="flex-1 bg-gray-800 border border-purple-700 rounded-lg px-4 py-3 text-white placeholder-purple-400
+                        focus:outline-none focus:ring-2 focus:ring-purple-500 transition" />
+          <input type="text" id="new-company" placeholder="Company" 
+                 class="flex-1 bg-gray-800 border border-purple-700 rounded-lg px-4 py-3 text-white placeholder-purple-400
+                        focus:outline-none focus:ring-2 focus:ring-purple-500 transition" />
+        </div>
+        <button onclick="addEntry()" 
+                class="w-full bg-gradient-to-r from-purple-600 via-indigo-700 to-blue-600 hover:from-purple-700 hover:via-indigo-800 hover:to-blue-700
+                       rounded-lg py-3 text-white font-semibold tracking-wide shadow-lg transition-transform duration-150
+                       active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500">
+          Add Entry
+        </button>
+      </div>
+    </div>
+
+    <!-- CSV Upload Tab -->
+    <div id="tab-csv" class="list-tab-content hidden space-y-6">
+
+      <!-- Header -->
+      <div class="text-center px-6">
+        <p class="text-sm text-gray-400 max-w-xl mx-auto">
+          Upload a CSV file with columns: <code class="bg-gray-800 px-1 rounded">Email</code>, <code class="bg-gray-800 px-1 rounded">Name</code>, <code class="bg-gray-800 px-1 rounded">Company</code>
+        </p>
+      </div>
+
+      <!-- File Input -->
+      <label for="csv-upload" 
+             class="block w-full p-8 border-2 border-dashed border-purple-700 rounded-lg text-center cursor-pointer hover:border-purple-500 transition-colors duration-300
+                    bg-gray-800/60 hover:bg-gray-800">
+        <i class="fas fa-file-csv text-4xl text-purple-600 mb-3"></i>
+        <p class="text-purple-300 font-semibold text-lg">Click to upload or drag your CSV file</p>
+        <input type="file" id="csv-upload" accept=".csv" class="hidden" />
+      </label>
+
+      <!-- Mapping / Preview -->
+      <div id="csv-mapping" class="mt-6 space-y-4 text-gray-300"></div>
+
+    </div>
+
+    <!-- ░░ EMAIL FILTER + LIST ░░ -->
+<!-- Filter Bar -->
+<!-- Emails Header -->
+<h3 class="text-lg font-bold text-purple-300 mb-2 flex items-center gap-2 border-t border-purple-700 pt-5">
+  <i class="fas fa-envelope-open-text text-purple-400 "></i>
+  Emails
+</h3>
+
+<!-- Filter Bar -->
+<div class="flex items-center gap-3 mb-4 ">
+  <i class="fas fa-search text-purple-400"></i>
+  <input
+    id="email-filter"
+    type="text"
+    placeholder="Search entries by email…"
+    class="flex-1 bg-gray-800 border border-purple-700 rounded-lg px-4 py-2 text-sm
+           text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    oninput="filterEmails(this.value)"
+  />
+  <button
+    class="text-xs px-3 py-1 rounded-lg bg-purple-700/30 text-purple-200 hover:bg-purple-700/50 transition"
+    onclick="document.getElementById('email-filter').value=''; filterEmails('');"
+  >
+    Clear
+  </button>
+</div>
+
+<!-- Emails List -->
+<div
+  id="edit-list-emails"
+  class="space-y-3 max-h-[30rem] overflow-y-auto nice-scrollbar"
+>
+  <!-- JS will inject <li> rows here -->
+</div>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Save Template Modal -->
+<div id="save-template-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0" onclick="if(event.target === this) closeSaveTemplateModal()">
+  <div id="save-template-modal-content" class="bg-gray-900 border border-purple-700 rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6 transform scale-95 transition-all duration-300">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-bold text-white">
+        <i class="fas fa-save mr-2 text-purple-400"></i> Save Template
+      </h3>
+      <button onclick="closeSaveTemplateModal()" class="text-gray-400 hover:text-red-400 transition">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Title Input -->
+    <div>
+      <label for="template-title" class="block text-sm font-medium text-gray-300 mb-1">Template Title</label>
+      <input
+        id="template-title"
+        type="text"
+        class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-purple-600 text-white placeholder-purple-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        placeholder="e.g. Welcome Email"
+      />
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-4">
+      <button onclick="closeSaveTemplateModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition">
+        Cancel
+      </button>
+      <button onclick="confirmSaveTemplate()" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm font-semibold rounded-lg transition">
+        <i class="fas fa-check mr-1"></i> Save
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal Overlay -->
+<div id="temp-display_modal" 
+     class="fixed inset-0 bg-black/60 z-50 hidden transition-opacity duration-300 ease-out opacity-0 flex items-center justify-center">
+  <div id="modal-inner" 
+       class="transform scale-95 transition-transform duration-300 ease-out
+              bg-gray-900 rounded-xl w-[90%] max-w-5xl h-[90%] shadow-2xl overflow-hidden 
+              flex flex-col ring-1 ring-pink-600"
+       role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    
+    <!-- Header -->
+    <div class="p-4 bg-gray-800 border-b border-gray-700 flex justify-between items-center">
+      <h2 id="modal-title" class="text-white text-lg font-bold tracking-wide flex items-center gap-2">
+        <i class="fas fa-envelope"></i> Template Preview
+      </h2>
+      <button onclick="close_template_display_modal()" 
+              class="text-gray-400 hover:text-pink-400 transition"
+              aria-label="Close modal">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Scrollable Iframe Area -->
+    <div class="flex-grow overflow-auto bg-white nice-scrollbar p-4 rounded-b-xl">
+      <iframe 
+        id="templatePreviewFrame"
+        class="w-full h-full border rounded"
+        sandbox=""
+        title="Template Preview Frame"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div
+  id="confirmation-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm hidden"
+  onclick="if(event.target === this) closeConfirmModal()"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="confirm-modal-title"
+  aria-describedby="confirm-modal-message"
+>
+  <div
+    id="confirmModalContent"
+    class="relative bg-gray-900 border border-blue-600 rounded-2xl shadow-lg shadow-blue-600/40 p-8 w-[420px] text-white opacity-0 scale-95 transform transition-all duration-300 ease-out"
+    tabindex="-1"
+  >
+    <!-- Close Icon -->
+    <button
+      onclick="closeConfirmModal()"
+      aria-label="Close confirmation modal"
+      class="absolute top-4 right-4 text-gray-400 hover:text-blue-500 transition duration-200 text-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Title & Message -->
+    <h2 id="confirm-modal-title" class="text-2xl font-bold text-center mb-2 tracking-wide text-blue-500">
+      Are you sure?
+    </h2>
+    <p id="confirm-modal-message" class="text-center text-gray-400 mb-6">
+      This action cannot be undone.
+    </p>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4">
+      <button
+        id="confirm-ok"
+        class="flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-blue-500/50 transition-transform duration-300 "
+      >
+        <i class="fas fa-check mr-2"></i> Confirm
+      </button>
+      <button
+        id="confirm-cancel"
+        class="flex items-center justify-center px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-300 focus:outline-none"
+      >
+        <i class="fas fa-times mr-2"></i> Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="addCampaignModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0" onclick="if(event.target === this) closeSaveTemplateModal()">
+  <div id="campaignModalContainer" class="bg-gray-900 border border-purple-700 rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6 transform scale-95 transition-all duration-300">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-bold text-white">
+        <i class="fas fa-save mr-2 text-purple-400"></i> Create New Campaign
+      </h3>
+      <button onclick="closeCampaignModal()" class="text-gray-400 hover:text-red-400 transition">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Title Input -->
+    <div>
+      <label for="campaignName" class="block text-sm font-medium text-gray-300 mb-1">Campaign Name</label>
+      <input
+        id="campaignName"
+        type="text"
+        class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-purple-600 text-white placeholder-purple-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        placeholder="e.g. My Campaign"
+      />
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-4">
+      <button onclick="closeCampaignModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition">
+        Cancel
+      </button>
+      <button onclick="submitNewCampaign()" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm font-semibold rounded-lg transition">
+        <i class="fas fa-check mr-1"></i> Create Campaign
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- add list  -->
+<div id="add-list-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <!-- Modal Container -->
+  <div class="bg-gray-800 text-white w-full max-w-md rounded-xl shadow-lg p-6 relative">
+
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold"><i class="fas fa-list-alt text-blue-400 mr-2"></i>Create New List</h2>
+      <button onclick="closeAddListModal()" class="text-gray-400 hover:text-red-500 text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="space-y-4">
+      <!-- List Name -->
+      <div>
+        <label for="new-list-name" class="block text-sm mb-1">List Name</label>
+        <input id="new-list-name" type="text" placeholder="list name" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      
+      <div>
+        <label for="list-description" class="block text-sm mb-1">Description</label>
+        <textarea rows="3" id="list-description" type="text" placeholder="description" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="flex justify-end gap-3 mt-6">
+      <button onclick="closeAddListModal()" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">Cancel</button>
+      <button onclick="submitNewList()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-medium">
+        <i class="fas fa-plus mr-1"></i>Create List
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+<!-- DELETE LIST CONFIRM-->
+    <div id="list-confirm-modal" class="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-gray-800 p-6 rounded-lg w-1/3">
+        <h3 class="text-xl text-white mb-4">Are you sure you want to delete this?</h3>
+        <div class="flex justify-between">
+          <button id="list-confirm-delete" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete</button>
+          <button onclick="closeListModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- Time Modal -->
+<div id="timeModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl p-8 w-[40rem] max-w-full space-y-6">
+
+    <!-- Header -->
+    <h3 class="text-xl font-bold text-white text-center">
+      Select Time for <span id="modal-date" class="text-purple-400"></span>
+    </h3>
+
+    <!-- Time Selectors -->
+    <div class="flex justify-center gap-16 text-white mt-4">
+
+      <!-- Hour Selector -->
+      <div class="text-center space-y-2">
+        <div class="text-sm text-gray-400">Hour</div>
+        <div class="flex items-center gap-4">
+          <button id="hour-decrease" class="w-9 h-9 bg-gray-700 hover:bg-gray-600 rounded-full text-lg">−</button>
+          <div id="selected-hour" class="text-2xl font-semibold w-10 text-center">00</div>
+          <button id="hour-increase" class="w-9 h-9 bg-gray-700 hover:bg-gray-600 rounded-full text-lg">+</button>
+        </div>
+      </div>
+
+      <!-- Minute Selector -->
+      <div class="text-center space-y-2">
+        <div class="text-sm text-gray-400">Minute</div>
+        <div class="flex items-center gap-4">
+          <button id="minute-decrease" class="w-9 h-9 bg-gray-700 hover:bg-gray-600 rounded-full text-lg">−</button>
+          <div id="selected-minute" class="text-2xl font-semibold w-10 text-center">00</div>
+          <button id="minute-increase" class="w-9 h-9 bg-gray-700 hover:bg-gray-600 rounded-full text-lg">+</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- AM/PM Toggle -->
+    <div class="text-center">
+      <button id="am-pm-button" class="px-5 py-2 rounded-lg text-sm font-medium bg-purple-600 hover:bg-purple-500 text-white transition">
+        AM
+      </button>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="flex justify-between items-center pt-2">
+
+      <!-- Unselect -->
+      <button id="unselect-time" class="text-sm px-4 py-2 bg-gray-700 hover:bg-red-500 hover:text-white border border-red-500 rounded-lg transition">
+        Unselect
+      </button>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3">
+        <button onclick="closeTimeModal()" class="text-sm px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">
+          Cancel
+        </button>
+        <button id="save-time" class="text-sm px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium shadow-sm">
+          Save
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+  <div id="logoutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm hidden" onclick="if(event.target === this) closeModal()">
+    <div id="logoutModalContent" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-gray-700 rounded-2xl shadow-xl shadow-blue-600/30 p-8 w-[420px] text-white opacity-0 scale-95 transition-all duration-300 ease-out">
+      
+      <!-- Close Icon -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-400 transition duration-200 text-2xl">
+        &times;
+      </button>
+  
+      <!-- Icon -->
+      <div class="flex justify-center mb-4">
+        <div class="bg-red-600/20 p-4 rounded-full border border-red-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10v1" />
+          </svg>
+        </div>
+      </div>
+  
+      <!-- Title -->
+      <h2 class="text-2xl font-semibold text-center text-white mb-2">Log Out?</h2>
+      <p class="text-center text-gray-400 mb-6">You're about to be signed out of your account. Are you sure you want to continue?</p>
+  
+      <!-- Buttons -->
+      <div class="flex justify-center gap-4">
+        <button onclick="confirmLogout()" class="px-6 py-2 bg-gradient-to-r from-red-500 to-pink-600 text-white font-medium rounded-lg shadow-md hover:scale-105 hover:shadow-red-500/30 transition-all duration-300">
+          Yes, Log Out
+        </button>
+        <button onclick="closeModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all duration-300">
+          Cancel
+        </button>
+      </div>
+  
+
+    
+
+
+
+
+
+      <script src="/static/js/base.js"></script>
+      <script src="/static/js/dashboard.js"></script>
+      <script src="/static/js/lists/list.js"></script>
+      <script src="/static/js/campaign/edit.js"></script>
+      <script src="/static/js/campaign/schedule.js"></script>
+      <script src="/static/js/campaign/campaigns.js"></script>
+      <script src="/static/js/campaign/email.js"></script>
+      <script src="/static/js/campaign/load.js"></script>
+      <script src="/static/js/error/error.js"></script>
+      <script src="/static/js/lists/add.js"></script>
+      <script src="/static//js/settings/settings.js"></script>
+      <script src="/static/js/dashboard/dash.js"></script>
+      <script src="/static/js/secure.js"></script>
+      <script src="/static/js/dashboard/stats.js"></script>
+      <script src="/static/js/campaign/templates.js"></script>
+      <script src="/static/js/campaign/custom_template.js"></script>
+      <script src="/static/js/campaign/list_section.js"></script>
+  <!--<script src="/static/js/lists/list.js"></script>-->
+        <script src="https://unpkg.com/grapesjs"></script>
+  <script src="https://unpkg.com/grapesjs-preset-newsletter"></script>
+  <script src="https://unpkg.com/grapesjs-blocks-basic-extend"></script>
+  
+</body>
+
+</html>
