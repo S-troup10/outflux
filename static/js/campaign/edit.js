@@ -98,7 +98,7 @@ function openCampaignDetails(campaignCard) {
   quill.root.innerHTML = body;
   setEmailHtml(body);
 
-if (/<style[\s\S]*?>[\s\S]*?<\/style>/.test(body)) {
+if (/<body[\s\S]*?>[\s\S]*?<\/body>/.test(body)) {
   Toggle_quill(false);
   console.log('returned true, switch to grapes js');
   old_html = getEmailHtml();
@@ -257,6 +257,10 @@ function showTab(tabId) {
       btn.classList.add('text-gray-400');
     }
   });
+
+  if (tabId == 'settingsTab') {
+    update_summary();
+  }
 }
 
 
@@ -313,7 +317,7 @@ function showTab(tabId) {
 
 
 
-function saveEditedCampaign() {
+function saveEditedCampaign(send_now = false) {
   loader.style.display = 'flex';
 
   const subject = document.getElementById('email-subject').value;
@@ -402,7 +406,7 @@ const changed = isChanged(keysToCheck, campaignData, {
 
 
 //if data matches old data and schedule remains unchanged then exit without saving
-if (changed == false && changed_schedule == false ) {
+if (changed == false && changed_schedule == false && !send_now) {
   backToCampaignList();
   console.log('leaving without saving');
   loader.style.display = 'none';
@@ -447,6 +451,13 @@ if (changed == false && changed_schedule == false ) {
         backToCampaignList();
         showToast('Campaign Saved Successfully');
         render_next_send();
+
+
+        if (send_now === true) {
+
+          showToast('Email Sent Successfully');
+        }
+        
       }
     } else {
       console.log('Server responded with error:', responseData.error);
@@ -459,3 +470,159 @@ if (changed == false && changed_schedule == false ) {
   });
 }
 
+// code to instead of having a se3ttings tab when the user fills out all fields in list and email a send button will show up 
+//first a function to fill out campain summary
+
+function update_summary() {
+  const subject = document.getElementById('email-subject').value;
+  const recipients = getRecipientCount(selectedListId, extractEmails());
+  document.getElementById('campaign-subject-preview').innerText = subject;
+
+  if (subject.length == 0 || recipients == 0) {
+    toggleSectionLock(true, !subject.length == 0, !recipients == 0);
+
+  } else {
+    toggleSectionLock(false);
+  }
+
+
+  
+
+  let htmlContent;
+
+  // PREVIEW
+  if (!grapesjsEditor.classList.contains('hidden')) {
+    htmlContent = getEmailHtml();
+  } else {
+    htmlContent = quill.root.innerHTML;
+  }
+
+  document.getElementById('campaign-recipients-preview').innerText = recipients + ' selected';
+
+  // Wrap content in full HTML doc + scrollbar styles
+  const fullHtml = `
+    <html>
+      <head>
+        <style>
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #2b7fff;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background-color: #1f2937;
+      }
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: #2b7fff #1f2937;
+      }
+      body { margin: 0; }
+        </style>
+      </head>
+      <body>
+        ${htmlContent}
+      </body>
+    </html>
+  `;
+
+  const blob = new Blob([fullHtml], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  document.getElementById('html-preview').src = url;
+}
+
+
+
+function toggleSectionLock(locked, subjectFilled = true, recipientsFilled = true) {
+  const container = document.getElementById('lock_section');
+  if (!container) return;
+
+  let overlay = container.querySelector('.lock-overlay');
+
+  if (locked) {
+    let missingItems = [];
+    if (!subjectFilled) missingItems.push("Subject");
+    if (!recipientsFilled) missingItems.push("Recipient List");
+
+    const missingMessage = missingItems.length
+      ? `<p class="text-sm text-red-400 font-medium">Missing: ${missingItems.join(', ')}</p>`
+      : '';
+
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = `
+        lock-overlay absolute inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 rounded-2xl
+        text-white text-center pointer-events-auto
+      `;
+
+      overlay.innerHTML = `
+        <div class="bg-gray-800/80 rounded-2xl p-8 shadow-xl max-w-md w-full flex flex-col items-center space-y-6 border border-purple-700">
+          <div class="bg-purple-700/20 p-6 rounded-full border-4 border-purple-600 shadow-inner">
+            <i class="fa-solid fa-ban text-5xl text-purple-400 animate-pulse"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-white">Section Locked</h2>
+          <p class="text-sm text-gray-300">
+            To access this section, please complete the email and list tab.
+          </p>
+          ${missingMessage}
+          <button onclick="showTab('emailTab')" class="mt-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold transition">
+            Go Back
+          </button>
+        </div>
+      `;
+
+      container.appendChild(overlay);
+    } else {
+      // Update existing overlay content if already there
+      const messageElement = overlay.querySelector('p.text-red-400');
+      if (messageElement) {
+        messageElement.innerHTML = `Missing: ${missingItems.join(', ')}`;
+      }
+    }
+  } else {
+    if (overlay) {
+      overlay.remove();
+    }
+  }
+}
+
+
+
+function sendCampaignNow() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+
+  const date = `${year}-${month}-${day}`;
+  const new_key = `${date}|${hour}|${minute}`;
+
+  pendingChanges.inserts.push(new_key);
+  saveEditedCampaign(true);
+  setTimeout(() => {
+
+    showSendingModal();
+  }, 300);
+
+
+}
+
+ function showSendingModal() {
+    const modal = document.getElementById("sending-modal");
+    const content = document.getElementById("sendingModalContent");
+    modal.classList.remove("hidden");
+    setTimeout(() => {
+      content.classList.remove("opacity-0", "scale-95");
+    }, 10);
+  }
+
+  function closeSendingModal() {
+    const modal = document.getElementById("sending-modal");
+    const content = document.getElementById("sendingModalContent");
+    content.classList.add("opacity-0", "scale-95");
+    setTimeout(() => modal.classList.add("hidden"), 300);
+  }

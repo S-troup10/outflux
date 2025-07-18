@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, abort
-from flask_cors import CORS
+
 import gunicorn
 import supabase_storage as storage
 import send_email as Email
@@ -7,13 +7,16 @@ import requests
 import bcrypt
 from collections import Counter, defaultdict 
 from datetime import datetime, timedelta, timezone
+
+import stripe
+
+STRIPE_SECRET_KEY = "sk_test_51Rm636IPmpPcLP6Dj5kZfuuw5MZs0cdxeNpS0NT3kRqh6rXOkos4L0LzUCVZGxOVWsrVn3lruniiv5nMiOWtKJoF00oTnz2rPY"
+stripe.api_key = STRIPE_SECRET_KEY
+
+
 app = Flask(__name__)
-CORS(app)  # Enables CORS for all routes
+  # Enables CORS for all routes
 app.secret_key = 'super_secret_key_123456'
-
-
-
-
 
 @app.route('/dashboard')
 def dashboard():
@@ -619,7 +622,50 @@ def disconnect_account():
 
 
 
+STRIPE_PUBLISHABLE_KEY = "pk_live_51R9hrqAGOU4usCEpsYRUz6KpAz|5AWPqdbvOKnnBBGZ1puSeDZlj1qvOrBFCUXdSujM1t@2EUHrXWRcY3HFSU005gUgf3M79"
 
+
+@app.route("/create-checkout-session", methods=["POST"])
+def create_checkout_session():
+    data = request.get_json()
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            success_url="http://127.0.0.1:5000/api/success",
+            cancel_url="http://127.0.0.1:5000/api/fail",
+            payment_method_types=["card"],
+            mode="subscription",
+            line_items=[{
+                "price": data["priceId"],
+                "quantity": 1,
+            }],
+        )
+        return jsonify({"url": checkout_session.url})
+    except Exception as e:
+        print(f"Stripe Error: {e}")
+        return jsonify(error=str(e)), 400  # use 400 (Bad Request) instead of 403
+
+
+#old for elliot
+#Premium prod_ShU9RXElUKECST
+#Pro prod_ShU9eUbQBMIs0u
+#secret
+
+#
+
+#public
+#
+
+
+
+@app.route("/api/success")
+def success():
+    #update their status in db
+    user_id = session.get('user').get('id')
+    storage.update_row_by_primary_key('users', {'subscription': ''})
+
+@app.route("/api/fail")
+def cancel():
+    return "Payment canceled"
 
 
 #start the app

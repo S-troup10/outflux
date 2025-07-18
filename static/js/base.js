@@ -99,8 +99,16 @@ function fill_setting_fields(user) {
   document.getElementById('settings-account-first').value = user.first_name;
   document.getElementById('settings-account-second').value = user.last_name ;
   document.getElementById('settings-account-email').value = user.email ;
-  //document.getElementById('settings-account-pw').value = user. ;
-  //document.getElementById('settings-account-cpw').value = user. ;
+ 
+  const date = new Date(user.created_at);
+const formatted = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long'
+});
+
+
+  document.getElementById('settings-joined').innerText = formatted;
+  document.getElementById('settings-plan').innerText = user.subscription;
 
 
 }

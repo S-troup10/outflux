@@ -736,3 +736,53 @@ input:-webkit-autofill:active {
     transition: max-height 0.5s ease;
   }
 
+.tab--button {
+  position: relative;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #d1d5db; /* text-gray-300 */
+  transition: all 0.3s ease;
+  border-bottom: 4px solid transparent;
+  background: none;
+}
+
+.tab--button:hover {
+  color: #fff;
+}
+
+/* Glow underline on hover */
+.tab--button:hover::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 50%;
+  height: 4px;
+  background: linear-gradient(to right, #c4b5fd, #8b5cf6); /* lighter purple */
+  border-radius: 9999px;
+  box-shadow: 0 0 6px #a78bfa;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+/* Active tab style */
+.active-tab {
+  
+  color: white !important;
+}
+
+.active-tab::after {
+  color: white;
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 60%;
+  height: 4px;
+  background: linear-gradient(to right, #a78bfa, #7c3aed);
+  border-radius: 9999px;
+  box-shadow: 0 0 12px #a78bfa;
+}

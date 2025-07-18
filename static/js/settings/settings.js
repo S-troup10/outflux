@@ -2,6 +2,13 @@ function switchSettingsTab(tabId) {
   const tabs = document.querySelectorAll('.settings-tab');
   const newActive = document.getElementById(`tab-${tabId}`);
 
+  if(tabId === 'subscription' ) {
+    fadeIn(document.getElementById('subscription-header'));
+  }
+  else if (!document.getElementById('subscription-header').classList.contains('hidden')){
+    fadeOut(document.getElementById('subscription-header'));
+  }
+
   // Animate tab content
   tabs.forEach(tabEl => {
     if (tabEl === newActive) {
@@ -437,18 +444,31 @@ function disconnect_account() {
 function showAboutContent(type) {
   const about = document.getElementById('aboutContent');
   const terms = document.getElementById('termsContent');
+  const privacy = document.getElementById('privacyContent');
+
   const aboutBtn = document.getElementById('aboutTabBtn');
   const termsBtn = document.getElementById('termsTabBtn');
+  const privacyBtn = document.getElementById('privacyTabBtn');
 
+  // Reset all tabs
+  about.classList.add('hidden');
+  terms.classList.add('hidden');
+  privacy.classList.add('hidden');
+
+  aboutBtn.classList.remove('border-purple-500', 'text-purple-400');
+  termsBtn.classList.remove('border-purple-500', 'text-purple-400');
+  privacyBtn.classList.remove('border-purple-500', 'text-purple-400');
+
+  // Activate selected tab
   if (type === 'about') {
     about.classList.remove('hidden');
-    terms.classList.add('hidden');
     aboutBtn.classList.add('border-purple-500', 'text-purple-400');
-    termsBtn.classList.remove('border-purple-500', 'text-purple-400');
-  } else {
-    about.classList.add('hidden');
+  } else if (type === 'terms') {
     terms.classList.remove('hidden');
     termsBtn.classList.add('border-purple-500', 'text-purple-400');
-    aboutBtn.classList.remove('border-purple-500', 'text-purple-400');
+  } else if (type === 'privacy') {
+    privacy.classList.remove('hidden');
+    privacyBtn.classList.add('border-purple-500', 'text-purple-400');
   }
 }
+

@@ -162,7 +162,7 @@ const emailInput = document.getElementById('email-chip-input');
 const chipList = document.getElementById('email-chip-list');
 const suggestionsBox = document.getElementById('email-suggestions');
 const mirror = document.getElementById('mirror-div');
-let _emails = [];
+let emails = [];
 
 const commonDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'icloud.com', 'hotmail.com', 'protonmail.com'];
 
@@ -274,8 +274,8 @@ function selectSuggestion(email) {
 }
 
 function addEmailChip(email) {
-  if (_emails.includes(email)) return;
-  _emails.push(email);
+  if (emails.includes(email)) return;
+  emails.push(email);
 
   const chip = document.createElement('div');
   chip.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-800/40 border border-blue-400/30 hover:scale-105 transition';
@@ -308,19 +308,19 @@ function validateEmail(email) {
 function extractEmails() {
   const list = document.getElementById('email-chip-list');
   const chips = list.querySelectorAll('span');
-  let emails = '';
+  let email_str = '';
   chips.forEach(chip => {
-    emails += chip.innerText + ',';
+    email_str += chip.innerText + ',';
   });
-  console.log(emails);
+  console.log(email_str);
   //reste the lenghth
  
-  return emails;
+  return email_str;
 
 }
 
 function prefil_chips(string_of_emails) {
-  _emails.length = 0;
+  emails.length = 0;
   const str = String(string_of_emails);
   chipList.innerHTML = '';
   console.log(str);

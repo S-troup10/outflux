@@ -61,6 +61,8 @@ function closeTimeModal() {
 // --- TIME FUNCTIONS ---
 
 function saveTime() {
+
+
   const hourText = document.getElementById("selected-hour").textContent;
   const minute = document.getElementById("selected-minute").textContent;
   let hour = parseInt(hourText);
@@ -119,6 +121,8 @@ function saveTime() {
   renderCalendar(currentYear, currentMonth);
   updateSelectedDatesDisplay();
   closeTimeModal();
+
+
 
   changed_schedule = true;
   //here the user clicks save on the time meaning they altered the schedule

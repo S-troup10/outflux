@@ -19,7 +19,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
+<script src="https://unpkg.com/grapesjs-plugin-inline-styles"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <!-- Quill JS -->
@@ -363,49 +363,38 @@
 <div class="flex justify-between items-center mb-6 border-b border-gray-700" id="campaignTabs">
 
   <!-- Tabs -->
-  <div class="flex space-x-6">
-    <button
-      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-300 hover:text-white focus:outline-none"
-      onclick="showTab('emailTab')"
-      id="tab-email"
-      aria-selected="true"
-      role="tab"
-      tabindex="0"
-      style="border-bottom: 4px solid transparent;"
-      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
-      onmouseout="this.style.borderBottom=''">
-      Create Email
-      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
-    </button>
+<div class="flex space-x-6">
+  <button
+    class="tab--button active-tab"
+    onclick="showTab('emailTab')"
+    id="tab-email"
+    aria-selected="true"
+    role="tab"
+    tabindex="0">
+    Create Email
+  </button>
 
-    <button
-      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white focus:outline-none"
-      onclick="showTab('listTab')"
-      id="tab-list"
-      aria-selected="false"
-      role="tab"
-      tabindex="-1"
-      style="border-bottom: 4px solid transparent;"
-      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
-      onmouseout="this.style.borderBottom=''">
-      List
-      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
-    </button>
+  <button
+    class="tab--button"
+    onclick="showTab('listTab')"
+    id="tab-list"
+    aria-selected="false"
+    role="tab"
+    tabindex="-1">
+    List
+  </button>
 
-    <button
-      class="tab--button relative px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white focus:outline-none"
-      onclick="showTab('settingsTab')"
-      id="tab-settings"
-      aria-selected="false"
-      role="tab"
-      tabindex="-1"
-      style="border-bottom: 4px solid transparent;"
-      onmouseover="this.style.borderBottom='4px solid #9f7aea'"
-      onmouseout="this.style.borderBottom=''">
-      Settings
-      <span class="absolute bottom-0 left-0 right-0 h-1 rounded-t-md bg-purple-600 opacity-0 transition-opacity duration-300"></span>
-    </button>
-  </div>
+  <button
+    class="tab--button"
+    onclick="showTab('settingsTab')"
+    id="tab-settings"
+    aria-selected="false"
+    role="tab"
+    tabindex="-1">
+    Send
+  </button>
+</div>
+
 
   <!-- Pause Toggle + Save Button -->
   <div class="flex items-center gap-6">
@@ -432,16 +421,13 @@
     <button
       id="update-campaign"
       onclick="saveEditedCampaign()"
-      class="inline-flex items-center gap-2 px-5 py-1 rounded-lg text-sm font-semibold
-               bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg
-               hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 hover:shadow-purple-700/50
-               transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500"
+      class="tab--button "
       type="button"
       title="Save Changes"
     >
 
 
-      <i class="fas fa-cloud-upload-alt text-lg"></i>
+      <i class="fas fa-cloud-upload-alt text-lg mr-2"></i>
       Save Changes
   
     </button>
@@ -707,38 +693,123 @@
 
 
 <!-- Settings Section -->
+<!-- Settings Section -->
 <div id="settingsTab" class="tab-content transition-all duration-300 opacity-0 hidden z-50">
-  <div class="max-w-4xl mx-auto bg-gray-800 p-6 rounded-2xl shadow-xl text-white space-y-6">
+
+  <div id="lock_section" class="relative">
+
+  <div class="max-w-6xl mx-auto bg-gray-900 border-2 border-purple-700 rounded-2xl shadow-2xl p-8 text-white space-y-6">
 
     <!-- Header -->
-    <h2 class="text-3xl font-bold text-center text-white">Select Send Dates</h2>
+    <h2 class="text-3xl font-bold text-center text-white mb-4">Schedule Your Campaign</h2>
 
-    <!-- Month Navigation -->
-    <div class="flex items-center justify-between">
-      <button onclick="changeMonth(-1)"
-              class="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none">
-        Prev
-      </button>
-      <h3 id="calendar-title" class="text-xl font-semibold text-white"></h3>
-      <button onclick="changeMonth(1)"
-              class="px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none">
-        Next
-      </button>
-    </div>
+    <!-- Split Layout: Send on left, Calendar on right -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
-    <!-- Calendar -->
-    <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-white">
-      <!-- Days injected by JS -->
-    </div>
-
-    <!-- Selected Dates Display -->
-    <div id="selectedDates" class="mt-4 text-sm text-gray-300 text-center">
-      No dates selected
-    </div>
+      <!-- 🔔 Send Now Section (LEFT) -->
+<div class="bg-gray-800 p-6 rounded-2xl shadow-inner border border-gray-700 text-white space-y-6 flex flex-col justify-between h-full">
+  <!-- Title -->
+  <div class="space-y-2">
+    <h3 class="text-2xl font-bold text-purple-400 flex items-center gap-2">
+     
+      Send Campaign
+    </h3>
+    <p class="text-gray-300 text-sm">Choose to send the campaign right now, or set a scheduled date using the calendar.</p>
   </div>
 
-  <!-- Delete Button -->
-  <div class="flex justify-end max-w-4xl mx-auto mt-4">
+  <!-- Campaign Summary Box -->
+  <div class="bg-gray-900 border border-purple-600 rounded-xl p-4 shadow-md space-y-2">
+    <h4 class="text-lg font-semibold text-white">Campaign Summary</h4>
+    <ul class="text-sm text-gray-300 list-disc list-inside">
+      <li><strong>Subject:</strong> <span id="campaign-subject-preview">Your Subject Here</span></li>
+      <li><strong>Recipients:</strong> <span id="campaign-recipients-preview">0 selected</span></li>
+      
+    </ul>
+    <h4 class="mt-5 mb-1 font-semibold text-white">Preview</h4>
+    <iframe 
+  src="" 
+  class="w-full h-[400px] rounded-xl border border-purple-700 shadow-inner bg-gray-100"
+  title="Campaign Status Preview"
+  id="html-preview"
+></iframe>
+  </div>
+
+  <!-- Info Badge -->
+  <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-900/20 border border-purple-600 text-sm text-purple-300 shadow-sm">
+    <i class="fas fa-info-circle text-purple-400"></i>
+    <span>This will send the campaign to all selected recipients immediately.</span>
+  </div>
+
+  <!-- Send Button -->
+  <button onclick="
+  showConfirmation({
+    title: 'Confirm Send',
+    message: 'Are you sure you want to send this campaign now? This action is final and cannot be undone.',
+    onConfirm: sendCampaignNow
+  })
+"
+
+          class="w-full inline-flex items-center justify-center gap-3 px-6 py-4 rounded-xl text-lg font-bold
+bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 text-white shadow-lg
+hover:from-emerald-600 hover:via-green-600 hover:to-emerald-700 hover:shadow-emerald-500/50
+transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-400
+">
+    <i class="fas fa-paper-plane text-xl"></i>
+    Send Now
+  </button>
+</div>
+
+
+
+
+
+<!-- 📅 Calendar Section (RIGHT) -->
+<div class="bg-gray-800 p-6 rounded-2xl shadow-inner border border-gray-700 space-y-6 flex flex-col justify-between h-full">
+
+  <!-- Header -->
+  <div class="space-y-2 text-center">
+    <h3 class="text-2xl font-bold text-indigo-400 flex items-center justify-center gap-2">
+      <i class="fas fa-calendar-alt text-purple-400"></i> Schedule for Later
+    </h3>
+    <p class="text-sm text-gray-300">Choose one or more days to schedule your campaign instead of sending it now.</p>
+  </div>
+
+  <!-- Month Navigation -->
+  <div class="flex items-center justify-between mt-4">
+    <button onclick="changeMonth(-1)"
+            class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-purple-700 transition shadow focus:outline-none">
+      <i class="fas fa-chevron-left mr-1"></i> Prev
+    </button>
+    <h3 id="calendar-title" class="text-xl font-semibold text-white">Loading...</h3>
+    <button onclick="changeMonth(1)"
+            class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-purple-700 transition shadow focus:outline-none">
+      Next <i class="fas fa-chevron-right ml-1"></i>
+    </button>
+  </div>
+
+  <!-- Calendar Grid -->
+  <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-sm text-gray-200 mt-2">
+    <!-- JS will inject days here -->
+  </div>
+
+  <!-- Selected Dates Summary -->
+  <div class="bg-gray-900 border border-purple-600 rounded-xl p-4 mt-4 space-y-2 text-center">
+    <h4 class="text-md font-semibold text-purple-300">
+      <i class="fas fa-clock mr-2"></i> Selected Send Dates
+    </h4>
+    <div id="selectedDates" class="text-sm text-gray-300">
+      No dates selected.
+    </div>
+    <p class="text-xs text-gray-500 mt-1">If dates are selected here, the campaign will be sent on those dates instead of immediately.</p>
+  </div>
+
+</div>
+
+
+    <!-- Delete Campaign Button -->
+    
+  </div>
+  <div class="flex justify-end">
     <button onclick="deleteCampaign()"
             id="delete-campaign"
             class="text-sm text-pink-400 hover:bg-pink-600/10 px-4 py-2 rounded-md focus:outline-none">
@@ -747,16 +818,8 @@
   </div>
 </div>
 
-<style>
-  .active-tab {
- 
-  border-bottom-width: 4px;
-  border-color: #9f7aea; /* Tailwind's purple-500 */
-  color: white;
-}
 
-  
-</style>
+</div>
 </div>
 </div>
 </div>
@@ -1020,6 +1083,21 @@
   <!--SETTINGS-->
 <div id="settings" class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden text-white min-h-screen p-6">
 
+
+  <section class="relative overflow-hidden rounded-2xl shadow-lg mb-6">
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 opacity-90"></div>
+    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-8 py-6">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-wide">Settings</h1>
+        <p class="text-indigo-200 mt-1 max-w-xl">
+          Manage your account settings, Google authentication, subscriptions, and more—all in one place.
+        </p>
+      </div>
+      
+    </div>
+  </section>
+
+
   <div class="flex flex-col md:flex-row gap-6">
     
     <!-- Sidebar Tabs -->
@@ -1032,14 +1110,14 @@
       <i class="fas fa-user mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
       Account
     </button>
-<!-- subscription
+
     <button onclick="switchSettingsTab('subscription')" 
       class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
              transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30">
       <i class="fas fa-credit-card mr-2 text-purple-400 transition duration-500 group-hover:text-white"></i>
       Subscription
     </button>
--->
+
     <button onclick="switchSettingsTab('connect')" 
       class="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-white bg-gray-800
              transition-all duration-500 ease-in-out hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30">
@@ -1071,192 +1149,241 @@
 
     <!-- Tab Content -->
     <main class="flex-1 space-y-6 relative">
+
+
+
+      
+<section id="subscription-header" class="transition-all duration-500 ease-in-out opacity-0 hidden flex flex-col items-center justify-center text-center min-h-[200px] px-6 md:px-12">
+  <div class="max-w-3xl">
+    <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight tracking-tight">
+      Choose Your Perfect Plan
+    </h1>
+    <p class="text-slate-400 text-lg md:text-xl mb-0 leading-relaxed max-w-xl mx-auto">
+      Flexible pricing tailored to teams of all sizes and projects at every stage. Whether you’re just getting started or scaling to thousands of emails, we have the right solution for you.
+    </p>
+  </div>
+</section>
+
+
+
       <!-- Account Settings -->
-<section id="tab-account" class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden">
-  <h2 class="text-3xl font-semibold mb-6 text-white">Account Settings</h2>
+<section
+  id="tab-account"
+  class="settings-tab absolute inset-0 w-full h-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden px-10 py-2"
+>
+  <h2 class="text-4xl font-extrabold mb-5 text-white max-w-4xl mx-auto border-b border-purple-700 pb-4">
+    Account Settings
+  </h2>
 
-  <div class="flex flex-col justify-between flex-grow bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-2xl shadow-xl border border-purple-700/20 min-h-[400px]">
-
-    
-    <div id="settings-account-loader" class="absolute inset-0 mt-30 flex justify-center items-center z-50 hidden ">
-  <div class="flex flex-col items-center space-y-2 text-gray-500">
-    <div class="w-6 h-6 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-    <span class="text-sm">Loading...</span>
-  </div>
-</div>
-
-
-    <div id="settings-all-fields">
-
-
-    
-    <!-- Top: Name Fields -->
-    
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-purple-300 mb-1">First Name</label>
-        <input type="text" value="Your" id="settings-account-first" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300">
+  <div
+    class="relative max-w-4xl mx-auto flex flex-col space-y-10 bg-gray-900 rounded-3xl px-10  border border-purple-700/40 shadow-xl"
+  >
+    <!-- Loader - unchanged -->
+    <div
+      id="settings-account-loader"
+      class="absolute inset-0 flex justify-center items-center z-50 hidden bg-black/50 rounded-3xl"
+    >
+      <div class="flex flex-col items-center space-y-2 text-gray-500">
+        <div class="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-sm tracking-wide">Loading account data...</span>
       </div>
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-purple-300 mb-1">Last Name</label>
-        <input type="text" value="Name" id="settings-account-second" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300">
+    </div>
+
+    <!-- Profile Picture and Basic Info -->
+    <section class="flex items-center space-x-8">
+
+      <div>
+        <h3 class="text-2xl font-semibold text-purple-300">Welcome back</h3>
+        <p class="mt-2 max-w-md text-gray-400">
+          Manage your personal info, update your email, and keep your account secure.
+        </p>
+
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-md">
+          <div>
+            <p class="text-sm text-gray-400">Joined</p>
+            <p id="settings-joined" class="font-semibold text-white">January 2023</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-400">Subscription Tier</p>
+            <p id="settings-plan" class="font-semibold text-white">base</p>
+          </div>
+
+        </div>
       </div>
-    
+    </section>
 
-    <!-- Middle: Email -->
-    <div class="mb-6">
-      <label class="block text-sm font-medium text-purple-300 mb-1">Email</label>
-      <input type="email" value="you@example.com" id="settings-account-email" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-300">
-    </div>
-<!-- Password Fields Side by Side -->
- 
-<div class="mb-4">
-  <button id="togglePasswordBtn" type="button"
-    class="text-sm font-semibold text-purple-400 hover:underline focus:outline-none">
-    Change Password
-  </button>
-</div>
+    <!-- Personal Information -->
+    <section>
+      <h3 class="text-xl font-semibold text-purple-300 mb-4">Personal Information</h3>
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-6" novalidate>
+        <div>
+          <label
+            for="settings-account-first"
+            class="block mb-2 text-sm font-medium text-purple-400"
+            >First Name</label
+          >
+          <input
+            id="settings-account-first"
+            type="text"
+            placeholder="First Name"
+            value="Your"
+            class="w-full rounded-xl border border-gray-700 bg-gray-900 px-5 py-3 text-white placeholder-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500 transition"
+          />
+          <p class="mt-1 text-xs text-gray-500">
+            Your given name, used for personalization.
+          </p>
+        </div>
 
-<div id="settings-password-fields" class="flex gap-6 hidden">
-  <!-- Password Input -->
-  <div class="flex-1">
-    <label class="block text-sm font-medium text-purple-300 mb-1">New Password</label>
-    <div class="relative w-full">
-      <input
-        id="settings-account-pw"
-        type="password"
-        placeholder="Password"
-        class="w-full px-4 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 hover:border-purple-500 transition duration-300"
-      />
-      <!-- Eye icon -->
-      <span
-        id="passwordEye"
-        class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-400"
-        style="display:none;"
-      >
-        <i id="eyeIcon" class="fa-solid fa-eye"></i>
-      </span>
-      <!-- Valid check -->
-      <span
-        id="passwordTick"
-        class="absolute inset-y-0 right-10 flex items-center text-green-400 hidden"
-      >
-        <i class="fa-solid fa-circle-check"></i>
-      </span>
-      <!-- Invalid cross -->
-      <span
-        id="passwordX"
-        class="absolute inset-y-0 right-10 flex items-center text-red-600 hidden"
-      >
-        <i class="fa-solid fa-circle-xmark"></i>
-      </span>
-    </div>
-  </div>
+        <div>
+          <label
+            for="settings-account-second"
+            class="block mb-2 text-sm font-medium text-purple-400"
+            >Last Name</label
+          >
+          <input
+            id="settings-account-second"
+            type="text"
+            placeholder="Last Name"
+            value="Name"
+            class="w-full rounded-xl border border-gray-700 bg-gray-900 px-5 py-3 text-white placeholder-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500 transition"
+          />
+          <p class="mt-1 text-xs text-gray-500">
+            Your family name or surname.
+          </p>
+        </div>
+      </form>
+    </section>
 
-  <!-- Confirm Password Input -->
-  <div class="flex-1">
-    <label class="block text-sm font-medium text-purple-300 mb-1">Confirm Password</label>
-    <div class="relative w-full">
-      <input
-        id="settings-account-cpw"
-        type="password"
-        placeholder="Confirm Password"
-        class="w-full px-4 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-purple-600 hover:border-purple-500 transition duration-300"
-      />
-      <!-- Valid check -->
-      <span
-        id="confirmTick"
-        class="absolute inset-y-0 right-4 flex items-center text-green-400 hidden"
-      >
-        <i class="fa-solid fa-circle-check"></i>
-      </span>
-      <!-- Invalid cross -->
-      <span
-        id="confirmX"
-        class="absolute inset-y-0 right-4 flex items-center text-red-600 hidden"
-      >
-        <i class="fa-solid fa-circle-xmark"></i>
-      </span>
-    </div>
-  </div>
-</div>
-<p id="settings-relay" class="mt-2 text-xs " style="display: none;"></p>
+    <!-- Email Section -->
+    <section>
+      <h3 class="text-xl font-semibold text-purple-300 mb-4">Email Address</h3>
+      <form novalidate>
+        <label
+          for="settings-account-email"
+          class="block mb-2 text-sm font-medium text-purple-400"
+          >Email</label
+        >
+        <input
+          id="settings-account-email"
+          type="email"
+          placeholder="you@example.com"
+          value="you@example.com"
+          class="w-full rounded-xl border border-gray-700 bg-gray-900 px-5 py-3 text-white placeholder-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500 transition"
+        />
+        <p class="mt-1 text-xs text-gray-500 max-w-lg">
+          This is your primary login email and where we'll send account notifications.
+        </p>
+      </form>
+    </section>
 
-    <!-- Bottom: Save Button -->
-    <div class="text-right  pt-6">
-      <button onclick="save_account(this)" class="relative group inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold shadow-md hover:from-blue-600 hover:to-purple-500 transition-all duration-300 transform hover:scale-105 active:scale-95">
+    <!-- Password Management -->
+    <section>
+      <h3 class="text-xl font-semibold text-purple-300 mb-4">Password Management</h3>
+
+      <button
+        id="togglePasswordBtn"
+        type="button"
+        aria-expanded="false"
+        aria-controls="settings-password-fields"
+        class="mb-6 text-purple-400 font-semibold hover:underline focus:outline-none"
+      >
+        Change Password
+      </button>
+
+      <form
+        id="settings-password-fields"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden"
+        novalidate
+      >
+        <div>
+          <label
+            for="settings-account-pw"
+            class="block mb-2 text-sm font-medium text-purple-400"
+            >New Password</label
+          >
+          <div class="relative">
+            <input
+              id="settings-account-pw"
+              type="password"
+              placeholder="Enter new password"
+              class="w-full rounded-xl border border-gray-700 bg-gray-900 px-5 py-3 pr-12 text-white placeholder-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500 hover:border-purple-500 transition"
+            />
+            <button
+              id="passwordEye"
+              type="button"
+              class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-purple-400 transition"
+              aria-label="Toggle password visibility"
+              style="display:none;"
+            >
+              <i id="eyeIcon" class="fa-solid fa-eye"></i>
+            </button>
+            <span
+              id="passwordTick"
+              class="absolute inset-y-0 right-10 flex items-center text-green-400 hidden"
+            >
+              <i class="fa-solid fa-circle-check"></i>
+            </span>
+            <span
+              id="passwordX"
+              class="absolute inset-y-0 right-10 flex items-center text-red-600 hidden"
+            >
+              <i class="fa-solid fa-circle-xmark"></i>
+            </span>
+          </div>
+          <p class="mt-2 text-xs text-gray-500 max-w-xs">
+            Minimum 8 characters, uppercase, lowercase, number, and symbol.
+          </p>
+        </div>
+
+        <div>
+          <label
+            for="settings-account-cpw"
+            class="block mb-2 text-sm font-medium text-purple-400"
+            >Confirm Password</label
+          >
+          <div class="relative">
+            <input
+              id="settings-account-cpw"
+              type="password"
+              placeholder="Confirm new password"
+              class="w-full rounded-xl border border-gray-700 bg-gray-900 px-5 py-3 text-white placeholder-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500 hover:border-purple-500 transition"
+            />
+            <span
+              id="confirmTick"
+              class="absolute inset-y-0 right-4 flex items-center text-green-400 hidden"
+            >
+              <i class="fa-solid fa-circle-check"></i>
+            </span>
+            <span
+              id="confirmX"
+              class="absolute inset-y-0 right-4 flex items-center text-red-600 hidden"
+            >
+              <i class="fa-solid fa-circle-xmark"></i>
+            </span>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Save Button -->
+    <div class="text-right">
+      <button
+        onclick="save_account(this)"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold
+               bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg
+               hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 hover:shadow-purple-700/50
+               transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500"
+      >
         <i class="fas fa-save group-hover:animate-pulse"></i>
         Save Changes
       </button>
     </div>
-</div>
   </div>
 </section>
+
 
       <!-- Account Settings -->
 
-<section id="tab-subscription" class="settings-tab absolute inset-0 w-full min-h-[675px] overflow-y-auto transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden p-6">
-
-  <h2 class="text-2xl sm:text-3xl font-semibold mb-8 text-white text-center tracking-wide">Choose Your Plan</h2>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-
-    <!-- Free Plan -->
-    <div class="flex flex-col justify-between bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl p-5 shadow-md hover:shadow-blue-300/20 transition">
-      <div>
-        <h3 class="text-xl font-semibold mb-1">Free</h3>
-        <p class="text-slate-300 mb-3 text-sm">Perfect for starting out.</p>
-        <ul class="text-slate-200 text-sm list-disc list-inside space-y-1 mb-5">
-          <li>50 emails/month</li>
-          <li>Basic scheduling tools</li>
-          <li>Email support</li>
-        </ul>
-      </div>
-      <div>
-        <div class="text-2xl font-bold mb-3">$0<span class="text-base text-slate-400">/mo</span></div>
-        <button class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg font-medium">Select Free</button>
-      </div>
-    </div>
-
-    <!-- Pro Plan -->
-    <div class="flex flex-col justify-between bg-gradient-to-br from-indigo-700 to-purple-800 text-white rounded-2xl p-5 shadow-md hover:shadow-purple-400/20 transition transform hover:scale-[1.14] scale-[1.1]">
-      <div>
-        <h3 class="text-xl font-semibold mb-1">Pro</h3>
-        <p class="text-indigo-100 mb-3 text-sm">Ideal for consistent campaigns and insights.</p>
-        <ul class="text-indigo-100 text-sm list-disc list-inside space-y-1 mb-5">
-          <li>1,000 emails/month</li>
-          <li>Campaign controls</li>
-          <li>Analytics dashboard</li>
-          <li>Priority support</li>
-        </ul>
-      </div>
-      <div>
-        <div class="text-2xl font-bold mb-3">$19<span class="text-base text-indigo-200">/mo</span></div>
-        <button class="w-full bg-white text-purple-800 hover:bg-gray-200 py-2 rounded-lg font-medium">Manage Subscription</button>
-      </div>
-    </div>
-
-    <!-- Premium Plan -->
-    <div class="flex flex-col justify-between bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] text-gray-800 rounded-2xl p-5 shadow-md hover:shadow-gray-400/30 transition transform hover:scale-[1.02]">
-      <div>
-        <h3 class="text-xl font-semibold mb-1 text-gray-900">Premium</h3>
-        <p class="text-gray-600 mb-3 text-sm">Full power for teams and high-volume users.</p>
-        <ul class="text-gray-700 text-sm list-disc list-inside space-y-1 mb-5">
-          <li>Unlimited emails</li>
-          <li>All Pro features</li>
-          <li>24/7 support</li>
-          <li>Integrations</li>
-          <li>Early feature access</li>
-        </ul>
-      </div>
-      <div>
-        <div class="text-2xl font-bold text-gray-900 mb-3">$49<span class="text-base text-gray-500">/mo</span></div>
-        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg font-medium">Select Premium</button>
-      </div>
-    </div>
-
-  </div>
-
-</section>
 
 
 
@@ -1292,9 +1419,70 @@
     <div class="flex space-x-4 mb-6">
       <button id="aboutTabBtn" onclick="showAboutContent('about')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-sm font-medium shadow-inner border border-gray-700 border-purple-500 text-purple-400">About</button>
       <button id="termsTabBtn" onclick="showAboutContent('terms')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-sm font-medium shadow-inner border border-gray-700">Terms & Conditions</button>
+      <button id="privacyTabBtn" onclick="showAboutContent('privacy')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-sm font-medium shadow-inner border border-gray-700">Privacy Policy</button>
+    </div>
     </div>
 
    <div class="bg-gray-800 rounded-2xl p-6 border border-purple-600 shadow-[0_0_20px_rgba(128,90,213,0.3)] transition-all duration-300">
+
+
+
+<div id="privacyContent" class="space-y-6 text-gray-300 max-w-3xl mx-auto hidden">
+  <h3 class="text-2xl font-bold text-white mb-4">Privacy Policy</h3>
+
+  <p>Effective Date: July 2025</p>
+
+  <p>At Outflux, your privacy is our priority. This Privacy Policy outlines how we handle your personal information and explains your rights in relation to it.</p>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">1. What We Collect</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li><strong>Account Information:</strong> Name, email address, authentication method (e.g., Google), and account preferences.</li>
+    <li><strong>Usage Data:</strong> Logs of app activity, features accessed, and settings interactions.</li>
+    <li><strong>Payment Data:</strong> Managed securely via Stripe. Outflux never stores raw card numbers.</li>
+    <li><strong>Support Inquiries:</strong> Messages or emails you send us when contacting support.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">2. How We Use Your Data</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li>To operate and improve Outflux’s features and interface.</li>
+    <li>To send essential service updates or billing-related emails.</li>
+    <li>To provide user support and help resolve issues.</li>
+    <li>To enforce terms of service or prevent abuse and fraud.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">3. Data Security & Storage</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li>All data is encrypted in transit (HTTPS) and at rest.</li>
+    <li>We use Supabase for secure backend and database management.</li>
+    <li>Access to your data is limited to authorized personnel only.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">4. Cookies & Tracking</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li>We use essential cookies to manage login sessions and preferences.</li>
+    <li>No third-party marketing or advertising cookies are used.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">5. Third-Party Services</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li><strong>Google:</strong> For secure login authentication.</li>
+    <li><strong>Stripe:</strong> For managing subscriptions and payments.</li>
+    <li><strong>Supabase:</strong> For database and user management.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">6. Your Rights</h4>
+  <ul class="list-disc list-inside space-y-2">
+    <li>You can view, update, or delete your account at any time in the settings panel.</li>
+    <li>You may request access to all data we hold about you via email.</li>
+    <li>You can opt-out of non-essential emails.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold text-purple-400 mt-6">7. Compliance & Contact</h4>
+  <p>Outflux complies with privacy laws including GDPR where applicable. For questions or concerns about data handling, please contact us at <a href="mailto:support@outflux.ai" class="text-purple-300 underline">support@outflux.ai</a>.</p>
+
+  <p class="text-sm text-gray-500">Last updated: July 18, 2025</p>
+</div>
+
 
     <!-- Tab Content -->
 <div id="aboutContent" class="space-y-6 text-gray-300 max-w-3xl mx-auto">
@@ -1426,7 +1614,131 @@
         </div>
       </section>
 
+
+
+
+
     </main>
+
+
+
+    <section id="tab-subscription" class="settings-tab w-full transition-all duration-500 ease-in-out opacity-0 translate-y-4 hidden px-6 py-12">
+  <div class="max-w-screen-2xl mx-auto">
+
+    <!-- Header -->
+
+
+   <!-- Pricing Plans -->
+<div class="grid lg:grid-cols-3 gap-10 mb-24 text-white">
+  <!-- Free Plan -->
+  <div class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-xl border border-slate-700 hover:shadow-blue-400/30 transition-transform hover:-translate-y-1 duration-300">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-extrabold tracking-wide">Free </h3>
+      <div class="text-2xl font-bold">$0<span class="text-slate-400 text-base">/mo</span></div>
+    </div>
+    <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+      Start strong with daily limits perfect for personal use or testing ideas.
+    </p>
+    <ul class="space-y-3 text-sm mb-8">
+      <li class="flex items-center"><i class="fas fa-envelope-open-text mr-3 text-blue-400"></i> 3 emails/day (approx. 90/month)</li>
+      <li class="flex items-center"><i class="fas fa-edit mr-3 text-blue-400"></i> Basic email editor</li>
+      <li class="flex items-center"><i class="fas fa-headset mr-3 text-blue-400"></i> Email support</li>
+    </ul>
+    <button class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition">Choose Free</button>
+  </div>
+
+  <!-- Pro Plan -->
+  <div class="rounded-3xl bg-gradient-to-br from-indigo-800 via-purple-700 to-indigo-900 p-8 shadow-xl border border-purple-500 hover:shadow-purple-400/40 transition-transform hover:-translate-y-1 duration-300 scale-105">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-extrabold tracking-wide">Pro </h3>
+      <div class="text-2xl font-bold">$10<span class="text-purple-200 text-base">/mo</span></div>
+    </div>
+    <p class="text-purple-100 text-sm mb-6 leading-relaxed">
+      Power up your campaigns with advanced tools and more sending capacity.
+    </p>
+    <ul class="space-y-3 text-sm mb-8">
+      <li class="flex items-center"><i class="fas fa-envelope mr-3 text-yellow-300"></i> 1,000 emails/month</li>
+      <li class="flex items-center"><i class="fas fa-edit mr-3 text-yellow-300"></i> Enhanced email editor</li>
+      <li class="flex items-center"><i class="fas fa-chart-bar mr-3 text-yellow-300"></i> Detailed analytics dashboard</li>
+      <li class="flex items-center"><i class="fas fa-th-large mr-3 text-yellow-300"></i> Customizable templates</li>
+      <li class="flex items-center"><i class="fas fa-headset mr-3 text-yellow-300"></i> Priority support</li>
+    </ul>
+    <button onclick="startCheckout('price_1Rm64rIPmpPcLP6DYH3FZ0yr')" class="w-full bg-gray-200 hover:bg-gray-100 text-gray-900 font-semibold py-3 rounded-xl transition">Upgrade to Pro</button>
+  </div>
+
+  <!-- Premium Plan -->
+  <div class="rounded-3xl bg-gradient-to-br from-gray-100 to-white text-gray-900 p-8 shadow-xl border border-gray-300 hover:shadow-gray-400/50 transition-transform hover:-translate-y-1 duration-300">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-extrabold tracking-wide">Premium </h3>
+      <div class="text-2xl font-bold">$49<span class="text-gray-500 text-base">/mo</span></div>
+    </div>
+    <p class="text-gray-700 text-sm mb-6 leading-relaxed">
+      Unlimited sending, team collaboration, and enterprise-grade features for scaling your business.
+    </p>
+    <ul class="space-y-3 text-sm mb-8">
+      <li class="flex items-center"><i class="fas fa-infinity mr-3 text-yellow-600"></i> Unlimited emails</li>
+      <li class="flex items-center"><i class="fas fa-users mr-3 text-yellow-600"></i> Multi-user/team accounts</li>
+      <li class="flex items-center"><i class="fas fa-plug mr-3 text-yellow-600"></i> API & CRM integrations</li>
+      
+      <li class="flex items-center"><i class="fas fa-headset mr-3 text-yellow-600"></i> 24/7 VIP support</li>
+    </ul>
+    <button onclick="startCheckout('price_1RmCvzIPmpPcLP6D0PcDSfqt ')" class="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-xl transition">Get Premium</button>
+  </div>
+</div>
+
+
+
+     <!-- Feature Highlights -->
+    <div class="grid md:grid-cols-3 gap-6 text-slate-300 mb-20">
+      <div class="bg-slate-800 rounded-xl p-6 shadow-md hover:shadow-purple-500/30 transition">
+        <div class="text-4xl text-purple-400 mb-4"><i class="fas fa-layer-group"></i></div>
+        <h3 class="text-xl font-semibold text-white mb-2">Scalable Infrastructure</h3>
+        <p class="text-sm leading-relaxed">
+          Start free, upgrade as you grow. Our platform scales to match your growth, ensuring performance at every step.
+        </p>
+      </div>
+      <div class="bg-slate-800 rounded-xl p-6 shadow-md hover:shadow-purple-500/30 transition">
+        <div class="text-4xl text-purple-400 mb-4"><i class="fas fa-chart-line"></i></div>
+        <h3 class="text-xl font-semibold text-white mb-2">Live Analytics</h3>
+        <p class="text-sm leading-relaxed">
+          View opens, clicks, conversions in real time. Stay informed and iterate fast with clear performance metrics.
+        </p>
+      </div>
+      <div class="bg-slate-800 rounded-xl p-6 shadow-md hover:shadow-purple-500/30 transition">
+        <div class="text-4xl text-purple-400 mb-4"><i class="fas fa-lock"></i></div>
+        <h3 class="text-xl font-semibold text-white mb-2">End-to-End Security</h3>
+        <p class="text-sm leading-relaxed">
+          Data is fully encrypted in transit and at rest. We’re GDPR-ready, privacy-first, and enterprise-secure.
+        </p>
+      </div>
+    </div>
+    <!-- Testimonials -->
+    <div class="grid md:grid-cols-3 gap-6 text-sm text-slate-300 mb-20">
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <p class="mb-3">"I moved over from a bigger platform and haven’t looked back. The UI is clean, responsive, and intuitive."</p>
+        <p class="mb-2">I run all my email campaigns solo and this tool makes it feel effortless.</p>
+        <div class="mt-3 font-semibold text-white">— Jamie T., Freelance Designer</div>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <p class="mb-3">"Switching to Pro gave us a major lift. We fine-tuned campaigns based on real-time data we never had before."</p>
+        <p class="mb-2">Saves our team hours every week and boosts engagement by 30%+.</p>
+        <div class="mt-3 font-semibold text-white">— Casey M., Agency Owner</div>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <p class="mb-3">"This platform checks all the boxes. Reliability, ease-of-use, great support, and affordable pricing."</p>
+        <p class="mb-2">We onboarded our whole team in a day and never looked back.</p>
+        <div class="mt-3 font-semibold text-white">— Alex R., Marketing Lead</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-xs text-slate-500">
+      <span>Payments securely processed</span> • <span class="text-white">Powered by Stripe</span>
+    </div>
+
+  </div>
+</section>
+
 
   </div>
 </div>
@@ -1850,58 +2162,38 @@
 
 
 
+<div id="confirmation-modal" class="fixed inset-0 z-[9999] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center">
+  <div id="confirmModalContent"
+       class="w-full max-w-lg rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-800 to-purple-900 p-8 text-white shadow-2xl transform transition-all duration-300 opacity-0 scale-95 border border-white/10 flex gap-8">
 
+    <!-- Left Icon Area -->
+    <div class="flex flex-col items-center justify-center flex-shrink-0 w-24">
+      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 shadow-inner">
+        <i class="fas fa-question-circle text-3xl text-white"></i>
+      </div>
+    </div>
 
+    <!-- Right Content Area -->
+    <div class="flex flex-col justify-center flex-grow min-w-0">
+      <h2 id="confirm-modal-title" class="text-2xl font-bold mb-2">Confirm Action</h2>
+      <p id="confirm-modal-message" class="text-sm text-gray-200">
+        Please review the information below before proceeding.
+      </p>
 
-<div
-  id="confirmation-modal"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm hidden"
-  onclick="if(event.target === this) closeConfirmModal()"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="confirm-modal-title"
-  aria-describedby="confirm-modal-message"
->
-  <div
-    id="confirmModalContent"
-    class="relative bg-gray-900 border border-blue-600 rounded-2xl shadow-lg shadow-blue-600/40 p-8 w-[420px] text-white opacity-0 scale-95 transform transition-all duration-300 ease-out"
-    tabindex="-1"
-  >
-    <!-- Close Icon -->
-    <button
-      onclick="closeConfirmModal()"
-      aria-label="Close confirmation modal"
-      class="absolute top-4 right-4 text-gray-400 hover:text-blue-500 transition duration-200 text-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
-    >
-      <i class="fas fa-times"></i>
-    </button>
-
-    <!-- Title & Message -->
-    <h2 id="confirm-modal-title" class="text-2xl font-bold text-center mb-2 tracking-wide text-blue-500">
-      Are you sure?
-    </h2>
-    <p id="confirm-modal-message" class="text-center text-gray-400 mb-6">
-      This action cannot be undone.
-    </p>
-
-    <!-- Buttons -->
-    <div class="flex justify-center gap-4">
-      <button
-        id="confirm-ok"
-        class="flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-blue-500/50 transition-transform duration-300 "
-      >
-        <i class="fas fa-check mr-2"></i> Confirm
-      </button>
-      <button
-        id="confirm-cancel"
-        class="flex items-center justify-center px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-300 focus:outline-none"
-      >
-        <i class="fas fa-times mr-2"></i> Cancel
-      </button>
+      <!-- Buttons -->
+      <div class="mt-6 flex justify-end gap-4">
+        <button id="confirm-cancel" class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-200 text-sm font-medium shadow-md">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+        <button id="confirm-ok" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full transition-all duration-200 text-sm font-semibold shadow-lg">
+          <i class="fas fa-check-circle"></i>
+          Yes, Continue
+        </button>
+      </div>
     </div>
   </div>
 </div>
-
 
 
 
@@ -2087,6 +2379,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
   <div id="logoutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm hidden" onclick="if(event.target === this) closeModal()">
     <div id="logoutModalContent" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-gray-700 rounded-2xl shadow-xl shadow-blue-600/30 p-8 w-[420px] text-white opacity-0 scale-95 transition-all duration-300 ease-out">
       
@@ -2117,9 +2420,70 @@
           Cancel
         </button>
       </div>
-  
+  </div>
+  </div>
 
-    
+
+
+
+
+
+<!-- Sending Modal -->
+<div id="sending-modal" class="fixed inset-0 z-[9999] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center">
+  <div id="sendingModalContent"
+       class="w-full max-w-lg rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-800 to-purple-900 p-8 text-white shadow-2xl transform transition-all duration-300 opacity-0 scale-95 border border-white/10">
+
+    <!-- Header Icon and Title -->
+    <div class="flex items-center gap-4 mb-6">
+      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 shadow-inner">
+        <i class="fas fa-clock text-2xl text-white"></i>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">Queued for Sending</h2>
+        <p class="text-sm text-gray-200 mt-1">Your email is scheduled and will be sent shortly.</p>
+      </div>
+    </div>
+<!-- Informative Highlights (Professional & Useful) -->
+<div class="space-y-4 text-sm text-white/90 mb-6">
+
+  <div class="flex items-start gap-3">
+    <i class="fas fa-check-circle text-green-400 mt-1"></i>
+    <div>
+      <p class="font-semibold">Email queued for dispatch</p>
+      <p class="text-gray-300">Your message has been successfully scheduled and will be sent shortly.</p>
+    </div>
+  </div>
+
+  <div class="flex items-start gap-3">
+    <i class="fas fa-hourglass text-yellow-400 mt-1"></i>
+    <div>
+      <p class="font-semibold">Processing in progress</p>
+      <p class="text-gray-300">Our system is preparing your email to ensure optimal delivery and formatting.</p>
+    </div>
+  </div>
+
+  <div class="flex items-start gap-3">
+    <i class="fas fa-rocket text-blue-400 mt-1"></i>
+    <div>
+      <p class="font-semibold">Rapid delivery ensured</p>
+      <p class="text-gray-300">Emails will be sent efficiently to reach your recipients as quickly as possible.</p>
+    </div>
+  </div>
+
+</div>
+
+
+    <!-- Footer Button -->
+    <div class="text-right">
+      <button onclick="closeSendingModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-200 text-sm font-medium shadow-md">
+        <i class="fas fa-thumbs-up"></i>
+        OK, Got It
+      </button>
+    </div>
+  </div>
+</div>
+
+
 
 
 
@@ -2142,6 +2506,7 @@
       <script src="/static/js/campaign/templates.js"></script>
       <script src="/static/js/campaign/custom_template.js"></script>
       <script src="/static/js/campaign/list_section.js"></script>
+      <script src="/static/js/settings/stripe.js"></script>
   <!--<script src="/static/js/lists/list.js"></script>-->
         <script src="https://unpkg.com/grapesjs"></script>
   <script src="https://unpkg.com/grapesjs-preset-newsletter"></script>

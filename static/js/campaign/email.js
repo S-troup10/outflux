@@ -18,11 +18,15 @@ function initGrapesJSEditor() {
       fromElement: false,
       plugins: [
         'grapesjs-preset-newsletter',
-        'grapesjs-blocks-basic-extend'
+        'grapesjs-blocks-basic-extend',
+        'gjs-plugin-inline-styles',
       ],
       pluginsOpts: {
         'grapesjs-preset-newsletter': {},
-        'grapesjs-blocks-basic-extend': {}
+        'grapesjs-blocks-basic-extend': {},
+        'gjs-plugin-inline-styles': {
+      onlyMatched: false, // Optional: set true to inline only matched styles
+    },
       },
       blockManager: {
         appendTo: '#blocks',
@@ -550,8 +554,11 @@ function getEmailHtml() {
     console.warn('Editor not initialized');
     return '';
   }
-  return editor.getHtml() + '<style>' + editor.getCss() + '</style>';
+
+  // Use the inline styles plugin to extract clean, inline-styled HTML
+  return editor.runCommand('gjs-get-inlined-html');
 }
+
 
 
 
@@ -561,10 +568,18 @@ function setEmailHtml(html) {
     console.warn('Editor not initialized');
     return;
   }
-  editor.setComponents('');
-  editor.setStyle('');
+
+  // Clear current editor content
+  editor.DomComponents.clear();
+  editor.CssComposer.clear();
+
+  // Load raw HTML into GrapesJS
   editor.setComponents(html);
+
+  // Optional: parse styles if you store them separately
+  // editor.setStyle(css);
 }
+
 
 const template_section = document.getElementById('template_section');
 
