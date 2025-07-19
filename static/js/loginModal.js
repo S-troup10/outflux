@@ -1,12 +1,13 @@
-const topLoginButton = document.getElementById('login');
-const topSignUpButton = document.getElementById('signUp');
-
 function openLogin() {
     //set the login invaid to hidden
     document.getElementById('fail').classList.remove('show');
 
-    topLoginButton.classList.add('hidden');
-    topSignUpButton.classList.add('hidden');
+    // Hide navigation buttons if they exist
+    const topLoginButton = document.querySelector('button[onclick="openLogin()"]');
+    const topSignUpButton = document.querySelector('button[onclick="openModal()"]');
+
+    if (topLoginButton) topLoginButton.classList.add('hidden');
+    if (topSignUpButton) topSignUpButton.classList.add('hidden');
     const modal = document.getElementById("loginModal");
     const modalContent = document.getElementById("loginModalContent");
     // Remove 'hidden' so the dark overlay appears instantly
@@ -18,7 +19,7 @@ function openLogin() {
     }, 50);
 }
 function closeLogin() {
-    
+
     const modal = document.getElementById("loginModal");
     const modalContent = document.getElementById("loginModalContent");
     // Animate modal content closing
@@ -27,8 +28,13 @@ function closeLogin() {
     // After the animation, hide the overlay
     setTimeout(() => {
         modal.classList.add("hidden");
-        topLoginButton.classList.remove('hidden');
-        topSignUpButton.classList.remove('hidden');
+
+        // Show navigation buttons if they exist
+        const topLoginButton = document.querySelector('button[onclick="openLogin()"]');
+        const topSignUpButton = document.querySelector('button[onclick="openModal()"]');
+
+        if (topLoginButton) topLoginButton.classList.remove('hidden');
+        if (topSignUpButton) topSignUpButton.classList.remove('hidden');
     }, 500);
 }
 

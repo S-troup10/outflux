@@ -4,6 +4,7 @@ let templates_opened = false;
 let currentEdit = null;
 let old_html;
 
+
 const backButton = document.getElementById('backb');
 function openCampaignDetails(campaignCard) {
   console.log(campaignCard);
@@ -90,7 +91,7 @@ function openCampaignDetails(campaignCard) {
   setSelectedDates(schedule);
   render_ListsTable();
   apply_selected_ids_to_list(list_id);
-  document.getElementById("check-paused").checked = paused;
+
   document.getElementById('email-subject').value = subject;
 
   //test for style , if yes then it was from the pro edior

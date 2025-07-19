@@ -1,7 +1,9 @@
-const button = document.getElementById('signUp');
 function openModal() {
-    button.classList.add('hidden');
-    topLoginButton.classList.add('hidden');
+    const button = document.getElementById('signup');
+    const topLoginButton = document.querySelector('button[onclick="openLogin()"]');
+
+    
+    if (topLoginButton) topLoginButton.classList.add('hidden');
     const modal = document.getElementById("signupModal");
     const modalContent = document.getElementById("modalContent");
     // Remove 'hidden' so the dark overlay appears instantly
@@ -22,8 +24,11 @@ function closeModal() {
     // After the animation, hide the overlay
     setTimeout(() => {
         modal.classList.add("hidden");
-        topLoginButton.classList.remove('hidden');
-        button.classList.remove('hidden');
+        
+        const topLoginButton = document.querySelector('button[onclick="openLogin()"]');
+
+        if (button) button.classList.remove('hidden');
+        if (topLoginButton) topLoginButton.classList.remove('hidden');
     }, 500);
 }
 
@@ -113,7 +118,7 @@ function togglePasswordVisibility() {
 
 const submit = document.getElementById('signup');
 
-submit.addEventListener('click', Submit);
+submit.addEventListener('click', do_Submit);
 
 const firstName = document.getElementById('firstName');
 const lastName = document.getElementById('lastName');
@@ -122,7 +127,7 @@ const email = document.getElementById('email');
 const _confirm = document.getElementById('confirm');
 
 
-function Submit() {
+function do_Submit() {
     //check each element to see if they have answered , 
     // if not illimuniate the fields required
     

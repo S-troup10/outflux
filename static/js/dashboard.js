@@ -28,7 +28,7 @@ const screens = {
   campaigns: document.getElementById('campaigns'),
   analytics: document.getElementById('analytics'),
   settings: document.getElementById('settings'),
-  lists: document.getElementById('list')
+  lists: document.getElementById('lists')
 };
 function switchScreen(screen) {
   //fitst highlight the new icon

@@ -109,136 +109,201 @@
 
 
 
-<div id="dashboard" class="main-content flex flex-col min-h-screen text-white p-8 space-y-8 transition-all duration-500">
-  <!-- Welcome Header -->
-  <div class="relative w-full  rounded-2xl shadow-xl p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700">
-  <!-- Background Glow Accent -->
-  <div class="absolute -top-10 -left-10 w-80 h-80 bg-blue-500 opacity-20 blur-3xl rounded-full z-0"></div>
-  <div class="absolute bottom-0 right-0 w-72 h-72 bg-purple-500 opacity-10 blur-2xl rounded-full z-0"></div>
+<div id="dashboard" class="main-content p-8 space-y-8">
 
-  <!-- Content -->
-  <div class="relative z-10 text-center space-y-2">
-    <h1 id='dash-name' class="text-5xl font-extrabold tracking-tight text-white animate-fade-in-slow">Welcome back</h1>
-    <p class="text-md text-gray-400 max-w-xl mx-auto">Your campaign control center is ready. Use the quick actions below to manage lists, send emails, and grow your audience.</p>
-  </div>
-</div>
+            <!-- Welcome Hero Section -->
+            <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/50 via-blue-900/50 to-indigo-900/50 border border-blue-500/20 p-12">
+                <!-- Animated Background -->
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10"></div>
+                <div class="absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
 
-  <!-- Main Split Layout -->
-  <div class="flex flex-col lg:flex-row gap-6 flex-1">
-    
-    <!-- Left Panel (2/3) -->
-    <div class="w-full lg:w-2/3 space-y-6">
-      <!-- Quick Action Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <!-- CARD TEMPLATE -->
+                <!-- Content -->
+                <div class="relative z-10 text-center">
+                    <h1 id="dash-name" class="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                        Welcome Back
+                    </h1>
+                    <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+                        Your email marketing command center. Track performance, manage campaigns, and grow your audience.
+                    </p>
 
-        <div onclick="update_settings('account')" class="bg-gray-800 rounded-2xl shadow-md p-8 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
-          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-user-cog"></i></div>
-          <div class="flex items-center justify-between mb-2 z-10 relative">
-            <h2 class="text-lg font-semibold">Update Account</h2>
-            <i class="fas fa-user-cog text-blue-400 text-xl"></i>
-          </div>
-          <p class="text-sm text-gray-400">Edit your profile and preferences.</p>
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-6">
+                            <div class="text-3xl font-bold text-blue-400 mb-2">0</div>
+                            <div class="text-slate-300 text-sm">Active Campaigns</div>
+                        </div>
+                        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-6">
+                            <div class="text-3xl font-bold text-emerald-400 mb-2">0</div>
+                            <div class="text-slate-300 text-sm">Total Subscribers</div>
+                        </div>
+                        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-6">
+                            <div class="text-3xl font-bold text-purple-400 mb-2">0%</div>
+                            <div class="text-slate-300 text-sm">Avg Open Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+                <!-- Left Column - Quick Actions -->
+                <div class="xl:col-span-2 space-y-8">
+
+                    <!-- Quick Actions Grid -->
+                    <section>
+
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Create Campaign -->
+                            <div onclick="create_new_campagin()" 
+                                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600/20 to-indigo-600/20 border border-purple-500/30 p-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-400/50">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-500"></div>
+                                <div class="relative z-10">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-plus text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-3">Create Campaign</h3>
+                                    <p class="text-slate-300 text-sm leading-relaxed">
+                                        Design and launch your next email campaign with our powerful editor.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Manage Lists -->
+                            <div onclick="create_new_list()" 
+                                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600/20 to-teal-600/20 border border-emerald-500/30 p-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/50">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-500"></div>
+                                <div class="relative z-10">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-users text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-3">Manage Lists</h3>
+                                    <p class="text-slate-300 text-sm leading-relaxed">
+                                        Organize your contacts and create targeted subscriber segments.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- View Analytics -->
+                            <div onclick="switchScreen('analytics')" 
+                                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-600/20 border border-blue-500/30 p-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-blue-400/50">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-500"></div>
+                                <div class="relative z-10">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-3">View Analytics</h3>
+                                    <p class="text-slate-300 text-sm leading-relaxed">
+                                        Track performance metrics and optimize your campaigns.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Account Settings -->
+                            <div onclick="update_settings('account')" 
+                                class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-600/20 to-red-600/20 border border-orange-500/30 p-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-orange-400/50">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-500"></div>
+                                <div class="relative z-10">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-cog text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-3">Settings</h3>
+                                    <p class="text-slate-300 text-sm leading-relaxed">
+                                        Configure your account and email preferences.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Google Connection Alert -->
+                    <div id="connect-google" class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-l-4 border-orange-500 p-8">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-orange-400 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-orange-100 mb-2">Google Account Not Connected</h3>
+                                <p class="text-orange-200/80 mb-4 leading-relaxed">
+                                    You have scheduled emails, but your Google account is not connected. Connect now to ensure reliable delivery.
+                                </p>
+                                <button onclick="update_settings('connect')" 
+                                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-lg shadow-lg hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105">
+                                    <i class="fas fa-link mr-2"></i>
+                                    Connect Google Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Info Cards -->
+                <div class="space-y-8">
+
+                    <!-- Next Send Card -->
+                    <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-8" id="next-send-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold flex items-center">
+                                <i class="fas fa-clock text-blue-400 mr-3"></i>
+                                Next Send
+                            </h3>
+                            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-3 border-b border-slate-700/50">
+                                <span class="text-slate-300">Campaign</span>
+                                <span class="text-white font-medium" id="ns-campaign">–</span>
+                            </div>
+                            <div class="flex justify-between items-center py-3 border-b border-slate-700/50">
+                                <span class="text-slate-300">Scheduled</span>
+                                <span class="text-white font-mono text-sm" id="ns-scheduled">–</span>
+                            </div>
+                            <div class="flex justify-between items-center py-3 border-b border-slate-700/50">
+                                <span class="text-slate-300">Recipients</span>
+                                <span class="text-white font-medium" id="ns-recipients">–</span>
+                            </div>
+                            <div class="flex justify-between items-center py-3">
+                                <span class="text-slate-300">Status</span>
+                                <span class="text-yellow-400 font-medium" id="ns-status">–</span>
+                            </div>
+                        </div>
+
+                        <button class="mt-6 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" id="ns-button">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            View Campaign
+                        </button>
+                    </div>
+
+                    <!-- Quick Tip Card -->
+                    <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-8">
+                        <h3 class="text-xl font-bold mb-6 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-3"></i>
+                            Quick Tip
+                        </h3>
+
+                        <div class="bg-slate-700/50 rounded-xl p-6 border border-slate-600/30">
+                            <div class="flex items-start space-x-4">
+                                <div class="text-3xl">💡</div>
+                                <div>
+                                    <p class="text-slate-200 leading-relaxed mb-3">
+                                        Avoid words like <span class="px-2 py-1 bg-red-500/20 border border-red-400/30 rounded text-red-300 font-semibold">"FREE!!!"</span> or <span class="px-2 py-1 bg-red-500/20 border border-red-400/30 rounded text-red-300 font-semibold">"LIMITED TIME"</span> in subject lines.
+                                    </p>
+                                    <p class="text-sm text-slate-400">
+                                        These trigger spam filters and significantly lower your delivery rates.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-
-
-        <div onclick="create_new_list()" class="bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
-          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-list-alt"></i></div>
-          <div class="flex items-center justify-between mb-2 z-10 relative">
-            <h2 class="text-lg font-semibold">Create List</h2>
-            <i class="fas fa-list-alt text-blue-400 text-xl"></i>
-          </div>
-          <p class="text-sm text-gray-400">Organize your subscribers.</p>
-        </div>
-
-        <div onclick="create_new_campagin()" class="bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-purple-500 transition cursor-pointer relative overflow-hidden">
-          <div class="absolute bottom-2 right-3 text-purple-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-bullhorn"></i></div>
-          <div class="flex items-center justify-between mb-2 z-10 relative">
-            <h2 class="text-lg font-semibold">Create Campaign</h2>
-            <i class="fas fa-bullhorn text-purple-400 text-xl"></i>
-          </div>
-          <p class="text-sm text-gray-400">Design and send a new campaign.</p>
-        </div>
-
-        <div onclick="switchScreen('campaigns')" class=" bg-gray-800 rounded-2xl shadow-md p-6 group hover:ring-2 hover:ring-blue-500 transition cursor-pointer relative overflow-hidden">
-          <div class="absolute bottom-2 right-3 text-blue-600 opacity-10 text-6xl group-hover:opacity-20 transition"><i class="fas fa-eye"></i></div>
-          <div class="flex items-center justify-between mb-2 z-10 relative">
-            <h2 class="text-lg font-semibold">View Campaigns</h2>
-            <i class="fas fa-eye text-blue-400 text-xl"></i>
-          </div>
-          <p class="text-sm text-gray-400">Browse your active and past campaigns.</p>
-        </div>
-      </div>
-
-
-<div id="connect-google" class="bg-orange-100 border-l-4 border-orange-400 text-orange-800 p-6 rounded-2xl shadow-md relative">
-  <div class="absolute bottom-2 right-3 text-orange-300 opacity-20 text-6xl">
-    <i class="fas fa-link-slash"></i>
-  </div>
-  <div class="flex items-center justify-between mb-2 relative z-10">
-    <h2 class="text-lg font-semibold">Google Account Not Connected</h2>
-    <i class="fas fa-link-slash text-orange-500 text-xl"></i>
-  </div>
-  <p class="text-sm text-orange-800 mb-4">
-    You have scheduled emails, but your Google account is not connected. Connect now to ensure delivery.
-  </p>
-  <button onclick="update_settings('connect')" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition shadow">
-    Connect Google Account
-  </button>
-</div>
-
-    
-
-    </div>
-
-    
-
-    <!-- Right Panel (1/3) -->
-    <div class="w-full lg:w-1/3 space-y-6">
-      <!-- Next Send Card -->
-     <div class="bg-gray-800 rounded-2xl shadow-md p-6 relative overflow-hidden" id="next-send-card">
-  <div class="absolute top-3 right-4 text-yellow-400 opacity-10 text-5xl"><i class="fas fa-clock"></i></div>
-  <h2 class="text-xl font-semibold mb-4">Next Send</h2>
-  <div class="space-y-2 text-sm text-gray-300">
-    <div class="flex justify-between">
-      <span>Campaign</span>
-      <span class="text-white font-medium" id="ns-campaign">–</span>
-    </div>
-    <div class="flex justify-between">
-      <span>Scheduled</span>
-      <span class="text-white" id="ns-scheduled">–</span>
-    </div>
-    <div class="flex justify-between">
-      <span>Recipients</span>
-      <span id="ns-recipients">–</span>
-    </div>
-    <div class="flex justify-between">
-      <span>Status</span>
-      <span class="text-yellow-400 font-medium" id="ns-status">–</span>
-    </div>
-  </div>
-  <button class="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg transition" id="ns-button">
-    View Campaign
-  </button>
-</div>
-
-
-      <!-- Quick Tip -->
-      <div class="bg-gray-800 rounded-2xl shadow-md p-6">
-        <h2 class="text-xl font-semibold mb-3">Quick Tip</h2>
-        <p class="text-sm text-gray-400 leading-relaxed">
-          💡 Avoid words like <b>“FREE!!!”</b> or <b>“LIMITED TIME”</b> in subject lines — they increase spam flagging and lower delivery rates.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="text-center text-sm text-gray-600 mt-12">
-    &copy; 2025 Neura • All rights reserved.
-  </div>
-</div>
 
 
 
@@ -825,6 +890,215 @@ transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-
 </div>
   
   
+
+
+
+
+
+
+
+
+
+
+
+<!-- MAIN LISTS VIEW -->
+<div id="lists"
+     class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden">
+
+  <!-- Modern Header Section -->
+  <div class="relative h-44 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-3xl overflow-hidden shadow-2xl mb-8">
+    <!-- Animated Background Pattern -->
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+      <div class="absolute top-0 -right-4 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-75"></div>
+      <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-150"></div>
+    </div>
+    
+    <!-- Header Content -->
+    <div class="relative z-10 h-full flex items-center justify-between px-8">
+      <div class="flex items-center space-x-6">
+        <div class="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+          <i class="fas fa-list-ul text-3xl text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-black text-white mb-2 tracking-tight">Email Lists</h1>
+          <p class="text-purple-200 text-lg font-medium max-w-md">
+            Organize, manage, and grow your subscriber base with powerful list management tools
+          </p>
+        </div>
+      </div>
+      
+      <button id="list-add"
+              onclick="openAddListModal()"
+              class="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-2xl font-bold text-white text-lg shadow-xl hover:shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 transition-all duration-200">
+        <span class="flex items-center gap-3">
+          <i class="fas fa-plus text-xl group-hover:rotate-90 transition-transform duration-200"></i>
+          Create New List
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Advanced Filter Panel -->
+  <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 mb-8 shadow-lg">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+      
+      <!-- Search Input -->
+      <div class="lg:col-span-2">
+        <label class="block text-sm font-semibold text-slate-300 mb-2">Search Lists</label>
+        <div class="relative">
+          <input id="list-search"
+                 type="text"
+                 placeholder="Type to search lists..."
+                 class="w-full pl-12 pr-4 py-3.5 bg-slate-900/80 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+          <div class="absolute left-4 top-1/2 -translate-y-1/2">
+            <i class="fas fa-search text-slate-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sort Field -->
+      <div>
+        <label class="block text-sm font-semibold text-slate-300 mb-2">Sort By</label>
+        <div class="relative">
+          <select id="sort-field"
+                  class="appearance-none w-full px-4 py-3.5 bg-slate-900/80 border border-slate-600/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+            <option value="name">List Name</option>
+            <option value="count">Email Count</option>
+          </select>
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <i class="fas fa-chevron-down text-slate-400 text-sm"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sort Direction -->
+      <div>
+        <label class="block text-sm font-semibold text-slate-300 mb-2">Order</label>
+        <div class="relative">
+          <select id="sort-dir"
+                  class="appearance-none w-full px-4 py-3.5 bg-slate-900/80 border border-slate-600/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+            <option value="asc">A → Z</option>
+            <option value="desc">Z → A</option>
+          </select>
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <i class="fas fa-chevron-down text-slate-400 text-sm"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Min Count Filter -->
+      <div class="flex items-end gap-3">
+        <div class="flex-1">
+          <label class="block text-sm font-semibold text-slate-300 mb-2">Min Emails</label>
+          <input id="min-count"
+                 type="number"
+                 min="0"
+                 placeholder="0"
+                 class="w-full px-4 py-3.5 bg-slate-900/80 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+        </div>
+        
+        <!-- Reset Button -->
+        <button id="reset-filters"
+                class="px-6 py-3.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+          <i class="fas fa-undo-alt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    
+    <!-- Lists Table - Takes up 2/3 of the width -->
+    <div class="xl:col-span-2">
+      <div class="bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-xl">
+        
+        <!-- Table Header -->
+        <div class="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-4 border-b border-slate-600/50">
+          <h3 class="text-xl font-bold text-white flex items-center gap-3">
+            <div class="p-2 bg-blue-500/20 rounded-lg">
+              <i class="fas fa-table text-blue-400"></i>
+            </div>
+            Your Email Lists
+          </h3>
+        </div>
+
+        <!-- Scrollable Table Container -->
+        <div class="max-h-[500px] overflow-y-auto">
+          <table class="w-full">
+            <thead class="sticky top-0 bg-slate-700/90 backdrop-blur-sm z-10">
+              <tr class="border-b border-slate-600/30">
+                <th class="text-left px-6 py-4 text-sm font-bold text-slate-300 uppercase tracking-wider">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-list text-blue-400"></i>
+                    List Name
+                  </div>
+                </th>
+                <th class="text-left px-6 py-4 text-sm font-bold text-slate-300 uppercase tracking-wider">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-users text-emerald-400"></i>
+                    Subscribers
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="list-table" class="divide-y divide-slate-700/30">
+              <!-- Rows will be injected by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Failures Sidebar - Takes up 1/3 of the width -->
+    <div class="xl:col-span-1">
+      <div class="bg-slate-800/30 backdrop-blur-xl border border-red-500/30 rounded-2xl overflow-hidden shadow-xl">
+        
+        <!-- Failures Header -->
+        <div class="bg-gradient-to-r from-red-600/80 to-red-700/80 px-6 py-4 border-b border-red-500/30">
+          <h3 class="text-lg font-bold text-white flex items-center gap-3">
+            <div class="p-2 bg-red-400/20 rounded-lg">
+              <i class="fas fa-exclamation-triangle text-red-300"></i>
+            </div>
+            Recent Failures
+          </h3>
+        </div>
+
+        <!-- Failures Content -->
+        <div class="max-h-[440px] overflow-y-auto">
+          <table class="w-full text-sm">
+            <thead class="sticky top-0 bg-slate-700/90 backdrop-blur-sm z-10">
+              <tr class="border-b border-slate-600/30">
+                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-300 uppercase tracking-wider">Email</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-300 uppercase tracking-wider">Issue</th>
+              </tr>
+            </thead>
+            <tbody id="fail-table" class="divide-y divide-slate-700/20">
+              <!-- Failure rows will be injected by JavaScript -->
+            </tbody>
+          </table>
+          
+          <!-- Empty State -->
+          <div id="fail-empty" class="hidden py-12 text-center">
+            <div class="flex flex-col items-center gap-3">
+              <div class="p-4 bg-emerald-500/10 rounded-full">
+                <i class="fas fa-check-circle text-3xl text-emerald-400"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-slate-300">All Clear!</p>
+                <p class="text-sm text-slate-400 mt-1">No recent email failures</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
 
 
 
@@ -1752,170 +2026,6 @@ transition-transform duration-300 active:scale-95 focus:outline-none focus:ring-
 
 
 
-
-
-
-<!-- MAIN LISTS VIEW -->
-<div id="list"
-     class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden p-6 text-white space-y-8">
-
-  <!-- ✨ Header Banner -->
-  <section class="relative overflow-hidden rounded-2xl shadow-lg">
-    <div class="absolute inset-0 bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 opacity-90"></div>
-    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-8 py-6">
-      <div>
-        <h1 class="text-3xl font-extrabold tracking-wide">Your Email Lists</h1>
-        <p class="text-indigo-200 mt-1 max-w-xl">
-          Manage all mailing lists, search, add new lists, and review recent email failures in one place.
-        </p>
-      </div>
-      <button id="list-add"
-              onclick="openAddListModal()"
-              class="bg-gradient-to-r from-blue-500 to-purple-600 flex items-center gap-2 py-3 px-6 rounded-full
-                     font-semibold hover:scale-105 transition-transform shadow-lg">
-        <i class="fas fa-plus"></i>
-        Create New List
-      </button>
-    </div>
-  </section>
-
-  <!-- 🔍 Search bar -->
-<!-- Filter Bar -->
-<!-- ░░ LIST FILTERS ░░ -->
-<div
-  class="flex flex-col md:flex-row md:items-end gap-4 bg-gray-800/60 backdrop-blur
-         rounded-2xl border border-blue-600/40 shadow-lg p-6">
-
-  <!-- 🔍 Search -->
-  <div class="relative flex-1">
-    <input id="list-search"
-           type="text"
-           placeholder="Search lists…"
-           class="w-full pl-11 pr-3 py-3 rounded-lg bg-gray-900/60 text-gray-100
-                  border border-gray-700/60 focus:outline-none focus:ring-2
-                  focus:ring-blue-500 placeholder-gray-500 transition" />
-    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-blue-400/80"></i>
-  </div>
-
-  <!-- ↕️ Sort Field -->
-  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
-    Sort&nbsp;By
-    <div class="relative">
-      <select id="sort-field"
-              class="appearance-none w-36 bg-gray-900/60 border border-gray-700/60
-                     rounded-lg pl-3 pr-8 py-2 text-sm text-gray-200 hover:border-blue-400
-                     focus:ring-2 focus:ring-blue-500 transition">
-        <option value="name">Name</option>
-        <option value="count">Count</option>
-      </select>
-      <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
-    </div>
-  </label>
-
-  <!-- ⬆/⬇ Direction -->
-  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
-    Direction
-    <div class="relative">
-      <select id="sort-dir"
-              class="appearance-none w-36 bg-gray-900/60 border border-gray-700/60
-                     rounded-lg pl-3 pr-8 py-2 text-sm text-gray-200 hover:border-blue-400
-                     focus:ring-2 focus:ring-blue-500 transition">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-      <i class="fas fa-sort-amount-down-alt absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
-    </div>
-  </label>
-
-  <!-- #️⃣ Min Count -->
-  <label class="flex flex-col gap-1 text-xs font-semibold tracking-wide text-gray-400">
-    Min&nbsp;Emails
-    <input id="min-count"
-           type="number"
-           min="0"
-           placeholder="0"
-           class="w-24 bg-gray-900/60 border border-gray-700/60 rounded-lg px-3 py-2 text-sm
-                  text-gray-200 placeholder-gray-500 hover:border-blue-400
-                  focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
-  </label>
-
-  <!-- 🔄 Reset -->
-  <button id="reset-filters"
-          class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-600
-                 text-white text-sm font-semibold px-5 py-2 rounded-lg shadow
-                 hover:-translate-y-0.5 hover:shadow-blue-600/50 active:scale-95 transition">
-    <i class="fas fa-sync-alt text-xs"></i>
-    Reset
-  </button>
-</div>
-
-
-<div class="flex flex-col lg:flex-row gap-8">
-
-  <!-- 📋 Lists Table (65% width) -->
-  <div class="lg:basis-[65%] bg-gray-900/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-purple-600/40 overflow-hidden ring-1 ring-purple-700/30 flex flex-col">
-
-    <div class="max-h-96 overflow-y-auto nice-scrollbar flex-1">
-      <table class="w-full text-sm text-gray-200 font-medium tracking-wide">
-
-        <thead class="sticky top-0 z-10 text-xs uppercase font-bold tracking-widest">
-          <tr class="bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 text-white shadow-sm shadow-purple-900/40">
-            <th class="py-5 px-6 text-left">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-list text-sm text-white/90"></i>
-                List&nbsp;Name
-              </div>
-            </th>
-            <th class="py-5 px-6 text-left">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-envelope text-sm text-white/90"></i>
-                Emails&nbsp;Count
-              </div>
-            </th>
-          </tr>
-        </thead>
-
-        <tbody id="list-table" class="divide-y divide-gray-700/30">
-          <!-- JS inject rows -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 🚨 Recent Failures Panel (35% width) -->
-  <div class="lg:basis-[35%] bg-gray-900 rounded-2xl shadow-xl border border-red-600/40 flex flex-col">
-
-    <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-700 to-red-600 rounded-t-2xl">
-      <h3 class="text-lg font-bold flex items-center gap-2">
-        <i class="fas fa-times-circle text-red-200"></i>
-        Recent&nbsp;Failures
-      </h3>
-      <!-- optional refresh button -->
-    </div>
-
-    <div class="max-h-80 overflow-y-auto nice-scrollbar flex-1">
-      <table class="w-full text-xs">
-        <thead class="sticky top-0 bg-gray-800/90 backdrop-blur text-gray-300 uppercase tracking-wider">
-          <tr>
-            <th class="px-4 py-2 text-left">Email</th>
-            <th class="px-4 py-2 text-left">Reason</th>
-          </tr>
-        </thead>
-        <tbody id="fail-table" class="divide-y divide-gray-700/50 text-gray-200 text-[0.75rem]">
-          <!-- rows injected by JS -->
-        </tbody>
-      </table>
-
-      <div id="fail-empty" class="hidden py-8 text-center text-gray-400 text-sm">
-        <i class="fas fa-inbox text-xl mb-1"></i><br>No failures yet.
-      </div>
-    </div>
-  </div>
-
-</div>
-
-
-</div>
 
 
 
