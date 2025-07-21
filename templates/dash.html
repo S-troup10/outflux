@@ -1,0 +1,142 @@
+<!-- ========== LISTS SCREEN ========== -->
+<div id="lists" class="main-content transition-all duration-500 opacity-0 transform translate-x-10 hidden p-8 space-y-8">
+
+  <!-- Header Banner -->
+  <section class="relative overflow-hidden rounded-3xl shadow-2xl">
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 opacity-90"></div>
+    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 px-8 py-8">
+      <div>
+        <h1 class="text-4xl font-black tracking-tight text-white mb-3">Your Email Lists</h1>
+        <p class="text-indigo-200 text-lg max-w-2xl leading-relaxed">
+          Manage all mailing lists, search contacts, add new lists, and review recent email failures in one centralized dashboard.
+        </p>
+      </div>
+      <button id="list-add" onclick="openAddListModal()" 
+              class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 flex items-center space-x-3 py-4 px-8 rounded-2xl font-bold hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-lg">
+        <i class="fas fa-plus text-xl"></i>
+        <span>Create New List</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Filter Bar -->
+  <div class="bg-gray-800/60 backdrop-blur-xl rounded-3xl border border-blue-600/30 shadow-2xl p-8">
+    <div class="flex flex-col lg:flex-row lg:items-end gap-6">
+      
+      <!-- Search -->
+      <div class="flex-1">
+        <label class="block text-sm font-semibold text-gray-300 mb-3">Search Lists</label>
+        <div class="relative">
+          <input id="list-search" type="text" placeholder="Search lists by name..." 
+                 class="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-900/60 text-gray-100 border border-gray-700/60 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 placeholder-gray-500 transition-all duration-300 text-lg">
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-blue-400 text-lg"></i>
+        </div>
+      </div>
+
+      <!-- Sort Field -->
+      <div class="lg:w-48">
+        <label class="block text-sm font-semibold text-gray-300 mb-3">Sort By</label>
+        <div class="relative">
+          <select id="sort-field" 
+                  class="w-full appearance-none bg-gray-900/60 border border-gray-700/60 rounded-2xl pl-4 pr-12 py-4 text-gray-200 hover:border-blue-400 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 text-lg">
+            <option value="name">Name</option>
+            <option value="count">Count</option>
+          </select>
+          <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- Direction -->
+      <div class="lg:w-48">
+        <label class="block text-sm font-semibold text-gray-300 mb-3">Direction</label>
+        <div class="relative">
+          <select id="sort-dir" 
+                  class="w-full appearance-none bg-gray-900/60 border border-gray-700/60 rounded-2xl pl-4 pr-12 py-4 text-gray-200 hover:border-blue-400 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 text-lg">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+          <i class="fas fa-sort-amount-down-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- Min Count -->
+      <div class="lg:w-40">
+        <label class="block text-sm font-semibold text-gray-300 mb-3">Min Emails</label>
+        <input id="min-count" type="number" min="0" placeholder="0" 
+               class="w-full bg-gray-900/60 border border-gray-700/60 rounded-2xl px-4 py-4 text-gray-200 placeholder-gray-500 hover:border-blue-400 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 text-lg">
+      </div>
+
+      <!-- Reset Button -->
+      <button id="reset-filters" 
+              class="lg:w-auto bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-blue-600/50 hover:-translate-y-1 active:scale-95 transition-all duration-300 flex items-center space-x-3">
+        <i class="fas fa-sync-alt"></i>
+        <span>Reset</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+    <!-- Lists Table -->
+    <div class="xl:col-span-2 bg-gray-900/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-purple-600/30 overflow-hidden">
+      
+      <div class="max-h-96 overflow-y-auto nice-scrollbar">
+        <table class="w-full text-white">
+          
+          <thead class="sticky top-0 z-10">
+            <tr class="bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-700 text-white shadow-lg">
+              <th class="py-6 px-8 text-left">
+                <div class="flex items-center space-x-3">
+                  <i class="fas fa-list text-white/90"></i>
+                  <span class="font-bold text-lg tracking-wide">List Name</span>
+                </div>
+              </th>
+              <th class="py-6 px-8 text-left">
+                <div class="flex items-center space-x-3">
+                  <i class="fas fa-envelope text-white/90"></i>
+                  <span class="font-bold text-lg tracking-wide">Email Count</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody id="list-table" class="divide-y divide-gray-700/30">
+            <!-- JS will inject rows here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent Failures Panel -->
+    <div class="bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-red-600/30 overflow-hidden">
+      
+      <div class="bg-gradient-to-r from-rose-700 to-red-600 px-8 py-6">
+        <h3 class="text-xl font-bold text-white flex items-center space-x-3">
+          <i class="fas fa-times-circle text-red-200"></i>
+          <span>Recent Failures</span>
+        </h3>
+      </div>
+
+      <div class="max-h-80 overflow-y-auto nice-scrollbar">
+        <table class="w-full">
+          <thead class="sticky top-0 bg-gray-800/90 backdrop-blur">
+            <tr class="text-gray-300 text-sm font-semibold">
+              <th class="px-6 py-4 text-left">Email</th>
+              <th class="px-6 py-4 text-left">Reason</th>
+            </tr>
+          </thead>
+          <tbody id="fail-table" class="divide-y divide-gray-700/50 text-gray-200 text-sm">
+            <!-- JS will inject rows here -->
+          </tbody>
+        </table>
+
+        <div id="fail-empty" class="hidden py-12 text-center text-gray-400">
+          <i class="fas fa-inbox text-4xl mb-4 opacity-50"></i>
+          <p class="text-lg">No failures yet.</p>
+          <p class="text-sm mt-2">Email delivery issues will appear here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

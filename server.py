@@ -625,48 +625,280 @@ def disconnect_account():
 STRIPE_PUBLISHABLE_KEY = "pk_live_51R9hrqAGOU4usCEpsYRUz6KpAz|5AWPqdbvOKnnBBGZ1puSeDZlj1qvOrBFCUXdSujM1t@2EUHrXWRcY3HFSU005gUgf3M79"
 
 
+
+
+
+
+
+
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():
     data = request.get_json()
+    user_id = session.get('user', {}).get('id')
+
+    if not user_id:
+        return jsonify(error="User not authenticated"), 401
+
     try:
+        # Map price IDs to plan names
+        price_to_plan = {
+            'price_1Rm64rIPmpPcLP6DYH3FZ0yr': 'pro',
+            'price_1RmCvzIPmpPcLP6D0PcDSfqt': 'premium'
+        }
+
+        plan_name = price_to_plan.get(data["priceId"], 'unknown')
+
         checkout_session = stripe.checkout.Session.create(
-            success_url="http://127.0.0.1:5000/api/success",
-            cancel_url="http://127.0.0.1:5000/api/fail",
+            success_url="http://127.0.0.1:5000/api/success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url="http://127.0.0.1:5000/api/cancel",
             payment_method_types=["card"],
             mode="subscription",
             line_items=[{
                 "price": data["priceId"],
                 "quantity": 1,
             }],
+            metadata={
+                "user_id": str(user_id),
+                "plan": plan_name
+            },
+            customer_email=session.get('user', {}).get('email')
         )
         return jsonify({"url": checkout_session.url})
     except Exception as e:
         print(f"Stripe Error: {e}")
-        return jsonify(error=str(e)), 400  # use 400 (Bad Request) instead of 403
-
-
-#old for elliot
-#Premium prod_ShU9RXElUKECST
-#Pro prod_ShU9eUbQBMIs0u
-#secret
-
-#
-
-#public
-#
-
-
+        return jsonify(error=str(e)), 400
 
 @app.route("/api/success")
 def success():
-    #update their status in db
-    user_id = session.get('user').get('id')
-    storage.update_row_by_primary_key('users', {'subscription': ''})
+    session_id = request.args.get('session_id')
 
-@app.route("/api/fail")
+    if not session_id:
+        return redirect('/dashboard#settings?error=no_session')
+
+    try:
+        # Retrieve the session from Stripe
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+
+        if checkout_session.payment_status == 'paid':
+            user_id = checkout_session.metadata.get('user_id')
+            plan = checkout_session.metadata.get('plan')
+
+            if user_id and plan:
+                # Update user subscription in database
+                update_data = {
+                    'subscription': plan,
+                    'stripe_customer_id': checkout_session.customer,
+                    'stripe_subscription_id': checkout_session.subscription,
+                    'id': int(user_id)
+                }
+
+                res = storage.update_row_by_primary_key('users', update_data, 'id')
+
+                if res.get('success'):
+                    return redirect('/dashboard#settings?success=subscription_updated')
+                else:
+                    print(f"Database update failed: {res}")
+                    return redirect('/dashboard#settings?error=db_update_failed')
+            else:
+                return redirect('/dashboard#settings?error=missing_metadata')
+        else:
+            return redirect('/dashboard#settings?error=payment_not_completed')
+
+    except Exception as e:
+        print(f"Error processing success: {e}")
+        return redirect('/dashboard#settings?error=processing_failed')
+
+@app.route("/api/cancel")
 def cancel():
-    return "Payment canceled"
+    return redirect('/dashboard#settings?cancelled=true')
 
+@app.route("/webhook", methods=["POST"])
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get('Stripe-Signature')
+
+    # You'll need to set this in your Stripe dashboard webhook settings
+    endpoint_secret = "whsec_cHnBQVn1k7VXzZxtnOVIF9hZ5lTnwaVX"  # Replace with actual secret
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        print(f"Invalid payload: {e}")
+        return jsonify(error="Invalid payload"), 400
+    except stripe.error.SignatureVerificationError as e:
+        print(f"Invalid signature: {e}")
+        return jsonify(error="Invalid signature"), 400
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        handle_checkout_session_completed(session)
+
+    elif event['type'] == 'customer.subscription.updated':
+        subscription = event['data']['object']
+        handle_subscription_updated(subscription)
+
+    elif event['type'] == 'customer.subscription.deleted':
+        subscription = event['data']['object']
+        handle_subscription_cancelled(subscription)
+
+    elif event['type'] == 'invoice.payment_failed':
+        invoice = event['data']['object']
+        handle_payment_failed(invoice)
+
+    return jsonify(success=True)
+
+def handle_checkout_session_completed(session):
+    """Handle successful checkout completion"""
+    user_id = session['metadata'].get('user_id')
+    plan = session['metadata'].get('plan')
+
+    if user_id and plan:
+        update_data = {
+            'subscription': plan,
+            'stripe_customer_id': session['customer'],
+            'stripe_subscription_id': session['subscription'],
+            'id': int(user_id)
+        }
+
+        result = storage.update_row_by_primary_key('users', update_data, 'id')
+        print(f"Subscription updated for user {user_id}: {result}")
+
+def handle_subscription_updated(subscription):
+    """Handle subscription updates (plan changes, etc.)"""
+    customer_id = subscription['customer']
+
+    # Find user by stripe customer ID
+    users = storage.fetch('users', {'stripe_customer_id': customer_id})
+
+    if users and len(users) > 0:
+        user = users[0]
+
+        # Determine plan based on subscription status and price
+        if subscription['status'] == 'active':
+            # You might need to map price IDs to plan names here
+            plan = 'pro'  # Default, or determine from subscription items
+            for item in subscription['items']['data']:
+                if item['price']['id'] == 'price_1RmCvzIPmpPcLP6D0PcDSfqt':
+                    plan = 'premium'
+                elif item['price']['id'] == 'price_1Rm64rIPmpPcLP6DYH3FZ0yr':
+                    plan = 'pro'
+        else:
+            plan = 'none'
+
+        update_data = {
+            'subscription': plan,
+            'stripe_subscription_id': subscription['id'],
+            'id': user['id']
+        }
+
+        result = storage.update_row_by_primary_key('users', update_data, 'id')
+        print(f"Subscription status updated for user {user['id']}: {result}")
+
+def handle_subscription_cancelled(subscription):
+    """Handle subscription cancellation"""
+    customer_id = subscription['customer']
+
+    # Find user by stripe customer ID
+    users = storage.fetch('users', {'stripe_customer_id': customer_id})
+
+    if users and len(users) > 0:
+        user = users[0]
+
+        update_data = {
+            'subscription': 'none',
+            'stripe_subscription_id': None,
+            'id': user['id']
+        }
+
+        result = storage.update_row_by_primary_key('users', update_data, 'id')
+        print(f"Subscription cancelled for user {user['id']}: {result}")
+
+def handle_payment_failed(invoice):
+    """Handle failed payment"""
+    customer_id = invoice['customer']
+
+    # Find user by stripe customer ID
+    users = storage.fetch('users', {'stripe_customer_id': customer_id})
+
+    if users and len(users) > 0:
+        user = users[0]
+        print(f"Payment failed for user {user['id']}, customer {customer_id}")
+        # You might want to send an email notification here
+        # Email.payment_failed_notification(user['email'], user['first_name'])
+
+@app.route('/cancel-subscription', methods=['POST'])
+def cancel_subscription():
+    user_id = session.get('user', {}).get('id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        # Get user's subscription ID
+        success, user = storage.get_user_by_email(session.get('user', {}).get('email'))
+        if not success or not user:
+            return jsonify({'error': 'User not found'}), 404
+
+        subscription_id = user.get('stripe_subscription_id')
+        if not subscription_id:
+            return jsonify({'error': 'No active subscription found'}), 400
+
+        # Cancel the subscription in Stripe
+        subscription = stripe.Subscription.modify(
+            subscription_id,
+            cancel_at_period_end=True
+        )
+
+        return jsonify({
+            'success': True, 
+            'message': 'Subscription will be cancelled at the end of the billing period',
+            'cancel_at': subscription.cancel_at
+        })
+
+    except stripe.error.StripeError as e:
+        print(f"Stripe error cancelling subscription: {e}")
+        return jsonify({'error': 'Failed to cancel subscription'}), 500
+    except Exception as e:
+        print(f"Error cancelling subscription: {e}")
+        return jsonify({'error': 'An error occurred'}), 500
+
+@app.route('/get-subscription-status', methods=['GET'])
+def get_subscription_status():
+    user_id = session.get('user', {}).get('id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        success, user = storage.get_user_by_email(session.get('user', {}).get('email'))
+        if not success or not user:
+            return jsonify({'error': 'User not found'}), 404
+
+        subscription_id = user.get('stripe_subscription_id')
+        if not subscription_id:
+            return jsonify({
+                'subscription': 'none',
+                'status': 'inactive'
+            })
+
+        # Get subscription details from Stripe
+        subscription = stripe.Subscription.retrieve(subscription_id)
+
+        return jsonify({
+            'subscription': user.get('subscription', 'none'),
+            'status': subscription.status,
+            'cancel_at_period_end': subscription.cancel_at_period_end,
+            'current_period_end': subscription.current_period_end,
+            'cancel_at': subscription.cancel_at
+        })
+
+    except stripe.error.StripeError as e:
+        print(f"Stripe error getting subscription: {e}")
+        return jsonify({'error': 'Failed to get subscription status'}), 500
+    except Exception as e:
+        print(f"Error getting subscription status: {e}")
+        return jsonify({'error': 'An error occurred'}), 500
 
 #start the app
 

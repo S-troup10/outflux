@@ -1,4 +1,10 @@
 function fillStats(data) {
+  // Add null check for data
+  if (!data || !data.stats) {
+    console.error('Invalid data structure received');
+    return;
+  }
+
   fill_failed_table(data);
   //set the current time 
   const now = new Date();
@@ -13,7 +19,7 @@ const formatted = `${year}-${month}-${day} ${hours}:${minutes}`;
 
 document.getElementById('an-lastSync').innerText = formatted;
 
-renderCampaignStats(data.campaigns, data.stats.campaigns );
+renderCampaignStats(data.campaigns || [], data.stats?.campaigns || {});
 
   const stats = data.stats;
 
@@ -44,13 +50,14 @@ renderCampaignStats(data.campaigns, data.stats.campaigns );
                            prev_recipients) * 100 : 0;
 
   /* ───── Helpers ───── */
-  const atLeastOne = n => n || 1;
-  const pct        = (curr, prev) =>
-      Math.round(((curr - prev) / atLeastOne(prev)) * 1000) / 10;  // 1 decimal
-  const cap        = v => Math.min(100, v);
+  const atLeastOne = (n) => n || 1;
+  const pct = (curr, prev) => {
+    return Math.round(((curr - prev) / atLeastOne(prev)) * 1000) / 10;  // 1 decimal
+  };
+  const cap = (v) => Math.min(100, v);
 
   //cap each percentage to 500%
-  const perc_cap        = v => Math.max(-500, Math.min(500, v));
+  const perc_cap = (v) => Math.max(-500, Math.min(500, v));
 
   /* ───── Percentage deltas ───── */
   const sentPct        = perc_cap(pct(sent,               prev_sent));
@@ -60,10 +67,16 @@ renderCampaignStats(data.campaigns, data.stats.campaigns );
   const indivFailPct   = perc_cap(pct(individuals_failed, prev_individuals_failed));
 
   /* ───── Fill numbers & delta badges ───── */
-  const num   = (id, val)  => (document.getElementById(id).textContent = val);
-  const delta = (id, pct)  =>
-      (document.getElementById(id).textContent =
-        (pct >= 0 ? '+' : '‑') + Math.abs(pct) + '%');
+  const num = (id, val) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = val;
+  };
+  const delta = (id, pct) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = (pct >= 0 ? '+' : '‑') + Math.abs(pct) + '%';
+    }
+  };
 
   num('an_sent',        sent);
   num('an-delivered',   deliveredRate.toFixed(1) + '%');        // ← now a %
@@ -87,12 +100,15 @@ renderCampaignStats(data.campaigns, data.stats.campaigns );
     bounces:    cap(recipients    ? (individuals_failed / recipients) * 100 : 0)
   };
 
-  const setBar = (numId, pct) =>
-    document
-      .getElementById(numId)          // <p id="…">
-      .parentElement                  // card body
-      .querySelector('.mt-4 > div') 
-      .style.width = pct + '%';
+  const setBar = (numId, pct) => {
+    const element = document.getElementById(numId);
+    if (element && element.parentElement) {
+      const barElement = element.parentElement.querySelector('.mt-4 > div');
+      if (barElement) {
+        barElement.style.width = pct + '%';
+      }
+    }
+  };
 
   setBar('an_sent',       barWidths.sent);
   setBar('an-delivered',  barWidths.delivered);
@@ -101,14 +117,16 @@ renderCampaignStats(data.campaigns, data.stats.campaigns );
   setBar('an-bounces',    barWidths.bounces);
 
   //parse and sort sent data
-  const sent_data = stats.sent;
+  const sent_data = stats.sent || [];
   renderSentOverTime(sent_data);
-  
 
+  // Add fallback for delivery pie chart
+  const delivered_count = recipients - individuals_failed;
+  renderDeliverPie(delivered_count, individuals_failed);
 
-
-  renderDeliverPie((recipients - individuals_failed), individuals_failed)
-  renderScheduleTable(stats.schedule, data.campaigns);
+  // Add fallback for schedule table
+  const schedule_data = stats.schedule || [];
+  renderScheduleTable(schedule_data, data.campaigns || []);
 }
 
 
@@ -121,14 +139,19 @@ renderCampaignStats(data.campaigns, data.stats.campaigns );
 
 let fullScheduleData = [];
 
-function renderScheduleTable(records = [], campaigns = {}) {
+function renderScheduleTable(records = [], campaigns = []) {
   const tbody = document.getElementById('schedule-body');
   const empty = document.getElementById('schedule-empty');
   const searchInput = document.getElementById('search-schedule');
   const statusSelect = document.getElementById('status-filter');
 
-
-  const campaignLookup = Object.fromEntries(campaigns.map(c => [c.id, c]));
+  // Handle campaigns array or object
+  let campaignLookup = {};
+  if (Array.isArray(campaigns)) {
+    campaignLookup = Object.fromEntries(campaigns.map(c => [c.id, c]));
+  } else if (campaigns && typeof campaigns === 'object') {
+    campaignLookup = campaigns;
+  }
 
 // inside render loop
 
@@ -155,6 +178,25 @@ function renderScheduleTable(records = [], campaigns = {}) {
 
     tbody.innerHTML = '';
     if (filtered.length === 0) {
+      // Update empty state message based on whether we have any data at all
+      const emptyDiv = document.getElementById('schedule-empty');
+      if (fullScheduleData.length === 0) {
+        emptyDiv.innerHTML = `
+          <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-calendar-times text-2xl text-slate-500"></i>
+          </div>
+          <p class="text-lg font-medium mb-2">No Scheduled Campaigns</p>
+          <p class="text-sm">Schedule your first campaign to see upcoming sends here</p>
+        `;
+      } else {
+        emptyDiv.innerHTML = `
+          <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-search text-2xl text-slate-500"></i>
+          </div>
+          <p class="text-lg font-medium mb-2">No matching campaigns found</p>
+          <p class="text-sm">Try adjusting your search filters</p>
+        `;
+      }
       empty.classList.remove('hidden');
       return;
     }
@@ -213,7 +255,43 @@ function renderCampaignStats(campaigns, campaignStats) {
   const container = document.getElementById('campaignStatsContainer');
   container.innerHTML = ''; // Clear container
 
-  Object.values(campaigns).forEach(campaign => {
+  // Add fallback when no campaigns exist - campaigns is an array
+  if (!campaigns || !Array.isArray(campaigns) || campaigns.length === 0) {
+    container.innerHTML = `
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-600/30 rounded-2xl p-12 text-center">
+        <div class="w-20 h-20 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-envelope text-3xl text-slate-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-300 mb-4">No Campaigns Yet</h3>
+        <p class="text-slate-400 mb-8 max-w-md mx-auto">
+          Create your first email campaign to start tracking performance metrics and analytics.
+        </p>
+        <button onclick="create_new_campagin()" 
+                class="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-xl hover:from-purple-400 hover:to-blue-400 transition-all duration-200 transform hover:scale-105 shadow-lg">
+          <i class="fas fa-plus mr-2"></i>Create Campaign
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // If no campaign stats available, show fallback
+  if (!campaignStats || Object.keys(campaignStats).length === 0) {
+    container.innerHTML = `
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-600/30 rounded-2xl p-12 text-center">
+        <div class="w-20 h-20 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-chart-line text-3xl text-slate-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-300 mb-4">No Campaign Stats Yet</h3>
+        <p class="text-slate-400 mb-8 max-w-md mx-auto">
+          Campaign statistics will appear here once you start sending emails.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  campaigns.forEach(campaign => {
     const id = campaign.id;
     const stats = campaignStats[id];
     if (!stats) return;
@@ -493,7 +571,24 @@ function renderSentOverTime(events) {
   });
 
   const labels = Object.keys(dayTotals).sort();          // ordered date strings
-  if (!labels.length) return;
+
+  // Add fallback display when no data
+  const ctx = document.getElementById('sentTimeChart');
+  if (!labels.length || !ctx) {
+    if (ctx) {
+      const parent = ctx.parentElement;
+      parent.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-slate-400">
+          <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-4">
+            <i class="fas fa-chart-line text-2xl text-slate-500"></i>
+          </div>
+          <p class="text-lg font-medium mb-2">No Email Data</p>
+          <p class="text-sm text-center">Start sending campaigns to see your email trends</p>
+        </div>
+      `;
+    }
+    return;
+  }
 
   const dataCounts = labels.map(d => dayTotals[d]);      // parallel array
 
@@ -570,9 +665,9 @@ function renderSentOverTime(events) {
     }
   };
 
-  const ctx = document.getElementById('sentTimeChart');
+  const ctx2 = document.getElementById('sentTimeChart');
   if (!sentTimeChart) {
-    sentTimeChart = new Chart(ctx, { data, options: opts });
+    sentTimeChart = new Chart(ctx2, { data, options: opts });
   } else {
     sentTimeChart.data = data;
     sentTimeChart.options = opts;
@@ -595,7 +690,21 @@ function renderDeliverPie(deliveredCount, bounceCount) {
 
   // Guard: avoid divide‑by‑zero & empty data
   const total = deliveredCount + bounceCount;
-  if (!total) return;
+  if (!total || !ctx) {
+    if (ctx) {
+      const parent = ctx.parentElement;
+      parent.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-slate-400">
+          <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-4">
+            <i class="fas fa-chart-pie text-2xl text-slate-500"></i>
+          </div>
+          <p class="text-lg font-medium mb-2">No Delivery Data</p>
+          <p class="text-sm text-center">Send emails to see delivery statistics</p>
+        </div>
+      `;
+    }
+    return;
+  }
 
   const data = {
     labels: ['Delivered', 'Bounced'],
@@ -643,4 +752,39 @@ function renderDeliverPie(deliveredCount, bounceCount) {
     deliverPie.options = opts;
     deliverPie.update();
   }
+}
+
+function fill_failed_table(data) {
+  const tbody = document.getElementById('fail-table');
+  const empty = document.getElementById('fail-empty');
+
+  if (!data.stats.failed_events || data.stats.failed_events.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) {
+      empty.innerHTML = `
+        <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-check-circle text-2xl text-green-500"></i>
+        </div>
+        <p class="text-lg font-medium mb-2 text-slate-300">No Failed Emails</p>
+        <p class="text-sm text-slate-400">All emails are being delivered successfully</p>
+      `;
+      empty.classList.remove('hidden');
+    }
+    return;
+  }
+
+  if (empty) empty.classList.add('hidden');
+  tbody.innerHTML = '';
+
+  data.stats.failed_events.forEach(event => {
+    const row = document.createElement('tr');
+    row.className = "hover:bg-slate-700/30 transition-colors";
+
+    row.innerHTML = `
+      <td class="px-4 py-3 text-slate-300 font-mono text-sm">${event.email || 'Unknown'}</td>
+      <td class="px-4 py-3 text-slate-400 text-sm">${event.reason || 'No reason provided'}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
 }

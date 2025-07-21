@@ -1,24 +1,24 @@
+const transitionMap = new WeakMap();
+
 function switchSettingsTab(tabId) {
   const tabs = document.querySelectorAll('.settings-tab');
   const newActive = document.getElementById(`tab-${tabId}`);
+  const header = document.getElementById('subscription-header');
 
-  if(tabId === 'subscription' ) {
-    fadeIn(document.getElementById('subscription-header'));
-  }
-  else if (!document.getElementById('subscription-header').classList.contains('hidden')){
-    fadeOut(document.getElementById('subscription-header'));
+  if (tabId === 'subscription') {
+    fadeIn(header);
+  } else {
+    fadeOut(header);
   }
 
-  // Animate tab content
   tabs.forEach(tabEl => {
     if (tabEl === newActive) {
       fadeIn(tabEl);
-    } else if (!tabEl.classList.contains('hidden')) {
+    } else {
       fadeOut(tabEl);
     }
   });
 
-  // Highlight the active button
   const buttons = document.querySelectorAll('aside button');
   buttons.forEach(btn => {
     btn.classList.remove(
@@ -37,11 +37,19 @@ function switchSettingsTab(tabId) {
 }
 
 function fadeIn(element) {
-  element.classList.remove('hidden');
+
+  if (!element || !element.classList.contains('hidden')) return;
+
+
+
+  cancelTransition(element);
+
+  setTimeout(() => {
+      element.classList.remove('hidden');
   element.style.opacity = '0';
   element.style.transform = 'translateY(20px)';
-  element.style.pointerEvents = 'none';
   element.style.transition = 'none';
+  element.style.pointerEvents = 'none';
 
   requestAnimationFrame(() => {
     element.style.transition = 'opacity 300ms ease, transform 300ms ease';
@@ -49,28 +57,57 @@ function fadeIn(element) {
     element.style.transform = 'translateY(0)';
   });
 
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     element.style.pointerEvents = '';
+    transitionMap.delete(element);
+  }, 310);
+
+  transitionMap.set(element, { type: 'fadeIn', timeoutId });
   }, 300);
+
 }
 
 function fadeOut(element) {
+  if (!element || element.classList.contains('hidden')) return;
+
+  cancelTransition(element);
+
   element.style.transition = 'opacity 300ms ease, transform 300ms ease';
   element.style.opacity = '0';
   element.style.transform = 'translateY(20px)';
   element.style.pointerEvents = 'none';
 
   const handler = (e) => {
-    if (e.propertyName === 'opacity') {
-      element.classList.add('hidden');
-      element.removeEventListener('transitionend', handler);
-      element.style.pointerEvents = '';
-    }
+    if (e.propertyName !== 'opacity') return;
+
+    element.classList.add('hidden');
+    element.removeEventListener('transitionend', handler);
+    element.style.pointerEvents = '';
+    transitionMap.delete(element);
   };
 
   element.addEventListener('transitionend', handler);
+
+  const timeoutId = setTimeout(() => {
+    // Fallback in case transitionend doesn’t fire
+    element.classList.add('hidden');
+    element.removeEventListener('transitionend', handler);
+    element.style.pointerEvents = '';
+    transitionMap.delete(element);
+  }, 350);
+
+  transitionMap.set(element, { type: 'fadeOut', timeoutId });
 }
 
+function cancelTransition(element) {
+  const current = transitionMap.get(element);
+  if (current && current.timeoutId) {
+    clearTimeout(current.timeoutId);
+    transitionMap.delete(element);
+  }
+  element.removeEventListener('transitionend', () => {});
+  element.style.transition = 'none';
+}
 
 
 

@@ -1,552 +1,313 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Email Builder - GrapesJS</title>
-
-  <!-- GrapesJS & Font Awesome -->
-  <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-
-
-   /* Desktop Layout */
-/* Base desktop styles */
-
-
-  </style>
-</head>
-<body>
-
-  <div id="editor-wrapper">
-    <div id="blocks"></div>
-    <div id="gjs"></div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://unpkg.com/grapesjs"></script>
-  <script src="https://unpkg.com/grapesjs-preset-newsletter"></script>
-  <script src="https://unpkg.com/grapesjs-blocks-basic-extend"></script>
-
-  <script>
-    const editor = grapesjs.init({
-      container: '#gjs',
-      height: '100%',
-      storageManager: false,
-      fromElement: false,
-      plugins: [
-        'grapesjs-preset-newsletter',
-        'grapesjs-blocks-basic-extend'
-      ],
-      pluginsOpts: {
-        'grapesjs-preset-newsletter': {},
-        'grapesjs-blocks-basic-extend': {}
-      },
-      blockManager: {
-        appendTo: '#blocks',
-      }
-    });
-
-    editor.on('load', () => {
-      const bm = editor.BlockManager;
-
-      // Custom responsive layout block
-      bm.add('layout-responsive-2col', {
-        label: '2 Columns',
-        category: 'Layout',
-        attributes: { class: 'fa fa-mobile-alt' },
-        content: `
-          <style>
-            @media only screen and (max-width: 600px) {
-              .resp-col {
-                display: block !important;
-                width: 100% !important;
-                max-width: 100% !important;
-              }
-            }
-          </style>
-          <table style="width:100%;"><tr>
-            <td class="resp-col" style="width:50%; padding:10px;">Col 1</td>
-            <td class="resp-col" style="width:50%; padding:10px;">Col 2</td>
-          </tr></table>`
-      });
-
-                  bm.add('layout-2-col', {
-        label: '2 Columns',
-        category: 'Layout',
-        attributes: { class: 'fa fa-columns' },
-        content: `
-          <table style="width:100%;"><tr>
-            <td style="width:50%; padding:10px;">Column 1</td>
-            <td style="width:50%; padding:10px;">Column 2</td>
-          </tr></table>
-        `
-      });
-
-      bm.add('layout-3-col', {
-        label: '3 Columns',
-        category: 'Layout',
-        attributes: { class: 'fa fa-table' },
-        content: `
-          <table style="width:100%;"><tr>
-            <td style="width:33%; padding:10px;">Col 1</td>
-            <td style="width:33%; padding:10px;">Col 2</td>
-            <td style="width:33%; padding:10px;">Col 3</td>
-          </tr></table>
-        `
-      });
-
-
-
-      bm.add('layout-header', {
-        label: 'Header',
-        category: 'Layout',
-        attributes: { class: 'fa fa-heading' },
-        content: `
-          <table style="width:100%; background:#eee;"><tr>
-            <td style="padding:20px; text-align:center; font-size:24px;">Header Title</td>
-          </tr></table>
-        `
-      });
-
-      bm.add('layout-footer', {
-        label: 'Footer',
-        category: 'Layout',
-        attributes: { class: 'fa fa-shoe-prints' },
-        content: `
-          <table style="width:100%; background:#f2f2f2;"><tr>
-            <td style="padding:20px; text-align:center; font-size:14px;">Footer Text</td>
-          </tr></table>
-        `
-      });
-
-      bm.add('layout-spacer-10', {
-  label: 'Spacer 10px',
-  category: 'Layout',
-  attributes: { class: 'fa fa-arrows-alt-v' },
-  content: `<table style="width:100%;"><tr><td style="height:10px; line-height:10px;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-spacer-20', {
-  label: 'Spacer 20px',
-  category: 'Layout',
-  attributes: { class: 'fa fa-arrows-alt-v' },
-  content: `<table style="width:100%;"><tr><td style="height:20px; line-height:20px;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-spacer-40', {
-  label: 'Spacer 40px',
-  category: 'Layout',
-  attributes: { class: 'fa fa-arrows-alt-v' },
-  content: `<table style="width:100%;"><tr><td style="height:40px; line-height:40px;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-divider-thin', {
-  label: 'Thin Divider',
-  category: 'Layout',
-  attributes: { class: 'fa fa-minus' },
-  content: `<table style="width:100%;"><tr><td style="border-bottom:1px solid #ccc; padding:10px 0;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-divider-thick', {
-  label: 'Thick Divider',
-  category: 'Layout',
-  attributes: { class: 'fa fa-minus' },
-  content: `<table style="width:100%;"><tr><td style="border-bottom:3px solid #999; padding:10px 0;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-divider-dotted', {
-  label: 'Dotted Divider',
-  category: 'Layout',
-  attributes: { class: 'fa fa-ellipsis-h' },
-  content: `<table style="width:100%;"><tr><td style="border-bottom:1px dotted #bbb; padding:10px 0;">&nbsp;</td></tr></table>`
-});
-
-bm.add('layout-1-col', {
-  label: '1 Column',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:100%;"><tr><td style="padding:15px;">Content here</td></tr></table>`
-});
-
-bm.add('layout-2-col-30-70', {
-  label: '2 Columns 30/70',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:30%; padding:10px;">Col 1 (30%)</td>
-              <td style="width:70%; padding:10px;">Col 2 (70%)</td>
-            </tr></table>`
-});
-
-bm.add('layout-2-col-70-30', {
-  label: '2 Columns 70/30',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:70%; padding:10px;">Col 1 (70%)</td>
-              <td style="width:30%; padding:10px;">Col 2 (30%)</td>
-            </tr></table>`
-});
-
-bm.add('layout-3-col-25-50-25', {
-  label: '3 Columns 25/50/25',
-  category: 'Layout',
-  attributes: { class: 'fa fa-table' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:25%; padding:10px;">Col 1</td>
-              <td style="width:50%; padding:10px;">Col 2</td>
-              <td style="width:25%; padding:10px;">Col 3</td>
-            </tr></table>`
-});
-
-bm.add('layout-3-col-20-60-20', {
-  label: '3 Columns 20/60/20',
-  category: 'Layout',
-  attributes: { class: 'fa fa-table' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:20%; padding:10px;">Col 1</td>
-              <td style="width:60%; padding:10px;">Col 2</td>
-              <td style="width:20%; padding:10px;">Col 3</td>
-            </tr></table>`
-});
-
-bm.add('layout-4-col-equal', {
-  label: '4 Columns Equal',
-  category: 'Layout',
-  attributes: { class: 'fa fa-th-large' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:25%; padding:10px;">Col 1</td>
-              <td style="width:25%; padding:10px;">Col 2</td>
-              <td style="width:25%; padding:10px;">Col 3</td>
-              <td style="width:25%; padding:10px;">Col 4</td>
-            </tr></table>`
-});
-
-bm.add('layout-section-wrapper', {
-  label: 'Section Wrapper',
-  category: 'Layout',
-  attributes: { class: 'fa fa-square' },
-  content: `<table style="width:100%; background:#f7f7f7; border:1px solid #ddd;">
-              <tr><td style="padding:20px;">
-                <table style="width:100%;"><tr><td>Nested content here</td></tr></table>
-              </td></tr>
-            </table>`
-});
-
-bm.add('layout-2-row-2-col', {
-  label: '2 Rows 2 Columns',
-  category: 'Layout',
-  attributes: { class: 'fa fa-th-list' },
-  content: `<table style="width:100%; border-collapse:collapse;">
-              <tr>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">Row 1, Col 1</td>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">Row 1, Col 2</td>
-              </tr>
-              <tr>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">Row 2, Col 1</td>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">Row 2, Col 2</td>
-              </tr>
-            </table>`
-});
-
-bm.add('layout-3-row-1-col', {
-  label: '3 Rows 1 Column',
-  category: 'Layout',
-  attributes: { class: 'fa fa-list-alt' },
-  content: `<table style="width:100%; border-collapse:collapse;">
-              <tr><td style="padding:10px; border:1px solid #ddd;">Row 1</td></tr>
-              <tr><td style="padding:10px; border:1px solid #ddd;">Row 2</td></tr>
-              <tr><td style="padding:10px; border:1px solid #ddd;">Row 3</td></tr>
-            </table>`
-});
-
-bm.add('layout-nested-cols', {
-  label: 'Nested Columns',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:100%; border-collapse:collapse;">
-              <tr>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">
-                  <table style="width:100%;"><tr>
-                    <td style="width:50%; padding:5px;">Nested 1</td>
-                    <td style="width:50%; padding:5px;">Nested 2</td>
-                  </tr></table>
-                </td>
-                <td style="width:50%; padding:10px; border:1px solid #ddd;">Col 2</td>
-              </tr>
-            </table>`
-});
-
-bm.add('layout-offset-col', {
-  label: 'Offset Column',
-  category: 'Layout',
-  attributes: { class: 'fa fa-indent' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:20%;">&nbsp;</td>
-              <td style="width:80%; padding:10px;">Offset content</td>
-            </tr></table>`
-});
-
-bm.add('layout-centered-narrow', {
-  label: 'Centered Narrow Column',
-  category: 'Layout',
-  attributes: { class: 'fa fa-align-center' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:15%;"></td>
-              <td style="width:70%; padding:10px; background:#eee;">Centered Content</td>
-              <td style="width:15%;"></td>
-            </tr></table>`
-});
-
-bm.add('layout-2-col-fixed', {
-  label: '2 Columns Fixed 200/400px',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:600px; max-width:100%;"><tr>
-              <td style="width:200px; padding:10px;">Fixed 200px</td>
-              <td style="width:400px; padding:10px;">Fixed 400px</td>
-            </tr></table>`
-});
-
-bm.add('layout-3-col-fixed', {
-  label: '3 Columns Fixed 150px',
-  category: 'Layout',
-  attributes: { class: 'fa fa-columns' },
-  content: `<table style="width:450px; max-width:100%;"><tr>
-              <td style="width:150px; padding:10px;">150px</td>
-              <td style="width:150px; padding:10px;">150px</td>
-              <td style="width:150px; padding:10px;">150px</td>
-            </tr></table>`
-});
-
-bm.add('layout-full-width-padding', {
-  label: 'Full Width + Padding',
-  category: 'Layout',
-  attributes: { class: 'fa fa-square' },
-  content: `<table style="width:100%;"><tr>
-              <td style="padding:30px;">Content with padding</td>
-            </tr></table>`
-});
-
-bm.add('layout-bg-container', {
-  label: 'Background Container',
-  category: 'Layout',
-  attributes: { class: 'fa fa-fill-drip' },
-  content: `<table style="width:100%; background:#f0f0f0;"><tr>
-              <td style="padding:20px;">Content inside colored container</td>
-            </tr></table>`
-});
-
-bm.add('layout-highlight-col', {
-  label: 'Highlight Column',
-  category: 'Layout',
-  attributes: { class: 'fa fa-paint-brush' },
-  content: `<table style="width:100%;"><tr>
-              <td style="width:50%; padding:10px; background:#ffebcc;">Highlighted col</td>
-              <td style="width:50%; padding:10px;">Normal col</td>
-            </tr></table>`
-});
-
-bm.add('text-header-large', {
-  label: 'Header Large',
-  category: 'Text',
-  attributes: { class: 'fa fa-header' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:15px; font-size:28px; font-weight:bold; text-align:center; font-family: Arial, sans-serif;">
-      Large Header Text
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-header-medium', {
-  label: 'Header Medium',
-  category: 'Text',
-  attributes: { class: 'fa fa-header' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:12px; font-size:22px; font-weight:bold; text-align:left; font-family: Arial, sans-serif;">
-      Medium Header Text
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-paragraph', {
-  label: 'Paragraph',
-  category: 'Text',
-  attributes: { class: 'fa fa-paragraph' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; line-height:1.5; font-family: Arial, sans-serif; color:#333;">
-      This is a sample paragraph. You can replace this text with your content.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-small', {
-  label: 'Small Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-font' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:8px; font-size:12px; line-height:1.4; font-family: Arial, sans-serif; color:#666;">
-      Small text for disclaimers or footnotes.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-center', {
-  label: 'Centered Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-align-center' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; text-align:center; font-family: Arial, sans-serif; color:#333;">
-      Centered text block
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-right', {
-  label: 'Right Aligned Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-align-right' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; text-align:right; font-family: Arial, sans-serif; color:#333;">
-      Right aligned text block
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-bold', {
-  label: 'Bold Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-bold' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; font-weight:bold; font-family: Arial, sans-serif;">
-      Bold emphasized text.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-italic', {
-  label: 'Italic Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-italic' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; font-style:italic; font-family: Arial, sans-serif;">
-      Italic styled text.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-link', {
-  label: 'Text Link',
-  category: 'Text',
-  attributes: { class: 'fa fa-link' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; font-family: Arial, sans-serif;">
-      Visit our <a href="#" style="color:#1a73e8; text-decoration:none;">website</a> for more info.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-quote', {
-  label: 'Blockquote',
-  category: 'Text',
-  attributes: { class: 'fa fa-quote-right' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:15px; font-size:16px; font-family: Arial, sans-serif; color:#666; border-left:4px solid #ccc; margin:0 10px;">
-      “This is a quoted text block with a left border.”
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-highlight', {
-  label: 'Highlighted Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-paint-brush' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:16px; background:#fffae6; font-family: Arial, sans-serif;">
-      Highlighted text for emphasis.
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-uppercase', {
-  label: 'Uppercase Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-text-height' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:14px; text-transform: uppercase; font-family: Arial, sans-serif; color:#444;">
-      Uppercase text block
-    </td>
-  </tr></table>`
-});
-
-bm.add('text-muted', {
-  label: 'Muted Text',
-  category: 'Text',
-  attributes: { class: 'fa fa-low-vision' },
-  content: `<table style="width:100%;"><tr>
-    <td style="padding:10px; font-size:14px; color:#999; font-family: Arial, sans-serif;">
-      Muted or secondary text.
-    </td>
-  </tr></table>`
-});
-
-
-      // Remove default fullscreen and replace with custom fullscreen
-      const panel = editor.Panels;
-      panel.removeButton('options', 'fullscreen');
-
-panel.addButton('options', {
-  id: 'custom-fullscreen',
-  className: 'fa fa-arrows-alt', // matches GrapesJS icons
-  command: 'custom-fullscreen',
-  attributes: { title: 'Fullscreen' },
-  togglable: true, // this makes it act like a toggle
-  active: false    // default inactive
-});
-
-
-      editor.Commands.add('custom-fullscreen', {
-        run() {
-          const wrapper = document.getElementById('editor-wrapper');
-          if (!document.fullscreenElement) {
-            wrapper.requestFullscreen();
-          } else {
-            document.exitFullscreen();
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription UI Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        .subscription-card {
+            transition: all 0.3s ease;
         }
-      });
+        .subscription-card:hover {
+            transform: translateY(-4px);
+        }
+        .popular-plan {
+            position: relative;
+            overflow: hidden;
+        }
+        .popular-plan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+        }
+        .plan-badge {
+            position: absolute;
+            top: -8px;
+            right: 20px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
 
-      // Optional: Hide GrapesJS "+" add blocks button
-      const hideOpenBlocksBtn = () => {
-        const buttons = document.querySelectorAll('.gjs-pn-buttons .gjs-pn-btn svg path');
-        buttons.forEach(path => {
-          if (path.getAttribute('d') === 'M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z') {
-            const btn = path.closest('.gjs-pn-btn');
-            if (btn) btn.style.display = 'none';
-          }
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-8 py-12">
+
+        <!-- Header Section -->
+        <section class="text-center mb-16">
+            <div class="max-w-4xl mx-auto relative">
+                <!-- Background Decorations -->
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl"></div>
+                
+                <h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-indigo-300 mb-6 leading-tight tracking-tight">
+                    Choose Your Perfect Plan
+                </h1>
+                <p class="text-slate-300/90 text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto font-light">
+                    Flexible pricing tailored to teams of all sizes and projects at every stage. Scale with confidence.
+                </p>
+            </div>
+        </section>
+
+        <!-- Current Subscription Status -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-600/50 shadow-2xl">
+                <h2 class="text-2xl font-bold text-purple-300 mb-6 flex items-center gap-3">
+                    <i class="fas fa-credit-card text-purple-400"></i>
+                    Current Subscription
+                </h2>
+                
+                <!-- Subscription Status Display -->
+                <div id="subscription-status" class="mb-6">
+                    <!-- This will be populated by JavaScript -->
+                    <div class="text-center p-6">
+                        <i class="fas fa-circle text-gray-500 text-sm mr-2"></i>
+                        <span class="text-gray-400">Loading subscription status...</span>
+                    </div>
+                </div>
+
+                <!-- Subscription Actions -->
+                <div id="subscription-actions" class="text-center">
+                    <!-- Action buttons will appear here based on subscription status -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Plans Grid -->
+        <section class="mb-16">
+            <div class="grid lg:grid-cols-3 gap-8">
+                
+                <!-- Free Plan -->
+                <div class="subscription-card group rounded-3xl bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-xl p-8 shadow-2xl border border-slate-600/50 hover:border-blue-400/50 hover:shadow-blue-400/20 transition-all duration-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold tracking-wide">Free</h3>
+                        <div class="text-3xl font-black">$0<span class="text-slate-400 text-base font-normal">/mo</span></div>
+                    </div>
+                    <p class="text-slate-300/90 text-sm mb-8 leading-relaxed">
+                        Start strong with daily limits perfect for personal use or testing ideas.
+                    </p>
+                    <ul class="space-y-4 text-sm mb-10">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope-open-text text-blue-400 w-5"></i>
+                            <span>3 emails/day (approx. 90/month)</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-edit text-blue-400 w-5"></i>
+                            <span>Basic email editor</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-headset text-blue-400 w-5"></i>
+                            <span>Email support</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50">
+                        Current Plan
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="subscription-card popular-plan group rounded-3xl bg-gradient-to-br from-indigo-900/90 via-purple-800/90 to-indigo-900/90 backdrop-blur-xl p-8 shadow-2xl border border-purple-400/50 hover:border-purple-300/70 hover:shadow-purple-400/30 transition-all duration-500 scale-105 relative overflow-hidden">
+                    <div class="plan-badge">Most Popular</div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold tracking-wide">Pro</h3>
+                        <div class="text-3xl font-black">$10<span class="text-purple-200 text-base font-normal">/mo</span></div>
+                    </div>
+                    <p class="text-purple-100/90 text-sm mb-8 leading-relaxed">
+                        Power up your campaigns with advanced tools and more sending capacity.
+                    </p>
+                    <ul class="space-y-4 text-sm mb-10">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-yellow-300 w-5"></i>
+                            <span>1,000 emails/month</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-edit text-yellow-300 w-5"></i>
+                            <span>Enhanced email editor</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-chart-bar text-yellow-300 w-5"></i>
+                            <span>Detailed analytics dashboard</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-th-large text-yellow-300 w-5"></i>
+                            <span>Customizable templates</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-headset text-yellow-300 w-5"></i>
+                            <span>Priority support</span>
+                        </li>
+                    </ul>
+                    <button onclick="startCheckout('price_1Rm64rIPmpPcLP6DYH3FZ0yr')" 
+                        class="w-full bg-gradient-to-r from-white to-gray-100 hover:from-gray-100 hover:to-white text-gray-900 font-bold py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/50 shadow-lg hover:shadow-xl">
+                        Upgrade to Pro
+                    </button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="subscription-card group rounded-3xl bg-gradient-to-br from-gray-100/95 via-white/95 to-gray-100/95 backdrop-blur-xl text-gray-900 p-8 shadow-2xl border border-gray-300/50 hover:border-gray-400/70 hover:shadow-gray-400/30 transition-all duration-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold tracking-wide">Premium</h3>
+                        <div class="text-3xl font-black">$49<span class="text-gray-500 text-base font-normal">/mo</span></div>
+                    </div>
+                    <p class="text-gray-700/90 text-sm mb-8 leading-relaxed">
+                        Unlimited sending, team collaboration, and enterprise-grade features for scaling your business.
+                    </p>
+                    <ul class="space-y-4 text-sm mb-10">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-infinity text-yellow-600 w-5"></i>
+                            <span>Unlimited emails</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-users text-yellow-600 w-5"></i>
+                            <span>Multi-user/team accounts</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-plug text-yellow-600 w-5"></i>
+                            <span>API & CRM integrations</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-headset text-yellow-600 w-5"></i>
+                            <span>24/7 VIP support</span>
+                        </li>
+                    </ul>
+                    <button onclick="startCheckout('price_1RmCvzIPmpPcLP6D0PcDSfqt')" 
+                        class="w-full bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white font-bold py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500/50 shadow-lg hover:shadow-xl">
+                        Get Premium
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Highlights -->
+        <section class="grid md:grid-cols-3 gap-8 text-slate-300 mb-16">
+            <div class="group bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-600/50 hover:border-purple-400/50 hover:shadow-purple-500/20 transition-all duration-500 hover:-translate-y-1">
+                <div class="text-5xl text-purple-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Scalable Infrastructure</h3>
+                <p class="leading-relaxed">
+                    Start free, upgrade as you grow. Our platform scales to match your growth, ensuring performance at every step.
+                </p>
+            </div>
+            <div class="group bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-600/50 hover:border-indigo-400/50 hover:shadow-indigo-500/20 transition-all duration-500 hover:-translate-y-1">
+                <div class="text-5xl text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Live Analytics</h3>
+                <p class="leading-relaxed">
+                    View opens, clicks, conversions in real time. Stay informed and iterate fast with clear performance metrics.
+                </p>
+            </div>
+            <div class="group bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-600/50 hover:border-emerald-400/50 hover:shadow-emerald-500/20 transition-all duration-500 hover:-translate-y-1">
+                <div class="text-5xl text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">End-to-End Security</h3>
+                <p class="leading-relaxed">
+                    Data is fully encrypted in transit and at rest. We're GDPR-ready, privacy-first, and enterprise-secure.
+                </p>
+            </div>
+        </section>
+
+        <!-- Enhanced Testimonials -->
+        <section class="grid md:grid-cols-3 gap-8 text-sm text-slate-300 mb-16">
+            <div class="bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-slate-600/50 hover:border-blue-400/50 transition-all duration-500">
+                <div class="mb-6">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-4 leading-relaxed">"I moved over from a bigger platform and haven't looked back. The UI is clean, responsive, and intuitive."</p>
+                    <p class="mb-4">I run all my email campaigns solo and this tool makes it feel effortless.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-400"></i>
+                    </div>
+                    <div class="font-semibold text-white">Jamie T., Freelance Designer</div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-slate-600/50 hover:border-purple-400/50 transition-all duration-500">
+                <div class="mb-6">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-4 leading-relaxed">"Switching to Pro gave us a major lift. We fine-tuned campaigns based on real-time data we never had before."</p>
+                    <p class="mb-4">Saves our team hours every week and boosts engagement by 30%+.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-purple-400"></i>
+                    </div>
+                    <div class="font-semibold text-white">Casey M., Agency Owner</div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-slate-800/90 via-slate-700/90 to-slate-800/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-slate-600/50 hover:border-emerald-400/50 transition-all duration-500">
+                <div class="mb-6">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="mb-4 leading-relaxed">"This platform checks all the boxes. Reliability, ease-of-use, great support, and affordable pricing."</p>
+                    <p class="mb-4">We onboarded our whole team in a day and never looked back.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-emerald-400"></i>
+                    </div>
+                    <div class="font-semibold text-white">Alex R., Marketing Lead</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center">
+            <div class="flex items-center justify-center gap-4 text-sm text-slate-400 mb-4">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-shield-alt text-green-400"></i>
+                    <span>SSL Secured</span>
+                </div>
+                <div class="w-1 h-1 bg-slate-600 rounded-full"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fab fa-stripe text-purple-400"></i>
+                    <span>Powered by Stripe</span>
+                </div>
+                <div class="w-1 h-1 bg-slate-600 rounded-full"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-lock text-blue-400"></i>
+                    <span>GDPR Compliant</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-8 right-4 flex flex-col gap-2 z-[9999] pointer-events-none"></div>
+
+    <!-- Include the JavaScript files -->
+    <script src="/static/js/settings/stripe.js"></script>
+    <script src="/static/js/settings/subscription.js"></script>
+
+    <script>
+        // Initialize subscription status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSubscriptionStatus();
         });
-      };
+    </script>
 
-      setTimeout(hideOpenBlocksBtn, 500);
-    });
-
-    // Refresh layout when fullscreen toggles
-    document.addEventListener('fullscreenchange', () => {
-      setTimeout(() => {
-        editor.refresh();
-        editor.refreshCanvas();
-      }, 100);
-    });
-  </script>
 </body>
 </html>
