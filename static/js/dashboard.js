@@ -6,19 +6,18 @@ let currentScreen = 'dashboard';
 
 
 
-// On page load
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.slice(1); 
-  if (hash) {
-    switchScreen(hash);
-    switchSettingsTab('connect');
 
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
-  else {
+  if (hash === 'new-user') {
+    openPostGoogleModal(); // Show modal for new user
+    history.replaceState(null, '', window.location.pathname + window.location.search); // Clean URL
+    switchSettingsTab('connect');
+  } else {
     switchSettingsTab('account');
   }
 });
+
 
 
 

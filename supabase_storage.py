@@ -311,19 +311,34 @@ def upsert(table: str, data):
 
 # Initialize the database
 
+import httpx  # for network errors
+
 def get_user_by_email(email):
     try:
         response = supabase.table("users").select("*").eq("email", email).limit(1).execute()
-        print('server response', response)
+        print('server response:', response)
 
+        # Check if response is successful and has a valid data field
+        if hasattr(response, 'status_code') and response.status_code != 200:
+            return False, f"Supabase error: Status code {response.status_code}"
 
-        if not response.data:
+        if not hasattr(response, 'data') or response.data is None:
+            return False, "Supabase error: Invalid response format"
+
+        if len(response.data) == 0:
             return False, "No user found with that email"
 
         return True, response.data[0]
 
+    except httpx.ConnectError:
+        return False, "Network error: Failed to connect to Supabase"
+    except httpx.ReadTimeout:
+        return False, "Network error: Supabase request timed out"
+    except httpx.RequestError as e:
+        return False, f"Network error: {e}"
     except Exception as e:
-        return False, f"Exception occurred: {e}"
+        return False, f"Unexpected error: {e}"
+
 
 
 

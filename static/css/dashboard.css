@@ -103,18 +103,16 @@ body {
 
 /* Neon Customer Avatar */
 .customer-section img {
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2rem;
+  height: 2rem;
   overflow:visible;
   object-fit:cover;
+  margin-left: 2px;
 
 
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-.customer-section img:hover {
-  transform: scale(1.1);
-  
-}
+
 
 /* Hide Customer Name by Default */
 .customer-info {
@@ -195,19 +193,7 @@ input:-webkit-autofill:active {
 }
 
 
-.loading-overlay {
-      display: flex;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      backdrop-filter: blur(6px);
-      background-color: rgba(0, 0, 0, 0.3);
-      align-items: center;
-      justify-content: center;
-      z-index: 999999;
-    }
+
 
     .spinner {
       width: 72px;

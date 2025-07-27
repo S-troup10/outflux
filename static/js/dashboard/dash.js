@@ -23,6 +23,8 @@ function find_next_send() {
   const campaigns = MAIN_DETAILS.campaigns;
   let nextSend = null;
 
+  
+
   for (const campaign of campaigns) {
     if (!Array.isArray(campaign.schedule)) continue;
 
@@ -33,6 +35,9 @@ function find_next_send() {
       if (isNaN(scheduledTime.getTime())) continue; // skip invalid dates
       if (scheduledTime < now) continue; // skip past events
 
+      
+      const manual_emails = campaign.manual_emails;
+
       // Update if it's the first valid one, or earlier than current
       if (!nextSend || scheduledTime < new Date(nextSend.scheduled_time)) {
         nextSend = {
@@ -42,6 +47,8 @@ function find_next_send() {
           status: 'Scheduled',
           list_id: campaign.list_id,
           scheduled_time: item.scheduled_time, // make sure this exists
+          manual_emails,
+
         };
       }
     }
@@ -74,8 +81,16 @@ function render_next_send(d = null) {
   let total_count = 0;
   for (const id of list_ids) {
     const list = MAIN_DETAILS.lists.find(l => l.id === id);
-    if (list) total_count += list.count;
+    if (list) total_count += list.count;      
   }
+  
+  const manual = data.manual_emails;
+    const man_count = manual
+      .split(',')
+      .map(item => item.trim())
+      .filter(item => item !== '')
+      .length;
+  total_count += man_count;
 
   document.getElementById('ns-campaign').textContent = data.campaign_name;
   document.getElementById('ns-scheduled').textContent = new Date(data.scheduled_time).toLocaleString('en-AU', {

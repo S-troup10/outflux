@@ -1,32 +1,27 @@
- async function startCheckout(priceId) {
+
+
+async function startCheckout(priceId) {
     const res = await fetch("/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ priceId: priceId })
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ priceId: priceId })
     });
 
     const data = await res.json();
     if (data.url) {
-      window.location.href = data.url;
+        window.location.href = data.url;
     } else {
-      alert("Error: " + data.error);
+        alert("Error: " + data.error);
     }
-  }
-
-
-
+}
 
 // Subscription management functions
 
-async function cancelSubscription() {
-    if (!confirm('Are you sure you want to cancel your subscription? It will remain active until the end of your billing period.')) {
-        return;
-    }
-
+async function manageSubscription() {
     try {
-        const response = await fetch('/cancel-subscription', {
+        const response = await fetch('/create-customer-portal-session', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,16 +30,14 @@ async function cancelSubscription() {
 
         const data = await response.json();
 
-        if (data.success) {
-            showNotification('Subscription cancelled successfully. It will remain active until the end of your billing period.', 'success');
-            // Refresh subscription status
-            await loadSubscriptionStatus();
+        if (data.url) {
+            window.location.href = data.url;
         } else {
-            showNotification(data.error || 'Failed to cancel subscription', 'error');
+            showNotification(data.error || 'Failed to create management session', 'error');
         }
     } catch (error) {
-        console.error('Error cancelling subscription:', error);
-        showNotification('An error occurred while cancelling subscription', 'error');
+        console.error('Error creating management session:', error);
+        showNotification('An error occurred while creating management session', 'error');
     }
 }
 
@@ -72,7 +65,7 @@ function updateSubscriptionUI(subscriptionData) {
 
     if (subscriptionData.subscription === 'none' || subscriptionData.status === 'inactive') {
         statusElement.innerHTML = `
-            <div class="text-center p-6">
+            <div class="text-center p-6 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-xl">
                 <i class="fas fa-circle text-gray-500 text-sm mr-2"></i>
                 <span class="text-gray-400">No active subscription</span>
             </div>
@@ -86,40 +79,44 @@ function updateSubscriptionUI(subscriptionData) {
     const statusIcon = subscriptionData.status === 'active' ? 'fa-check-circle text-green-400' : 'fa-exclamation-circle text-yellow-400';
     
     let statusText = subscriptionData.status.charAt(0).toUpperCase() + subscriptionData.status.slice(1);
-    
     if (subscriptionData.cancel_at_period_end) {
         statusText += ' (Cancelling at period end)';
     }
 
     statusElement.innerHTML = `
-        <div class="bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl p-6 border border-blue-500/30">
-            <div class="flex items-center justify-between mb-4">
+        <div class="rounded-xl border border-indigo-500/20 bg-gradient-to-br from-indigo-800/40 to-purple-900/50 p-6 shadow-md">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h3 class="text-xl font-bold text-white">${planName} Plan</h3>
-                    <p class="text-blue-200 flex items-center">
-                        <i class="fas ${statusIcon} mr-2"></i>
-                        ${statusText}
+                    <h3 class="text-2xl font-extrabold text-white mb-1">${planName} Plan</h3>
+                    <p class="text-blue-200 text-sm flex items-center">
+                        <i class="fas ${statusIcon} mr-2"></i>${statusText}
                     </p>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm text-gray-400">Next billing</p>
-                    <p class="text-white">${new Date(subscriptionData.current_period_end * 1000).toLocaleDateString()}</p>
+                    <p class="text-sm text-gray-400">Next Billing</p>
+                    <p class="text-white font-semibold text-lg">${new Date(subscriptionData.current_period_end * 1000).toLocaleDateString()}</p>
                 </div>
             </div>
         </div>
     `;
 
-    if (subscriptionData.status === 'active' && !subscriptionData.cancel_at_period_end) {
+    // Beautiful Manage Subscription Button
+    if (subscriptionData.has_customer) {
         actionElement.innerHTML = `
-            <button onclick="cancelSubscription()" 
-                    class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all duration-200">
-                <i class="fas fa-times mr-2"></i>Cancel Subscription
-            </button>
+            <div class="mt-6 flex justify-center">
+                <button onclick="manageSubscription()" 
+                        class="relative group inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold rounded-2xl transition duration-300 ease-in-out shadow-lg">
+                    <i class="fas fa-cog mr-2 text-white text-base"></i>
+                    <span>Manage Subscription</span>
+                   
+                </button>
+            </div>
         `;
     } else {
         actionElement.innerHTML = '';
     }
 }
+
 
 function showNotification(message, type = 'info') {
     // Create notification element
@@ -161,12 +158,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     
     if (urlParams.get('success') === 'subscription_updated') {
-        showNotification('Subscription updated successfully!', 'success');
+        ShowToast('Subscription updated successfully!');
         // Clean up URL
         window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
         loadSubscriptionStatus();
     } else if (urlParams.get('cancelled') === 'true') {
-        showNotification('Payment was cancelled', 'info');
+        ShowToast('Payment was cancelled');
         window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
     } else if (urlParams.get('error')) {
         const error = urlParams.get('error');
@@ -189,7 +186,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMessage = 'Payment processing error';
         }
         
-        showNotification(errorMessage, 'error');
+        ShowToast(errorMessage, False);
         window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
     }
 });
+

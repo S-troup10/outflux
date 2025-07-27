@@ -52,7 +52,10 @@ function set_main_details() {
       // Clear loaders before inserting real content
       campaignList.innerHTML = "";
       listTable.innerHTML = "";
-      render_next_send();
+      setTimeout(()=> {
+        render_next_send();
+      }, 300);
+      
       populate_lists();
       populate_campaigns();
       fillStats(MAIN_DETAILS);
@@ -73,11 +76,12 @@ let USER_DETAILS;
           document.getElementById("nav-name").textContent = `${user.first_name} ${user.last_name}` || '';
           
             //temporily set this for now
-            document.getElementById("nav-status").textContent = 'basic';
+            document.getElementById("nav-status").textContent = user.subscription;
             //document.getElementById("nav-status").value = user.last_name || '';
             USER_DETAILS = user;
             set_connection_status(user.refresh_token);
             fill_setting_fields(USER_DETAILS);
+            check_if_new_user(USER_DETAILS);
             //set the name in the dashboard
             document.getElementById('dash-name').innerText = `Welcome Back, ${user.first_name}`;
             if (user.refresh_token == true) {
@@ -197,3 +201,164 @@ function set_connection_status(status) {
   //  Connect
   //</button>
 //</div>
+
+
+
+  let valid = false;
+
+  function check_if_new_user(user) {
+    const first = user.first_name?.trim();
+    const last = user.last_name?.trim();
+
+    if (!first || !last) {
+      openPostGoogleModal();
+    }
+  }
+
+  function openPostGoogleModal() {
+    const modal = document.getElementById('postGoogleModal');
+    const content = document.getElementById('postGoogleModalContent');
+    modal.classList.remove('hidden');
+    setTimeout(() => content.classList.add('opacity-100', 'scale-100'), 10);
+  }
+
+  function closePostGoogleModal() {
+    const modal = document.getElementById('postGoogleModal');
+    const content = document.getElementById('postGoogleModalContent');
+    content.classList.remove('opacity-100', 'scale-100');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+  }
+
+  function togglePasswordVisibility(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+
+  function onPasswordChange() {
+    const password = document.getElementById('postGooglePassword');
+    const confirm = document.getElementById('confirmPassword');
+    const relay = document.getElementById('relay');
+
+    const icon = document.getElementById('postGoogleEyeIcon');
+
+    if (password.value.length === 0) {
+      icon.style.display = 'none';
+      relay.style.display = 'none';
+      valid = false;
+
+      return;
+    }
+
+    icon.style.display = 'inline';
+
+    if (password.value.length < 8) {
+      relay.textContent = 'Password must be 8 characters or longer';
+      relay.style.display = 'block';
+      valid = false;
+
+    } else if (!/[A-Z]/.test(password.value)) {
+      relay.textContent = 'Password must include a capital letter';
+      relay.style.display = 'block';
+      valid = false;
+
+    } else if (password.value !== confirm.value) {
+      relay.textContent = 'Passwords do not match';
+      relay.style.display = 'block';
+      valid = false;
+
+    } else {
+      valid = true;
+      relay.style.display = 'none';
+      
+    }
+  }
+
+
+function submitPostGoogle() {
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
+  const password = document.getElementById('postGooglePassword');
+  const failBox = document.getElementById('postGoogleFail');
+  const loading = document.getElementById('loader');
+  const id = USER_DETAILS.id;
+
+  let submit = true;
+  failBox.classList.add('hidden');
+
+  // Validate first name
+  if (firstName.value.trim() === '') {
+    firstName.classList.add('glow-error');
+    submit = false;
+  } else {
+    firstName.classList.remove('glow-error');
+  }
+
+  // Check global "valid" password flag
+  if (typeof valid !== 'undefined' && !valid) {
+    failBox.textContent = 'Fix the password issues before submitting.';
+    failBox.classList.remove('hidden');
+    submit = false;
+  }
+
+  if (submit) {
+    const payload = {
+      table: 'users',
+      primary_key: 'id',
+      data: {
+        first_name: firstName.value.trim(),
+        last_name: lastName.value.trim(),
+        password: password.value.trim(),
+        id: id
+      }
+    };
+
+    loading.classList.remove('hidden');
+
+    fetch('/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(result => {
+      loading.classList.add('hidden');
+
+      if (result.success) {
+        closePostGoogleModal();
+        showToast('Sign Up Completed');
+
+        // Update USER_DETAILS locally
+        USER_DETAILS.first_name = payload.data.first_name;
+        USER_DETAILS.last_name = payload.data.last_name;
+
+        // Update UI
+        document.getElementById('dash-name').innerText = `Welcome Back, ${payload.data.first_name}`;
+        document.getElementById("nav-name").textContent = `${payload.data.first_name} ${payload.data.last_name}`;
+        document.getElementById("nav-status").textContent = USER_DETAILS.subscription || '';
+
+        fill_setting_fields(USER_DETAILS);
+      } else {
+        failBox.textContent = result.message || 'Save failed.';
+        failBox.classList.remove('hidden');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      failBox.textContent = 'Server error. Try again later.';
+      failBox.classList.remove('hidden');
+      loading.classList.add('hidden');
+    });
+  }
+}

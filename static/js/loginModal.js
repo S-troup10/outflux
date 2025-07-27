@@ -88,7 +88,7 @@ function AttemptLogin() {
 }
 
 function Login(email, password) {
-    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('loader').classList.remove('hidden');
     fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -108,12 +108,13 @@ function Login(email, password) {
                 // You can redirect or show a success message here
             } else {
                 onFail(data.message);
+                document.getElementById('loader').classList.add('hidden');
                 // Show an error to the user
             }
-            document.getElementById('loader').style.display = 'none';
+            
         })
         .catch((error) => {
-            document.getElementById('loader').style.display = 'none';
+            document.getElementById('loader').classList.add('hidden');
             console.error("Error:", error);});
 
         

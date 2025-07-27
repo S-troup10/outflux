@@ -127,6 +127,12 @@ renderCampaignStats(data.campaigns || [], data.stats?.campaigns || {});
   // Add fallback for schedule table
   const schedule_data = stats.schedule || [];
   renderScheduleTable(schedule_data, data.campaigns || []);
+
+
+  //code for adding the basic stats to the dashboard
+  document.getElementById("dash-sent").innerText = sent;
+  document.getElementById("dash-delivered").innerText = `${deliveredPct}%`;
+  
 }
 
 
@@ -528,6 +534,19 @@ function renderCampaignStats(campaigns, campaignStats) {
 
     container.insertAdjacentHTML('beforeend', html);
   });
+
+
+
+if (Array.isArray(campaigns)) {
+  const ready = campaigns.filter(c => c.paused === false);
+  const active_count = ready.length;
+  const dashElement = document.getElementById("dash-active");
+  if (dashElement) {
+    dashElement.innerText = active_count;
+  }
+}
+
+
 }
 
 function toggleStats(id) {

@@ -1666,7 +1666,395 @@ const templates = [
         </tr>
       </table>
     `
-  }
+  },
+
+
+  {
+  id: '42',
+  title: 'Complete Vehicle Service Experience',
+  tags: ['Premium', 'Service', 'Reminder', 'Engaging'],
+  features: ['Hero image', 'Timeline', 'Testimonials', 'Responsive'],
+  html: `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:760px; margin:auto; font-family:'Segoe UI', sans-serif; background-color:#f4f4f4; color:#333; border-radius:10px; overflow:hidden; box-shadow:0 5px 20px rgba(0,0,0,0.1);">
+      
+      <!-- Hero Header -->
+      <tr>
+        <td style="background:#1e293b; padding:40px 30px; text-align:center; color:#ffffff;">
+          <h1 style="margin:0; font-size:36px;">Your Premium Service Journey Begins</h1>
+          <p style="margin-top:10px; font-size:18px;">Complete Care. Unmatched Confidence.</p>
+        </td>
+      </tr>
+
+      <!-- Hero Image -->
+      <tr>
+        <td>
+          <img src="https://images.unsplash.com/photo-1597764691850-5fe3e5501361" width="100%" alt="Vehicle Service" style="display:block; max-height:300px; object-fit:cover;">
+        </td>
+      </tr>
+
+      <!-- Introduction -->
+      <tr>
+        <td style="background:#ffffff; padding:30px;">
+          <p>Hi [Customer Name],</p>
+          <p>As a valued client, we’re excited to guide you through your upcoming premium vehicle service. This is more than just maintenance — it’s a full care experience designed for longevity, safety, and performance.</p>
+
+          <h2 style="color:#0f172a; margin-top:30px;">🚗 What to Expect From This Visit:</h2>
+          <ul style="padding-left:20px; margin-top:10px;">
+            <li>Full Multi-Point Vehicle Inspection</li>
+            <li>Oil Change with Synthetic Upgrade</li>
+            <li>Brake Health Analysis & Fluid Check</li>
+            <li>Tyre Rotation & Tread Evaluation</li>
+            <li>Battery & Charging System Diagnostic</li>
+            <li>Detailed Interior Sanitation</li>
+            <li>Complimentary Exterior Wash</li>
+          </ul>
+        </td>
+      </tr>
+
+      <!-- Timeline -->
+      <tr>
+        <td style="background:#f1f5f9; padding:30px;">
+          <h2 style="margin-bottom:15px; color:#1e293b;">📅 Personalized Service Timeline</h2>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:14px;">
+            <tr>
+              <td style="padding:10px;"><strong>🕘 9:00 AM</strong></td>
+              <td style="padding:10px;">Vehicle Drop-Off & Welcome Consultation</td>
+            </tr>
+            <tr style="background:#ffffff;">
+              <td style="padding:10px;"><strong>🛠️ 9:30 AM</strong></td>
+              <td style="padding:10px;">Full System Diagnostics & Fluids Inspection</td>
+            </tr>
+            <tr>
+              <td style="padding:10px;"><strong>🔍 11:00 AM</strong></td>
+              <td style="padding:10px;">Brake, Battery, and Engine Analysis</td>
+            </tr>
+            <tr style="background:#ffffff;">
+              <td style="padding:10px;"><strong>🧼 12:30 PM</strong></td>
+              <td style="padding:10px;">Cleaning & Interior Detail</td>
+            </tr>
+            <tr>
+              <td style="padding:10px;"><strong>✅ 2:00 PM</strong></td>
+              <td style="padding:10px;">Final Quality Checks & Pick-Up Notification</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Testimonials -->
+      <tr>
+        <td style="background:#ffffff; padding:30px;">
+          <h2 style="margin-bottom:15px; color:#0f172a;">⭐ What Customers Are Saying</h2>
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:10px 0; border-bottom:1px solid #e2e8f0;">
+                <p style="font-style:italic;">"Absolutely top-tier experience. My car feels brand new again!"</p>
+                <p style="font-size:14px; color:#555;">– Jordan M.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0; border-bottom:1px solid #e2e8f0;">
+                <p style="font-style:italic;">"Professional, transparent, and worth every penny."</p>
+                <p style="font-size:14px; color:#555;">– Elise R.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;">
+                <p style="font-style:italic;">"This service was leagues ahead of the usual garage. Loved it."</p>
+                <p style="font-size:14px; color:#555;">– Shaun D.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- CTA Block -->
+      <tr>
+        <td style="background:#e2e8f0; padding:30px; text-align:center;">
+          <h2 style="color:#1e293b;">🗓️ Secure Your Service Slot</h2>
+          <p style="margin:10px 0 25px;">Appointments fill up quickly. Lock in your spot now to ensure your vehicle gets the premium treatment it deserves.</p>
+          <a href="#" style="background:#10b981; color:#ffffff; padding:16px 32px; font-size:16px; font-weight:bold; border-radius:8px; text-decoration:none;">Book My Service</a>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="background:#0f172a; color:#cbd5e1; padding:30px; text-align:center; font-size:13px;">
+          <p>AutoCare Elite, 123 Motorway Dr, Autoville, ZZ 45678</p>
+          <p>Email: <a href="mailto:support@autocareelite.com" style="color:#3b82f6;">support@autocareelite.com</a> | Call: (123) 456-7890</p>
+          <p style="margin-top:10px;">
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Facebook</a> |
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Instagram</a> |
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Website</a>
+          </p>
+          <p style="margin-top:15px;"><a href="#" style="color:#f87171; text-decoration:none;">Unsubscribe</a> | <a href="#" style="color:#f87171; text-decoration:none;">Privacy Policy</a></p>
+        </td>
+      </tr>
+
+    </table>
+  `
+},
+{
+  id: '44',
+  title: 'Elite Auto Service Alert (Expanded)',
+  tags: ['Luxury', 'Bold', 'Value-Dense'],
+  features: ['Double content per section', 'Compact', 'Modern'],
+  html: `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:700px; margin:auto; font-family:'Helvetica Neue', sans-serif; background:#fdfdfd; border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,0.08); overflow:hidden;">
+
+      <!-- Banner / Headline -->
+      <tr>
+        <td style="background:linear-gradient(135deg, #0f172a, #334155); color:#fff; padding:50px 30px; text-align:center;">
+          <h1 style="font-size:30px; margin:0;">Elite Auto Service Alert</h1>
+          <p style="margin-top:10px; font-size:16px; opacity:0.85;">Performance. Protection. Precision.</p>
+          <p style="margin-top:8px; font-size:14px; opacity:0.7;">Experience a smoother, safer ride with certified care and zero hassle.</p>
+        </td>
+      </tr>
+
+      <!-- Icon Grid / Highlights -->
+      <tr>
+        <td style="padding:30px 30px; background:#ffffff;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="text-align:center;">
+            <tr>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/car.png" alt="Service" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>Pro Diagnostics</strong></p>
+                <p style="font-size:12px; color:#555;">Advanced scanning for hidden issues before they affect performance.</p>
+              </td>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/wrench.png" alt="Tools" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>Precision Tune-Up</strong></p>
+                <p style="font-size:12px; color:#555;">Engine optimization and fluid balance for maximum efficiency.</p>
+              </td>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/checked-2.png" alt="Check" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>Certified Report</strong></p>
+                <p style="font-size:12px; color:#555;">A full checklist emailed to you with insights and technician notes.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/clock.png" alt="Fast" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>Same-Day Service</strong></p>
+                <p style="font-size:12px; color:#555;">Drop-off in the morning, back on the road by evening.</p>
+              </td>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/customer-support.png" alt="Support" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>VIP Support</strong></p>
+                <p style="font-size:12px; color:#555;">Real-time updates and service advisors always available.</p>
+              </td>
+              <td style="padding:12px;">
+                <img src="https://img.icons8.com/fluency/48/parking.png" alt="Pickup" style="margin:auto;">
+                <p style="margin:8px 0 0; font-size:14px;"><strong>Pickup & Drop</strong></p>
+                <p style="font-size:12px; color:#555;">Stay home — we’ll handle the logistics and bring your car back serviced.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Message -->
+      <tr>
+        <td style="padding:30px 30px; background:#f9fafb; color:#1e293b;">
+          <p style="font-size:16px; margin-bottom:16px;">Hi [Customer Name],</p>
+          <p style="font-size:15px; margin-bottom:12px;">
+            We’re reaching out to let you know that your vehicle is due for its premium service experience.
+          </p>
+          <p style="font-size:14px; margin-bottom:0;">
+            Based on your driving history and vehicle type, we've curated a care plan that balances performance, safety, and long-term reliability. Our technicians will walk you through a tailored service — and you’ll be kept in the loop every step of the way.
+          </p>
+        </td>
+      </tr>
+
+      <!-- CTA -->
+      <tr>
+        <td style="padding:35px 30px; text-align:center; background:#f9fafb;">
+          <a href="#" style="display:inline-block; background:#10b981; color:#fff; padding:16px 30px; font-size:16px; border-radius:8px; text-decoration:none; font-weight:bold;">Confirm My Service Slot</a>
+          <p style="font-size:13px; color:#64748b; margin-top:10px;">Need to reschedule? No problem — just click and select a new date.</p>
+        </td>
+      </tr>
+
+      <!-- Testimonials x2 -->
+      <tr>
+        <td style="padding:25px 30px; background:#ffffff; border-top:1px solid #e5e7eb; text-align:center;">
+          <p style="font-size:13px; margin:0; font-style:italic; color:#555;">
+            “Hands-down the smoothest car service process I've ever used. Zero stress.”<br>
+            <span style="font-size:12px;">– Laura B.</span>
+          </p>
+          <p style="font-size:13px; margin:20px 0 0; font-style:italic; color:#555;">
+            “From booking to pickup, everything was handled with care and clarity.”<br>
+            <span style="font-size:12px;">– Marcus V.</span>
+          </p>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="background:#0f172a; color:#cbd5e1; text-align:center; font-size:12px; padding:25px;">
+          <p style="margin:0;">AutoCare Elite • 123 Motorway Dr, Autoville</p>
+          <p style="margin:5px 0;">support@autocareelite.com • (123) 456-7890</p>
+          <p style="margin-top:10px;">
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Facebook</a> |
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Instagram</a> |
+            <a href="#" style="color:#93c5fd; text-decoration:none; margin:0 8px;">Website</a>
+          </p>
+          <p style="margin-top:10px;">
+            <a href="#" style="color:#f87171; text-decoration:none;">Unsubscribe</a> |
+            <a href="#" style="color:#f87171; text-decoration:none;">Privacy Policy</a>
+          </p>
+        </td>
+      </tr>
+
+    </table>
+  `
+},
+{
+  id: '45',
+  title: 'Precision Service, Delivered',
+  tags: ['Luxury', 'Apple-style', 'Sleek', 'Content-rich'],
+  features: ['Minimalist aesthetic', 'Full of premium content', 'Elegant layout'],
+  html: `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:760px; margin:auto; background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1a1a1a; line-height:1.6;">
+
+      <!-- Header -->
+      <tr>
+        <td style="padding:60px 30px 40px; text-align:center;">
+          <img src="https://img.icons8.com/ios-filled/50/000000/car--v1.png" width="50" alt="Auto Icon" style="margin-bottom:20px;" />
+          <h1 style="font-size:36px; font-weight:600; margin:0;">Precision Service. Delivered.</h1>
+          <p style="font-size:18px; margin:10px 0 0; color:#4b5563;">Experience the future of automotive care — elegant, efficient, and effortless.</p>
+        </td>
+      </tr>
+
+      <!-- Hero Image -->
+      <tr>
+        <td>
+          <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=800&q=80" width="100%" style="max-height:300px; object-fit:cover;" alt="Luxury car service" />
+        </td>
+      </tr>
+
+      <!-- Welcome Message -->
+      <tr>
+        <td style="padding:50px 30px;">
+          <h2 style="font-size:24px; font-weight:500; margin-bottom:15px;">Hi [Customer Name],</h2>
+          <p style="margin:0 0 20px;">Your vehicle is due for its precision-tuned service. This isn’t a routine check — it's a comprehensive performance evaluation paired with white-glove treatment.</p>
+          <p style="margin:0;">Book today and unlock priority support, same-day turnaround, and a full digital health report for your vehicle.</p>
+        </td>
+      </tr>
+
+      <!-- Features Section -->
+      <tr>
+        <td style="padding:40px 30px; background:#f9fafb;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="text-align:center; padding:20px;">
+                <img src="https://img.icons8.com/ios-filled/40/000000/inspection.png" alt="Inspection Icon" />
+                <h3 style="margin:15px 0 5px; font-size:18px;">Full Diagnostics</h3>
+                <p style="font-size:14px; color:#4b5563;">We scan and evaluate 100+ systems with certified-grade precision.</p>
+              </td>
+              <td style="text-align:center; padding:20px;">
+                <img src="https://img.icons8.com/ios-filled/40/000000/gear.png" alt="Tune-Up Icon" />
+                <h3 style="margin:15px 0 5px; font-size:18px;">Performance Tuning</h3>
+                <p style="font-size:14px; color:#4b5563;">Enhance responsiveness, efficiency, and fuel economy in one go.</p>
+              </td>
+              <td style="text-align:center; padding:20px;">
+                <img src="https://img.icons8.com/ios-filled/40/000000/checkmark.png" alt="Report Icon" />
+                <h3 style="margin:15px 0 5px; font-size:18px;">Digital Health Report</h3>
+                <p style="font-size:14px; color:#4b5563;">You’ll receive a detailed, visual service report straight to your inbox.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Visual CTA -->
+      <tr>
+        <td style="padding:60px 30px; text-align:center;">
+          <h2 style="font-size:26px; font-weight:600; margin-bottom:20px;">Reserve Your Service Window</h2>
+          <p style="font-size:16px; color:#4b5563; margin-bottom:30px;">Spots are limited. Confirm your appointment now and we’ll handle the rest — pickup included.</p>
+          <a href="#" style="display:inline-block; background:#000000; color:#ffffff; text-decoration:none; padding:16px 36px; font-size:16px; border-radius:8px; font-weight:500;">Schedule My Service</a>
+        </td>
+      </tr>
+
+      <!-- Trust Builder -->
+      <tr>
+        <td style="padding:40px 30px; background:#f1f5f9; text-align:center;">
+          <p style="font-style:italic; font-size:14px; color:#4b5563; margin-bottom:10px;">“Honestly felt like a premium tech product launch, not a car service. I’m impressed.”</p>
+          <p style="font-size:13px; color:#6b7280;">— Natalie F., Elite Member</p>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="padding:40px 30px; text-align:center; font-size:12px; color:#9ca3af;">
+          <p style="margin:0;">AutoCare Elite · 123 Motorway Drive · Autoville</p>
+          <p style="margin:5px 0;">support@autocareelite.com · (123) 456-7890</p>
+          <p style="margin-top:10px;">
+            <a href="#" style="color:#6b7280; text-decoration:none;">Unsubscribe</a> | 
+            <a href="#" style="color:#6b7280; text-decoration:none;">Privacy Policy</a>
+          </p>
+        </td>
+      </tr>
+
+    </table>
+  `
+}, 
+{
+  id: '46',
+  title: 'Premium Service Notice',
+  tags: ['Reminder', 'Luxury', 'Apple-style'],
+  features: ['Minimalist Design', 'Content-Rich', 'High Trust'],
+  html: `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:700px; margin:auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f8f8f8; border-radius:12px; overflow:hidden; box-shadow:0 0 30px rgba(0,0,0,0.05);">
+      <!-- Header -->
+      <tr>
+        <td style="background:#000; padding:40px; text-align:center;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" width="40" alt="Apple" style="margin-bottom:20px;">
+          <h1 style="color:#fff; font-size:26px; margin:0;">Time for Your Next Service</h1>
+          <p style="color:#aaa; font-size:14px; margin-top:8px;">Tailored for your experience</p>
+        </td>
+      </tr>
+
+      <!-- Body Content -->
+      <tr>
+        <td style="padding:40px; color:#111; background:#fff;">
+          <h2 style="margin-top:0; font-size:20px;">A Smoother Journey Ahead</h2>
+          <p style="font-size:15px; line-height:1.6;">
+            We noticed it's time for your routine service. Regular maintenance ensures performance, reliability, and peace of mind. At Neura, we treat your vehicle—and your time—with care and precision.
+          </p>
+
+          <ul style="margin-top:25px; padding-left:20px; font-size:15px; line-height:1.8;">
+            <li>✔ Personalized diagnostics by certified technicians</li>
+            <li>✔ Complimentary fluid top-up & interior clean</li>
+            <li>✔ Service history sync with your digital profile</li>
+          </ul>
+
+          <p style="margin-top:30px;">
+            <a href="#" style="background:#000; color:#fff; padding:14px 28px; border-radius:8px; text-decoration:none; font-weight:500;">Book Now</a>
+          </p>
+        </td>
+      </tr>
+
+      <!-- Device Image Section -->
+      <tr>
+        <td style="text-align:center; background:#fafafa; padding:30px;">
+          <img src="https://images.unsplash.com/photo-1597003431868-0eae87ed94e4?auto=format&fit=crop&w=800&q=80" width="100%" alt="Vehicle" style="max-width:640px; border-radius:10px;">
+          <p style="font-size:13px; color:#888; margin-top:10px;">Your next service, redefined by elegance and innovation.</p>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="background:#f0f0f0; padding:30px; text-align:center; font-size:12px; color:#777;">
+          <p style="margin:0;">Need help? <a href="#" style="color:#000; text-decoration:underline;">Contact Support</a></p>
+          <p style="margin:8px 0;">© 2025 Neura Automotive. All rights reserved.</p>
+          <p style="margin:0;"><a href="#" style="color:#555; text-decoration:none;">Unsubscribe</a></p>
+        </td>
+      </tr>
+    </table>
+  `
+}
+
+
+
 
 
 

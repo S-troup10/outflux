@@ -1,9 +1,9 @@
 function openModal() {
-    const button = document.getElementById('signup');
-    const topLoginButton = document.querySelector('button[onclick="openLogin()"]');
 
+    closeDemoModal();
+
+    const button = document.getElementById('signup');
     
-    if (topLoginButton) topLoginButton.classList.add('hidden');
     const modal = document.getElementById("signupModal");
     const modalContent = document.getElementById("modalContent");
     // Remove 'hidden' so the dark overlay appears instantly

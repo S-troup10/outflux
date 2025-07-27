@@ -56,3 +56,22 @@ fields.forEach(field => {
     });
   });
 });
+
+
+
+
+
+
+
+  
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    if (loader) {
+      loader.style.transition = "opacity 0.5s";
+      loader.style.opacity = 0;
+      setTimeout(() => {loader.classList.add('hidden');
+            loader.style.opacity = 1;
+      }, 500);
+    }
+  });
+
