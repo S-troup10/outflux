@@ -1,4 +1,5 @@
 
+let USER_DETAILS;
 let MAIN_DETAILS;
 let sent_count = 0;
 let list_headers = [
@@ -6,25 +7,19 @@ let list_headers = [
     // id name count
     ];
 
-function set_main_details() {
+async function set_main_details(retries = 3, delay = 1000) {
   const campaignList = document.getElementById("campaignList");
   const listTable = document.getElementById("list-table");
 
   // Loader for campaignList (valid inside a div)
   const campaignLoader = `
-<div id="campaign-loader" class="absolute inset-0 mt-24 flex justify-center items-center z-50 bg-white/80">
-  <div class="flex flex-col items-center space-y-2 text-gray-500">
-    <div class="w-6 h-6 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-    <span class="text-sm">Loading campaigns...</span>
-  </div>
-</div>
-
-
-
+    <div id="campaign-loader" class="absolute inset-0 mt-24 flex justify-center items-center z-50 bg-white/80">
+      <div class="flex flex-col items-center space-y-2 text-gray-500">
+        <div class="w-6 h-6 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-sm">Loading campaigns...</span>
+      </div>
+    </div>
   `;
-
-
-
 
   // Loader for listTable (valid inside tbody)
   const listLoader = `
@@ -42,82 +37,102 @@ function set_main_details() {
 
   // Set initial loaders
   campaignList.innerHTML = campaignLoader;
-  //so the table is actully made
   listTable.innerHTML = listLoader;
 
-  // Fetch data
-  fetch('/all_data')
-    .then(res => res.json())
-    .then(data => {
+  let attempt = 0;
+
+  while (attempt < retries) {
+    try {
+      const res = await fetch('/all_data');
+      const data = await res.json();
+
       MAIN_DETAILS = data;
       console.log(MAIN_DETAILS);
 
-      // Clear loaders before inserting real content
       campaignList.innerHTML = "";
       listTable.innerHTML = "";
-      setTimeout(()=> {
+
+      setTimeout(() => {
         render_next_send();
       }, 300);
-      
+
       populate_lists();
       populate_campaigns();
-      
       fillStats(MAIN_DETAILS);
 
+      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      sent_count = 0;
 
+      MAIN_DETAILS.stats.sent.forEach(element => {
+        const eventTime = new Date(element.event_time).getTime();
+        if (eventTime >= oneDayAgo) {
+          sent_count++;
+        }
+      });
 
+      console.log('User has sent', sent_count, 'emails today');
+      return; // Success – exit function
 
-const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-
-MAIN_DETAILS.stats.sent.forEach(element => {
-    const eventTime = new Date(element.event_time).getTime();
-    if (eventTime >= oneDayAgo) {
-        sent_count++;
+    } catch (error) {
+      console.error(`Attempt ${attempt + 1} failed:`, error);
+      attempt++;
+      if (attempt < retries) {
+        await new Promise(resolve => setTimeout(resolve, delay)); // wait before retry
+      } else {
+        campaignList.innerHTML = `<div class="text-center text-red-500 mt-12">Failed to load campaigns after ${retries} tries.</div>`;
+        listTable.innerHTML = `<tr><td colspan="100%" class="text-center text-red-500 py-6">Failed to load lists.</td></tr>`;
+      }
     }
-});
-console.log('user has sent ', sent_count, ' emails today');
-
-
-
-    });
+  }
 }
+
+
 
 
 window.addEventListener('load', () => {
   set_main_details();
+  FillCustomerFields();
 });
 
 
 
 
-let USER_DETAILS;
-  function FillCustomerFields() {
-    fetch('/session_user')
-        .then(res => res.json())
-        .then(user => {
-          console.log(user);
-          const capitalizedName = user.first_name.charAt(0).toUpperCase() + user.first_name.slice(1);
-          document.getElementById("nav-name").textContent = `${capitalizedName} ${user.last_name}` || '';
-          
-            //temporily set this for now
-            document.getElementById("nav-status").textContent = user.subscription;
-            //document.getElementById("nav-status").value = user.last_name || '';
-            USER_DETAILS = user;
-            set_connection_status(user.refresh_token);
-            fill_setting_fields(USER_DETAILS);
-            check_if_new_user(USER_DETAILS);
-            //set the name in the dashboard
-            document.getElementById('dash-name').innerText = `Welcome Back, ${capitalizedName}`;
-            if (user.refresh_token == true) {
-              document.getElementById('connect-google').classList.add('hidden');
-            }
-        }).catch(
-          reason => {
-            console.log('failed', reason);
-            window.location.replace("/");
-          }
-        );
+async function FillCustomerFields(retries = 3, delay = 1000) {
+  try {
+    const res = await fetch('/session_user');
+    if (!res.ok) throw new Error("Fetch failed");
+    
+    const user = await res.json();
+    console.log(user);
+
+    const capitalizedName = user.first_name.charAt(0).toUpperCase() + user.first_name.slice(1);
+    document.getElementById("nav-name").textContent = `${capitalizedName} ${user.last_name}` || '';
+    document.getElementById("nav-status").textContent = user.subscription;
+
+    USER_DETAILS = user;
+
+    set_connection_status(user.refresh_token);
+    fill_setting_fields(USER_DETAILS);
+    check_if_new_user(USER_DETAILS);
+
+    document.getElementById('dash-name').innerText = `Welcome Back, ${capitalizedName}`;
+    if (user.refresh_token === true) {
+      document.getElementById('connect-google').classList.add('hidden');
+    }
+
+  } catch (err) {
+    console.error("Failed to fetch user session:", err);
+    
+    if (retries > 0) {
+      console.log(`Retrying... (${retries} left)`);
+      setTimeout(() => FillCustomerFields(retries - 1, delay), delay);
+    } else {
+      console.error("Max retries reached. Redirecting to login.");
+      window.location.replace("/");
+    }
+  }
 }
+
 
 
 

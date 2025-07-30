@@ -479,7 +479,10 @@ function update_summary() {
   const recipients = getRecipientCount(selectedListId, extractEmails());
   document.getElementById('campaign-subject-preview').innerText = subject;
 
-  if (subject.length == 0 || recipients == 0) {
+  const googleConnected = USER_DETAILS.refresh_token;
+  const withinUsageLimit = isWithinUsageLimit();
+
+  if (subject.length == 0 || recipients == 0 || !withinUsageLimit || !googleConnected) {
     toggleSectionLock(true, !subject.length == 0, !recipients == 0);
 
   } else {
@@ -564,7 +567,7 @@ function toggleSectionLock(
       issues += `
         <div class="bg-yellow-500/10 border border-yellow-400 text-yellow-300 px-4 py-2 rounded-lg text-sm w-full space-y-2">
           <p>Google account not connected.</p>
-          <button onclick="connectGoogleAccount()" class="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-semibold transition">
+          <button onclick="switchScreen('settings'); switchSettingsTab('connect');" class="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-semibold transition">
             Connect Account
           </button>
         </div>
@@ -575,7 +578,7 @@ function toggleSectionLock(
       issues += `
         <div class="bg-blue-500/10 border border-blue-400 text-blue-300 px-4 py-2 rounded-lg text-sm w-full space-y-2">
           <p>Usage limit reached.</p>
-          <button onclick="switchScreen('settings'); " class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+          <button onclick="switchScreen('settings'); switchSettingsTab('subscription'); " class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
             Upgrade Plan
           </button>
         </div>

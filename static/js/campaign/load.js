@@ -207,33 +207,31 @@ return `
 
 // search the list ids to get total count
 function getRecipientCount(list_ids, manual_emails) {
-  if (!Array.isArray(list_ids) || !Array.isArray(list_headers) || list_headers.length === 0) {
-    return 0;
+  let final_total = 0;
+
+  if (Array.isArray(list_ids) && Array.isArray(list_headers) && list_headers.length > 0) {
+    final_total = list_ids.reduce((total, rawId) => {
+      const id = parseInt(rawId);
+      if (isNaN(id)) return total;
+
+      const list = list_headers.find(header => parseInt(header.id) === id);
+      return total + (list?.count || 0);
+    }, 0);
   }
 
-  let final_total =  list_ids.reduce((total, rawId) => {
-    const id = parseInt(rawId);
-    if (isNaN(id)) return total;
-
-    const list = list_headers.find(header => parseInt(header.id) === id);
-    return total + (list?.count || 0);
-  }, 0);
-
-
   let manual_count = 0;
+  if (typeof manual_emails === 'string') {
+    const manual_email_list = manual_emails
+      .split(',')
+      .map(email => email.trim())
+      .filter(email => email.length > 0);
 
-if (typeof manual_emails === 'string') {
-  const manual_email_list = manual_emails
-  .split(',')
-  .map(email => email.trim())
-  .filter(email => email.length > 0);
-
-  manual_count += manual_email_list.length;
-}
-
+    manual_count += manual_email_list.length;
+  }
 
   return final_total + manual_count;
 }
+
 
 
 

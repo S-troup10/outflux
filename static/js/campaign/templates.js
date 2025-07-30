@@ -2461,7 +2461,7 @@ const templates = [
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:auto;background-color:#1a1a1a;border-radius:8px;overflow:hidden;">
       <tr>
         <td style="padding:0;">
-          <img src="https://via.placeholder.com/720x320/000000/ffffff?text=Interface+Kit+Vol.+3" alt="Interface Kit Banner" width="100%" style="display:block;">
+          <img  alt="Interface Kit Banner" width="100%" style="display:block;">
         </td>
       </tr>
       <tr>
@@ -2475,13 +2475,13 @@ const templates = [
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td style="padding:10px;">
-                <img src="https://via.placeholder.com/200x140/2c2c2c/ffffff?text=Dashboard" style="width:100%;border-radius:6px;" alt="Component 1">
+                <img  style="width:100%;border-radius:6px;" alt="Component 1">
               </td>
               <td style="padding:10px;">
-                <img src="https://via.placeholder.com/200x140/2c2c2c/ffffff?text=Charts" style="width:100%;border-radius:6px;" alt="Component 2">
+                <img  style="width:100%;border-radius:6px;" alt="Component 2">
               </td>
               <td style="padding:10px;">
-                <img src="https://via.placeholder.com/200x140/2c2c2c/ffffff?text=Cards" style="width:100%;border-radius:6px;" alt="Component 3">
+                <img  style="width:100%;border-radius:6px;" alt="Component 3">
               </td>
             </tr>
           </table>
@@ -2533,7 +2533,7 @@ const templates = [
       </tr>
       <tr>
         <td style="text-align:center;padding:0 40px;">
-          <img src="https://via.placeholder.com/600x200/ffe0cc/333333?text=Your+Pro+Toolkit" width="100%" alt="Pro Tools" style="border-radius:6px;margin-top:20px;">
+          <img  width="100%" alt="Pro Tools" style="border-radius:6px;margin-top:20px;">
         </td>
       </tr>
       <tr>
@@ -2747,7 +2747,7 @@ const templates = [
             Your new smart companion to streamline your workflow, powered by advanced AI.
           </p>
 
-          <img src="https://via.placeholder.com/600x300/87ceeb/ffffff?text=Neura+AI+Assistant" alt="Neura AI Assistant" width="100%" style="border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+          <img  alt="Neura AI Assistant" width="100%" style="border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
 
           <p style="font-size: 16px; color: #1a2e5c; max-width: 520px; margin: auto;">
             From automating your daily tasks to providing insightful analytics, Neura AI Assistant is designed to make your life easier and your business smarter.
@@ -3078,26 +3078,26 @@ const templates = [
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td style="vertical-align: top; width: 50%; padding-right: 20px;">
-                <img src="https://via.placeholder.com/320x200/ff7043/ffffff?text=Beach+Escape" alt="Beach Escape" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                <img  alt="Beach Escape" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
                 <h3 style="color: #ff7043; margin: 0 0 10px;">Beach Escapes</h3>
                 <p style="font-size: 15px; line-height: 1.5; margin: 0 0 20px;">
                   Soak up the sun at pristine beaches with crystal-clear water. Perfect for relaxation and water sports alike.
                 </p>
 
-                <img src="https://via.placeholder.com/320x200/42a5f5/ffffff?text=Mountain+Hiking" alt="Mountain Hiking" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                <img  alt="Mountain Hiking" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
                 <h3 style="color: #42a5f5; margin: 0 0 10px;">Mountain Hiking</h3>
                 <p style="font-size: 15px; line-height: 1.5; margin: 0;">
                   Explore breathtaking trails, fresh air, and stunning vistas. Challenge yourself and reconnect with nature.
                 </p>
               </td>
               <td style="vertical-align: top; width: 50%; padding-left: 20px;">
-                <img src="https://via.placeholder.com/320x200/8e24aa/ffffff?text=City+Adventures" alt="City Adventures" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                <img  alt="City Adventures" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
                 <h3 style="color: #8e24aa; margin: 0 0 10px;">City Adventures</h3>
                 <p style="font-size: 15px; line-height: 1.5; margin: 0 0 20px;">
                   Discover vibrant cultures, world-class dining, and exciting nightlife. Perfect for those who thrive on urban energy.
                 </p>
 
-                <img src="https://via.placeholder.com/320x200/ffb300/ffffff?text=Safari+Experience" alt="Safari Experience" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                <img  alt="Safari Experience" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
                 <h3 style="color: #ffb300; margin: 0 0 10px;">Safari Experience</h3>
                 <p style="font-size: 15px; line-height: 1.5; margin: 0;">
                   Witness majestic wildlife and pristine landscapes on an unforgettable safari adventure.
@@ -3342,7 +3342,7 @@ const templates = [
             Fun, educational toys designed to inspire your little ones’ imagination and learning!
           </p>
 
-          <img src="https://via.placeholder.com/600x250/ffd54f/ffffff?text=Play+and+Learn" alt="Play and Learn" style="width: 100%; border-radius: 12px; margin-bottom: 25px;">
+          <img  alt="Play and Learn" style="width: 100%; border-radius: 12px; margin-bottom: 25px;">
 
           <h2 style="color: #fb8c00; margin-bottom: 10px;">Why Choose PlayTime?</h2>
           <ul style="text-align: left; font-size: 15px; padding-left: 20px; margin-bottom: 25px;">
@@ -3388,7 +3388,7 @@ const templates = [
           <p style="font-size: 16px; margin-bottom: 35px;">
             The future of smart living is here. Control your home with ease, enhance security, and simplify your life.
           </p>
-          <img src="https://via.placeholder.com/400x220/8e44ad/ffffff?text=HomeSense+Device" alt="HomeSense Device" style="width: 100%; max-width: 400px; border-radius: 12px; margin-bottom: 35px;" />
+          <img  alt="HomeSense Device" style="width: 100%; max-width: 400px; border-radius: 12px; margin-bottom: 35px;" />
 
           <div style="text-align: left; max-width: 460px; margin: auto;">
             <h3 style="color: #34495e; margin-bottom: 12px;">Why HomeSense?</h3>
