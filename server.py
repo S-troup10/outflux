@@ -392,7 +392,7 @@ app.secret_key = 'super_secret_key_123456'
 
 @app.route('/dashboard')
 def dashboard():
-    print(f"🔍 Dashboard access attempt - Session keys: {list(session.keys())}")
+    
     print(f"📋 Full session: {dict(session)}")
     
     if 'user' in session and session['user']:
@@ -1231,12 +1231,18 @@ def get_subscription_status():
         # Retrieve the subscription from Stripe
         subscription = stripe.Subscription.retrieve(subscription_id)
 
+        print(subscription)
+
+        current_period_end = subscription["items"]["data"][0]["current_period_end"]
+        readable_date = datetime.fromtimestamp(current_period_end, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+
+        
         # Safely access StripeObject attributes using getattr()
         return jsonify({
             'subscription': user.get('subscription', 'none'),
             'status': getattr(subscription, 'status', 'unknown'),
             'cancel_at_period_end': getattr(subscription, 'cancel_at_period_end', False),
-            'current_period_end': getattr(subscription, 'current_period_end', None),
+            'current_period_end': readable_date,
             'cancel_at': getattr(subscription, 'cancel_at', None),
             'has_customer': bool(customer_id)
         })

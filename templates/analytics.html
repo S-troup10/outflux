@@ -1,0 +1,400 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<div id="analytics" class="main-content transition-all duration-500 opacity-0 transform translate-x-full hidden text-white min-h-screen p-8">
+
+<!-- Pro Lock Overlay -->
+<div
+  id="pro-lock-overlay"
+  class="absolute top-0 left-0 w-full h-full z-[9999] backdrop-blur-xl flex items-center justify-center p-4"
+>
+  <div
+    class="w-full max-w-2xl rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl transform transition-all duration-500 opacity-100 scale-100 border border-slate-600/50 backdrop-blur-md"
+  >
+    <!-- Header Icon and Title -->
+    <div class="flex items-center gap-6 mb-8">
+      <div
+        class="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl"
+      >
+        <i class="fas fa-crown text-4xl text-white"></i>
+      </div>
+      <div>
+        <h2 class="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
+          Upgrade to Pro
+        </h2>
+        <p class="text-slate-400 mt-2 text-lg">
+          Unlock exclusive features to supercharge your performance.
+        </p>
+      </div>
+    </div>
+
+    <!-- Feature Highlights -->
+    <div class="space-y-4 mb-8">
+      <div
+        class="flex items-start gap-4 p-6 bg-green-500/10 rounded-2xl border border-green-500/20 backdrop-blur-sm"
+      >
+        <div
+          class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg mt-0.5"
+        >
+          <i class="fas fa-chart-line text-white"></i>
+        </div>
+        <div>
+          <p class="font-semibold text-white text-lg">Advanced Analytics</p>
+          <p class="text-slate-400">
+            Gain insights into opens, clicks, and campaign performance.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex items-start gap-4 p-6 bg-purple-500/10 rounded-2xl border border-purple-500/20 backdrop-blur-sm"
+      >
+        <div
+          class="w-10 h-10 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-2xl flex items-center justify-center shadow-lg mt-0.5"
+        >
+          <i class="fas fa-brain text-white"></i>
+        </div>
+        <div>
+          <p class="font-semibold text-white text-lg">Smart Template Tools</p>
+          <p class="text-slate-400">
+            AI-powered suggestions and performance tracking of your content.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex items-start gap-4 p-6 bg-blue-500/10 rounded-2xl border border-blue-500/20 backdrop-blur-sm"
+      >
+        <div
+          class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg mt-0.5"
+        >
+          <i class="fas fa-rocket text-white"></i>
+        </div>
+        <div>
+          <p class="font-semibold text-white text-lg">Priority Delivery</p>
+          <p class="text-slate-400">
+            Pro campaigns are prioritized on our fast, global delivery network.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="text-center">
+      <button
+        onclick="window.location.href='/upgrade'"
+        class="px-12 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black rounded-2xl transition-all duration-200 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 text-lg"
+      >
+        <i class="fas fa-gem mr-3"></i>
+        Upgrade Now
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- Futuristic Hero Header -->
+  <div
+    class="mb-12 p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 shadow-2xl border border-purple-500/30 relative overflow-hidden"
+  >
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 animate-pulse"></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+    
+    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between">
+      <!-- Title Section -->
+      <div class="space-y-4">
+        <h2
+          class="text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 drop-shadow-lg"
+        >
+          CAMPAIGN ANALYTICS
+        </h2>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-blue-500/30">
+            <span class="text-blue-300 text-sm font-medium">Last synced:</span>
+            <span id="an-lastSync" class="font-mono text-cyan-300 text-sm font-bold">2025-07-03 15:42 UTC</span>
+          </div>
+          <div class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400 ">
+            <span class="text-emerald-300 text-xs font-bold tracking-wider">● LIVE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorative Elements -->
+      <div class="hidden lg:flex items-center gap-4 mt-6 lg:mt-0">
+        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-20 animate-spin-slow"></div>
+        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 opacity-30 "></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced KPI Stats Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
+    
+    <!-- SENT Card -->
+    <div class="group relative rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-blue-500/20 p-6 shadow-xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 hover:border-blue-400/40">
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent rounded-2xl"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-400/30">
+              <i class="fas fa-paper-plane text-blue-400 text-lg"></i>
+            </div>
+            <span class="text-blue-300 font-semibold text-sm tracking-wide uppercase">Sent</span>
+          </div>
+          <div id="an-sent_percent" class="px-2 py-1 rounded-lg bg-blue-900/40 border border-blue-500/30 text-blue-300 text-xs font-mono">
+            +4.8%
+          </div>
+        </div>
+        <p id="an_sent" class="text-4xl font-black text-white mb-2 group-hover:text-blue-100 transition-colors">132</p>
+        <p class="text-xs text-slate-400 mb-4">emails sent this week</p>
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full animate-pulse" style="width: 66%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERED Card -->
+    <div class="group relative rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-purple-500/20 p-6 shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 hover:border-purple-400/40">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent rounded-2xl"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-400/30">
+              <i class="fas fa-envelope-open-text text-purple-400 text-lg"></i>
+            </div>
+            <span class="text-purple-300 font-semibold text-sm tracking-wide uppercase">Delivered</span>
+          </div>
+          <div id="an-delivered_percent" class="px-2 py-1 rounded-lg bg-purple-900/40 border border-purple-500/30 text-purple-300 text-xs font-mono">
+            +3.1%
+          </div>
+        </div>
+        <p id="an-delivered" class="text-4xl font-black text-white mb-2 group-hover:text-purple-100 transition-colors">126</p>
+        <p class="text-xs text-slate-400 mb-4">successful deliveries</p>
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full animate-pulse" style="width: 82%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAILED Card -->
+    <div class="group relative rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-rose-500/20 p-6 shadow-xl hover:shadow-rose-500/25 transition-all duration-300 hover:scale-105 hover:border-rose-400/40">
+      <div class="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent rounded-2xl"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-rose-500/20 flex items-center justify-center border border-rose-400/30">
+              <i class="fas fa-times-circle text-rose-400 text-lg"></i>
+            </div>
+            <span class="text-rose-300 font-semibold text-sm tracking-wide uppercase">Failed</span>
+          </div>
+          <div id="an-failed-percent" class="px-2 py-1 rounded-lg bg-rose-900/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
+            ‑1.2%
+          </div>
+        </div>
+        <p id="an-failed" class="text-4xl font-black text-white mb-2 group-hover:text-rose-100 transition-colors">6</p>
+        <p class="text-xs text-slate-400 mb-4">bounced or blocked</p>
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-rose-500 to-rose-400 rounded-full animate-pulse" style="width: 12%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECIPIENTS Card -->
+    <div class="group relative rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-indigo-500/20 p-6 shadow-xl hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105 hover:border-indigo-400/40">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-2xl"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center border border-indigo-400/30">
+              <i class="fas fa-users text-indigo-400 text-lg"></i>
+            </div>
+            <span class="text-indigo-300 font-semibold text-sm tracking-wide uppercase">Recipients</span>
+          </div>
+          <div id="an-recipients_percent" class="px-2 py-1 rounded-lg bg-indigo-900/40 border border-indigo-500/30 text-indigo-300 text-xs font-mono">
+            +0.0%
+          </div>
+        </div>
+        <p id="an-recipients" class="text-4xl font-black text-white mb-2 group-hover:text-indigo-100 transition-colors">0</p>
+        <p class="text-xs text-slate-400 mb-4">addresses targeted</p>
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-indigo-500 to-indigo-400 rounded-full animate-pulse" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOUNCES Card -->
+    <div class="group relative rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-pink-500/20 p-6 shadow-xl hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105 hover:border-pink-400/40">
+      <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent rounded-2xl"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center border border-pink-400/30">
+              <i class="fas fa-ban text-pink-400 text-lg"></i>
+            </div>
+            <span class="text-pink-300 font-semibold text-sm tracking-wide uppercase">Bounces</span>
+          </div>
+          <div id="an-bounces_percent" class="px-2 py-1 rounded-lg bg-pink-900/40 border border-pink-500/30 text-pink-300 text-xs font-mono">
+            +0.0%
+          </div>
+        </div>
+        <p id="an-bounces" class="text-4xl font-black text-white mb-2 group-hover:text-pink-100 transition-colors">0</p>
+        <p class="text-xs text-slate-400 mb-4">individual failures</p>
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-pink-500 to-pink-400 rounded-full animate-pulse" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Engagement Trends Section -->
+  <div class="mb-12 bg-gradient-to-br from-slate-900 to-slate-800 border border-purple-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+    <!-- Animated background -->
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-cyan-500/5 animate-pulse"></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500"></div>
+    
+    <div class="relative z-10">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+            <i class="fas fa-chart-area text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-blue-300">
+              Engagement Trends
+            </h3>
+            <p class="text-slate-400 text-sm">Real-time campaign performance insights</p>
+          </div>
+        </div>
+        
+        <!-- Time Range Selector -->
+        <div class="flex gap-2">
+          <button class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white text-sm font-semibold hover:from-purple-400 hover:to-blue-400 transition-all duration-200 transform hover:scale-105 shadow-lg">
+            14d
+          </button>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid gap-8 lg:grid-cols-2">
+        <!-- Sent Over Time Chart -->
+        <div class="relative h-80 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 border border-slate-600/30 shadow-inner">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-xl"></div>
+          <h4 class="text-lg font-semibold text-slate-200 mb-4 relative z-10">Sent Over Time</h4>
+          <canvas id="sentTimeChart" class="relative z-10 w-full h-full"></canvas>
+        </div>
+
+        <!-- Deliverability Chart -->
+        <div class="relative h-80 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 border border-slate-600/30 shadow-inner">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-xl"></div>
+          <h4 class="text-lg font-semibold text-slate-200 mb-4 relative z-10">Deliverability</h4>
+          <canvas id="deliverPieChart" class="relative z-10 w-full h-full"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Performance Section -->
+  <section class="w-full py-8 mb-12">
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+          <i class="fas fa-chart-line text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-300">
+            Campaign Performance
+          </h2>
+          <p class="text-slate-400 mt-2">
+            Comprehensive overview of email delivery, recipients, and activity trends across all campaigns.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="campaignStatsContainer" class="space-y-6">
+      <!-- Campaign cards will be dynamically injected here -->
+    </div>
+  </section>
+
+  <!-- Enhanced Scheduled Sends Panel -->
+  <div id="schedule-panel" class="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-slate-900 to-slate-800 shadow-2xl overflow-hidden relative">
+    <!-- Animated top border -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 animate-pulse"></div>
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between px-8 py-6 bg-gradient-to-r from-purple-900/50 to-blue-900/50 backdrop-blur-sm">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-400/30">
+          <i class="fas fa-calendar-check text-purple-300 text-lg"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-blue-300">
+          Scheduled Sends
+        </h3>
+      </div>
+    </div>
+
+    <!-- Enhanced Filters -->
+    <div class="flex flex-col sm:flex-row gap-6 px-8 py-6 bg-slate-800/50 border-b border-slate-700/50">
+      <div class="flex-1 relative">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <i class="fas fa-search text-slate-400"></i>
+        </div>
+        <input
+          id="search-schedule"
+          type="text"
+          placeholder="Search campaign name…"
+          class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600/30 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400/50 transition-all duration-200"
+        />
+      </div>
+      <div class="relative">
+        <select
+          id="status-filter"
+          class="px-6 py-3 rounded-xl bg-slate-700/50 border border-slate-600/30 text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400/50 transition-all duration-200 appearance-none cursor-pointer"
+        >
+          <option value="">All Status</option>
+          <option value="true">Sent</option>
+          <option value="false">Upcoming</option>
+        </select>
+        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+          <i class="fas fa-chevron-down text-slate-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Table -->
+    <div class="max-h-96 overflow-y-auto nice-scrollbar">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-800/80 backdrop-blur sticky top-0 z-10 text-slate-300">
+          <tr class="border-b border-slate-700/50">
+            <th class="px-8 py-4 text-left font-semibold tracking-wider uppercase">Campaign</th>
+            <th class="px-8 py-4 text-left font-semibold tracking-wider uppercase">Scheduled</th>
+            <th class="px-8 py-4 text-left font-semibold tracking-wider uppercase">Status</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body" class="divide-y divide-slate-700/30">
+          <!-- Table rows will be dynamically populated -->
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div id="schedule-empty" class="hidden py-16 text-center text-slate-400">
+        <div class="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-inbox text-2xl text-slate-500"></i>
+        </div>
+        <p class="text-lg font-medium mb-2">No scheduled sends found</p>
+        <p class="text-sm">Try adjusting your filters or create a new campaign</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}

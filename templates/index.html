@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Outflux - Modern Email Campaigns</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+
+
+        <link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/loader.css">
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#6366f1",
+                            secondary: "#8b5cf6",
+                            accent: "#06b6d4",
+                        },
+                    },
+                },
+            };
+        </script>
+    </head>
+    <body
+        class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white min-h-screen"
+    >
+        <!-- Navigation -->
+        <nav
+            class="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-lg border-b border-white/10"
+        >
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <img
+                            src="/static/img/logo.png"
+                            alt="Outflux"
+                            class="h-[30px] w-auto"
+                        />
+                        <span
+                            class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                        >
+                            Outflux
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button
+                            onclick="openLogin()"
+                            class="px-4 py-2 text-sm font-medium text-blue-200 hover:text-white transition-colors"
+                        >
+                            Sign In
+                        </button>
+                        <button
+                            onclick="openModal()"
+                            class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                        >
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="pt-32 pb-20 px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <div class="mb-8">
+                    <h1
+                        class="text-6xl md:text-7xl font-extrabold mb-6 leading-tight"
+                    >
+                        <span
+                            class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
+                        >
+                            Email Marketing
+                        </span>
+                        <br />
+                        <span class="text-white">Reimagined</span>
+                    </h1>
+                    <p
+                        class="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
+                    >
+                        Create, schedule, and analyze powerful email campaigns
+                        with our intuitive platform. Built for teams who demand
+                        simplicity without sacrificing functionality.
+                    </p>
+                </div>
+
+                <div
+                    class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+                >
+                    <button
+                        onclick="openModal()"
+                        class="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                        <span class="relative z-10 flex items-center">
+                            Get Started
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"
+                            ></i>
+                        </span>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity"
+                        ></div>
+                    </button>
+                    <button
+                        onclick="openDemoModal()"
+                        class="px-8 py-4 border border-slate-600 rounded-xl text-lg font-medium hover:border-slate-400 hover:bg-slate-800/50 transition-all"
+                    >
+                        Watch Demo
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+                >
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-blue-400 mb-2">
+                            10M+
+                        </div>
+                        <div class="text-slate-400">Emails Delivered</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-400 mb-2">
+                            99.9%
+                        </div>
+                        <div class="text-slate-400">Uptime</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-cyan-400 mb-2">
+                            50K+
+                        </div>
+                        <div class="text-slate-400">Happy Customers</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-20 px-4 bg-black/20">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        Everything you need to
+                        <span
+                            class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                        >
+                            succeed
+                        </span>
+                    </h2>
+                    <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                        Powerful features designed to help you create, send, and
+                        optimize your email campaigns.
+                    </p>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    <!-- Feature 1 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-blue-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i
+                                class="fas fa-paint-brush text-white text-xl"
+                            ></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            Visual Email Builder
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            Drag-and-drop email builder with professional
+                            templates and custom design capabilities.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i class="fas fa-clock text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            Smart Scheduling
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            Schedule campaigns for optimal delivery times with
+                            intelligent timing recommendations.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-cyan-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i class="fas fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            Advanced Analytics
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            Real-time insights and detailed reporting to
+                            optimize your campaign performance.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-emerald-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            List Management
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            Organize and segment your contacts with powerful
+                            list management tools.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-orange-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            Enterprise Security
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            Bank-level security with encryption, compliance, and
+                            data protection features.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div
+                        class="group p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-pink-500/50 transition-all hover:transform hover:scale-105"
+                    >
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                        >
+                            <i class="fas fa-bolt text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-white">
+                            Lightning Fast
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed">
+                            High-performance infrastructure ensures your emails
+                            are delivered instantly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-20 px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div
+                    class="p-12 rounded-3xl bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30"
+                >
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        Ready to get started?
+                    </h2>
+                    <p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+                        Join thousands of businesses who trust Outflux for their
+                        email marketing needs.
+                    </p>
+                    <button
+                        onclick="openModal()"
+                        class="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+                    >
+                        Get Started Today
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modals (keeping existing modal functionality) -->
+        <div
+            id="signupModal"
+            class="fixed inset-0 flex items-center justify-center  bg-black/40 backdrop-blur-md hidden z-50"
+            onclick="if(event.target===this) closeModal()"
+        >
+            <div
+                id="modalContent"
+                class="relative bg-slate-900/95 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl p-8 w-[450px] text-white opacity-0 scale-90 transition-all duration-500"
+            >
+                <button
+                    onclick="closeModal()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-red-400 transition-colors text-2xl"
+                >
+                    &times;
+                </button>
+
+                <div class="text-center mb-6">
+                    <h2
+                        class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2"
+                    >
+                        Create Account
+                    </h2>
+                    <p class="text-slate-400">
+                        Start your email marketing journey
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <p
+                        id="signupError"
+                        class="hidden text-center text-sm font-medium text-red-400 bg-red-500/10 rounded-lg border border-red-500/20 p-3"
+                    ></p>
+                    <div class="flex space-x-4">
+                        <input
+                            type="text"
+                            id="firstName"
+                            placeholder="First Name"
+                            class="w-1/2 p-3 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                        />
+                        <input
+                            type="text"
+                            id="lastName"
+                            placeholder="Last Name"
+                            class="w-1/2 p-3 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                        />
+                    </div>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Email Address"
+                        class="w-full p-3 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                    />
+                    <p id="relay" class="m-0" style="display: none"></p>
+                    <div class="relative">
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Password"
+                            class="w-full p-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                        />
+                        <span
+                            id="passwordEye"
+                            class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        >
+                            <i
+                                id="eyeIcon"
+                                style="display: none"
+                                class="fa-solid fa-eye text-slate-500 hover:text-slate-300"
+                            ></i>
+                        </span>
+                        <span
+                            id="passwordTick"
+                            class="absolute inset-y-0 right-11 flex items-center text-green-400 hidden"
+                        >
+                            <i class="fa-solid fa-circle-check"></i>
+                        </span>
+                        <span
+                            id="passwordX"
+                            class="absolute inset-y-0 right-11 flex items-center text-red-400 hidden"
+                        >
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </span>
+                    </div>
+                    <div class="relative">
+                        <input
+                            id="confirm"
+                            type="password"
+                            placeholder="Confirm Password"
+                            class="w-full p-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                        />
+                        <span
+                            id="confirmTick"
+                            class="absolute inset-y-0 right-4 flex items-center text-green-400 hidden"
+                        >
+                            <i class="fa-solid fa-circle-check"></i>
+                        </span>
+                        <span
+                            id="confirmX"
+                            class="absolute inset-y-0 right-4 flex items-center text-red-400 hidden"
+                        >
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button
+                    id="signup"
+                    class="w-full mt-6 p-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
+                >
+                    Create Account
+                </button>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-slate-600"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-slate-900 text-slate-400">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Google Sign In Button -->
+          <button onclick="signInWithGoogle()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <span class="text-gray-700 font-medium">Continue with Google</span>
+          </button>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div
+            id="loginModal"
+            class="fixed inset-0 flex items-center justify-center  bg-black/40 backdrop-blur-md hidden z-50"
+            onclick="if(event.target===this) closeLogin()"
+        >
+            <div
+                id="loginModalContent"
+                class="relative bg-slate-900/95 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl p-8 w-[450px] text-white opacity-0 scale-90 transition-all duration-500"
+            >
+                <button
+                    onclick="closeLogin()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-red-400 transition-colors text-2xl"
+                >
+                    &times;
+                </button>
+
+                <div class="text-center mb-6">
+                    <h2
+                        class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2"
+                    >
+                        Welcome Back
+                    </h2>
+                    <p class="text-slate-400">Sign in to your account</p>
+                </div>
+
+                <p
+                    id="fail"
+                    class="hidden text-center text-sm font-medium text-red-400 bg-red-500/10 rounded-lg border border-red-500/20 p-3 mb-4"
+                >
+                    Invalid credentials. Please try again.
+                </p>
+
+                <div class="space-y-4">
+                    <input
+                        id="email-login"
+                        type="email"
+                        placeholder="Email Address"
+                        class="w-full p-3 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                    />
+                    <div class="relative">
+                        <input
+                            id="password-login"
+                            type="password"
+                            placeholder="Password"
+                            class="w-full p-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-400"
+                        />
+                        <span
+                            class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        >
+                            <i
+                                id="logineyeIcon"
+                                class="fa-solid fa-eye text-slate-500 hover:text-slate-300"
+                            ></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button
+                    id="loginButton"
+                    class="w-full mt-6 p-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
+                >
+                    Sign In
+                </button>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-slate-600"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-slate-900 text-slate-400">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Google Sign In -->
+        <button onclick="signInWithGoogle()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          <span class="text-gray-700 font-medium">Sign in with Google</span>
+        </button>
+            </div>
+        </div>
+
+        <!-- Watch Demo Modal -->
+        <div
+            id="demoModal"
+            class="fixed inset-0 flex items-center justify-center  bg-black/40 backdrop-blur-md hidden z-50"
+            onclick="if(event.target===this) closeDemoModal()"
+        >
+            <div
+                id="demoModalContent"
+                class="relative bg-slate-900/95 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl p-8 w-[600px] text-white opacity-0 scale-90 transition-all duration-500"
+            >
+                <button
+                    onclick="closeDemoModal()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-red-400 transition-colors text-2xl"
+                >
+                    &times;
+                </button>
+
+                <div class="text-center mb-6">
+                    <h2
+                        class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2"
+                    >
+                        Watch Demo
+                    </h2>
+                    <p class="text-slate-400">
+                        See Outflux in action
+                    </p>
+                </div>
+
+                <div class="aspect-video bg-slate-800 rounded-lg mb-6 flex items-center justify-center">
+                    <div class="text-center">
+                        <i class="fas fa-play-circle text-6xl text-blue-400 mb-4"></i>
+                        <p class="text-slate-300">Demo video coming soon!</p>
+                        <p class="text-sm text-slate-500">Experience our powerful email marketing platform</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button
+                        onclick="openModal()"
+                        class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                    >
+                        Get Started
+                    </button>
+                    <button
+                        onclick="closeDemoModal()"
+                        class="px-6 py-3 border border-slate-600 rounded-lg text-lg font-medium hover:border-slate-400 hover:bg-slate-800/50 transition-all"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Free Trial Modal -->
+        <div
+            id="trialModal"
+            class="fixed inset-0 flex items-center justify-center  bg-black/40 backdrop-blur-md hidden z-50"
+            onclick="if(event.target===this) closeTrialModal()"
+        >
+            <div
+                id="trialModalContent"
+                class="relative bg-slate-900/95 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl p-8 w-[500px] text-white opacity-0 scale-90 transition-all duration-500"
+            >
+                <button
+                    onclick="closeTrialModal()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-red-400 transition-colors text-2xl"
+                >
+                    &times;
+                </button>
+
+                <div class="text-center mb-6">
+                    <h2
+                        class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2"
+                    >
+                        Get Started
+                    </h2>
+                    <p class="text-slate-400">
+                        free to use • No credit card required                    </p>
+                </div>
+
+                <div class="space-y-6 mb-8">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>Send up to 1,000 emails per month</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>Access to all email templates</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>Advanced analytics and reporting</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>24/7 customer support</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button
+                        onclick="openModal()"
+                        class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                    >
+                        Create Account
+                    </button>
+                    <button
+                        onclick="closeTrialModal()"
+                        class="px-6 py-3 border border-slate-600 rounded-lg text-lg font-medium hover:border-slate-400 hover:bg-slate-800/50 transition-all"
+                    >
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+        </div>
+
+       <!-- Orbiting Loader -->
+        <div class="loading-overlay" id="loader">
+
+            <div  class="orbit-loader ">
+              <span class="orbit-shadow"></span>
+              <span class="orbit-shadow"></span>
+              <span class="orbit-shadow"></span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-text">loading...</span>
+            </div>
+        </div>
+
+        <!-- Add this inside your HTML body -->
+<div id="error-banner" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded shadow-md hidden z-50"></div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+
+    if (error) {
+      const errorBanner = document.getElementById('error-banner');
+      let message = "An unknown error occurred.";
+
+      switch (error) {
+        case 'database_error':
+          message = "A database error occurred. Please try again later.";
+          break;
+        case 'auth_failed':
+          message = "Authentication failed. Please log in again.";
+          break;
+        case 'invalid_input':
+          message = "Some input was invalid. Please correct the form.";
+          break;
+        case 'network_error':
+          message = "Network error. Please check your internet connection.";
+          break;
+        // Add more custom errors as needed
+      }
+
+      errorBanner.textContent = message;
+      errorBanner.classList.remove('hidden');
+
+      // Clear the query param after showing
+      const cleanURL = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanURL);
+
+      // Auto-hide after 5 seconds (optional)
+      setTimeout(() => {
+        errorBanner.classList.add('hidden');
+      }, 5000);
+    }
+  });
+</script>
+
+
+
+        <!-- Scripts -->
+        <script src="/static/js/login.js"></script>
+        <script src="/static/js/signUp.js"></script>
+        <script src="/static/js/loginModal.js"></script>
+        <script src="/static/js/secure.js"></script>
+        <script src="/static/js/modals.js"></script>
+
+  <script>
+    function signInWithGoogle() {
+      // Show loader
+      document.getElementById('loader').style.display = 'flex';
+
+      // Redirect to Google OAuth
+      window.location.href = '/auth/google';
+    }
+  </script>
+
+  <script>
+    function showGoogleLoader(element) {
+      // Show the main loader
+      document.getElementById('loader').style.display = 'flex';
+
+      // Disable the button and change text
+      element.style.pointerEvents = 'none';
+      element.style.opacity = '0.7';
+      const span = element.querySelector('span');
+      const originalText = span.textContent;
+      span.textContent = 'Redirecting to Google...';
+
+      // Reset after a timeout as fallback
+      setTimeout(() => {
+        element.style.pointerEvents = 'auto';
+        element.style.opacity = '1';
+        span.textContent = originalText;
+        document.getElementById('loader').style.display = 'none';
+      }, 10000);
+    }
+  </script>
+</body>
+</html>

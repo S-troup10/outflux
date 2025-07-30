@@ -1,0 +1,299 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 90%;
+    max-width: 1300px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.product-item {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+    width: 300px; /* Fixed width */
+    height: 400px; /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure content is well-spaced */
+    align-items: center;
+}
+
+/* Title Styling */
+.product-item b {
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #4facfe, #6a00ff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Price Styling */
+.product-item p {
+    color: #a0f3ff;
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+/* Image Styling */
+.product-item img {
+    width: 100%;
+    height: 200px; /* Fixed height for all images */
+    object-fit: cover; /* Crop instead of stretching */
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover img {
+    transform: scale(1.01);
+}
+
+/* Floating effect */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Subtle glowing effect on hover */
+.product-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0px 4px 30px rgba(0, 191, 255, 0.5);
+}
+.signup-btn {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #4facfe, #6a00ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.signup-btn:hover {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+}
+@keyframes glow {
+    0%, 100% { box-shadow: 0px 0px 10px rgba(0, 191, 255, 0.5); }
+    50% { box-shadow: 0px 0px 20px rgba(138, 43, 226, 0.8); }
+}
+.animate-glow {
+    animation: glow 1.5s infinite alternate;
+}
+.fade-in {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.show {
+    opacity: 1 !important;
+    transform: scale(1);
+}
+
+.hidden {
+    display: none;
+}
+ /* Error Glow Effect */
+ .glow-error {
+    border-color: red !important;
+    animation: glowError 1s infinite alternate;
+}
+
+@keyframes glowError {
+    0% { box-shadow: 0px 0px 5px red; }
+    100% { box-shadow: 0px 0px 15px red; }
+}
+/* Ensure that autofill styles work correctly */
+input:-webkit-autofill {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(31, 41, 55, 1) inset !important; /* bg-gray-800 */
+    -webkit-text-fill-color: white !important;
+    border-color: #4b5563 !important;
+}
+
+/* Handle hover, focus, and active states */
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(31, 41, 55, 1) inset !important;
+    -webkit-text-fill-color: white !important;
+    border-color: #4b5563 !important;
+}
+
+
+.hover-underline {
+    font-size: 2rem;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .hover-underline::after,
+  .hover-underline::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #ff0000, #00ffff);
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease-out;
+  }
+  
+  .hover-underline::before {
+    top: -5px;
+    transform-origin: left;
+  }
+  
+  .hover-underline:hover::after,
+  .hover-underline:hover::before {
+    transform: scaleX(1);
+  }
+ 
+
+
+  /* From Uiverse.io by adeladel522 */ 
+.button {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    padding-block: 0.5rem;
+    padding-inline: 1.25rem;
+    background-color: rgb(59, 52, 159);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ffff;
+    gap: 10px;
+    font-weight: bold;
+    border: 3px solid #ffffff4d;
+    outline: none;
+    overflow: hidden;
+    font-size: 15px;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    border-color: #fff9;
+  }
+  
+  .button:hover .icon {
+    transform: translate(4px);
+  }
+  
+  .button:hover::before {
+    animation: shine 1.5s ease-out infinite;
+  }
+  
+  .button::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    background-image: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 255, 255, 0) 70%
+    );
+    top: 0;
+    left: -100px;
+    opacity: 0.6;
+  }
+  
+  @keyframes shine {
+    0% {
+      left: -100px;
+    }
+  
+    60% {
+      left: 100%;
+    }
+  
+    to {
+      left: 100%;
+    }
+  }
+  .logo-container {
+    position: absolute;
+    top: 0.1rem;
+    right: 1rem;
+}
+
+#fail {
+    display: none;
+    padding : 0.5rem 4rem;
+    margin-bottom: 0.5rem;
+}
+
+#fail.show {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.3); /* Optional semi-transparent dark overlay */
+  
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, #474bff 94%, #0000) top/11.5px 11.5px no-repeat,
+              conic-gradient(#0000 30%, #474bff);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 11.5px), #000 0);
+  animation: spinner-c7wet2 1s infinite linear;
+}
+
+@keyframes spinner-c7wet2 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
